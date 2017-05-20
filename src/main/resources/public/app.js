@@ -15,6 +15,7 @@ require([
 	request
 ) {
 	var ListClass = List.createSubclass([ Selection ], {
+		selectionMode: 'single',
 		renderRow: function (object, options) {
 			var div = document.createElement('div');
 			div.textContent = object.label;
@@ -45,10 +46,9 @@ require([
 
 	request.get('/ontologies', { handleAs: 'json' }).then(function (data) {
 		data = [ { id: '', label: ' ' } ].concat(data);
-		var store = new SelectStore({
-			data: data
-		})
+		var store = new SelectStore({ data: data })
 		ontology1.set('store', store);
+		ontology2.set('store', store);
 	});
 
 	ontology1.on('change', function (newValue) {
@@ -56,10 +56,33 @@ require([
 			handleAs: 'json',
 			query: { ontology: newValue }
 		}).then(function (data) {
-			var collection = new Memory({
-				data: data
-			})
-			entities1.set('collection', collection);
+			entities1.set('collection', new Memory({ data: data }));
 		});
+		getRelatedEntities();
 	});
+
+	entities1.on('dgrid-select', function () {
+		getRelatedEntities();
+	});
+
+	ontology2.on('change', function () {
+		getRelatedEntities();
+	});
+
+	function getRelatedEntities() {
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+		var ent1 = Object.keys(entities1.selection).filter(function (id) {
+			return entities1.selection[id];
+		})[0];
+
+		if (ent1 && ont1 && ont2) {
+			request.get('/relatedEntities', {
+				handleAs: 'json',
+				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+			}).then(function (data) {
+				entities2.set('collection', new Memory({ data: data }));
+			});
+		}
+	}
 });
