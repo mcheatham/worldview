@@ -33,18 +33,14 @@ public class Main {
 		for (Entity e: entities) {
 			System.out.println(e);
 		}
+
+		if (args[0].equals("serve")) {
+			port(8080);
+			staticFiles.location("/public");
+			init();
 		
-		
-//		port(8080);
-//		staticFiles.location("/public");
-//		
-//		get("/hello", (req, res) -> "Hello World");
-//		
-//		get("/example", (req, res) -> 
-//			example(Integer.parseInt(req.queryParams("first")), 
-//					Integer.parseInt(req.queryParams("second"))));
-//		
-//		get("/ontologies", (req, res) -> getOntologies());
+			// get("/ontologies", (req, res) -> getOntologies());
+		}
 	}
 	
 	
