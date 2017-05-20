@@ -1,0 +1,133 @@
+body {
+	font-family: Helvetica Neue, Arial, sans-serif;
+	font-size: 14px;
+}
+
+*, .tundra .dijitInline {
+	box-sizing: border-box;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+.column > *, .row > * {
+	flex-grow: 1;
+}
+.row {
+	display: flex;
+	flex-direction: row;
+}
+.row > * {
+	margin-right: 4px;
+}
+.row > *:last-child {
+	margin-right: 0;
+}
+.column > * {
+	margin-bottom: 4px;
+}
+.column > *:last-child {
+	margin-bottom: 0;
+}
+.row > * > * {
+	width: 100%;
+}
+.fixed {
+	flex-grow: 0;
+}
+
+.box, .dgrid, .tundra .dijitSelect, .tundra .dijitSelectMenu {
+	border-radius: 4px;
+}
+.box, .tundra .dijitSelect, .tundra .dijitReset {
+	border-color: #ddd;
+}
+.tundra .dijitSelect {
+	overflow: hidden;
+}
+
+.tundra .dijitSelect .dijitArrowButton {
+	width: 16px;
+	background: #f7f7f7;
+	border: none;
+	position: relative;
+}
+.tundra .dijitSelect .dijitArrowButton:before {
+	content: '\25BC';
+	font-size: 10px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	color: #777;
+}
+.tundra .dijitSelect .dijitButtonContents {
+	background: white;
+}
+.tundra .dijitSelect.dijitHasDropDownOpen {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.tundra .dijitSelectMenu {
+	border: solid 1px #ddd;
+	border-collapse: separate;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+.tundra .dijitMenuItemLabel {
+	padding: 0 3px 2px 3px;
+}
+.tundra .dijitMenuTable {
+	box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tundra .dijitSelect .dijitButtonContents, .dgrid, .axioms {
+	box-shadow: inset 0px 0px 4px 2px rgba(0, 0, 0, 0.03);
+}
+
+.dgrid {
+	height: 6em;
+}
+
+#map {
+	border-style: solid;
+	border-width: 1px;
+	height: 120px;
+}
+.dgrid-row {
+	cursor: pointer;
+}
+
+.select-grid > * {
+	margin-bottom: 4px;
+}
+.select-grid > *:last-child {
+	margin-bottom: 0;
+}
+
+.axioms {
+	border: solid 1px #ddd;
+}
+
+#main {
+	height: 20em;
+}
+
+#ontologies {
+	width: 200px;
+}
+
+.dijitInputField, .dgrid-row {
+	padding-left: 3px;
+}
+
+#ontologies-column {
+	width: 400px;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+#select-grids > * {
+	width: 50%;
+}

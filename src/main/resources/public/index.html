@@ -1,9 +1,51 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>USGS</title>
+		<title>WorldView</title>
+		<meta charset="UTF-8">
+		<script>
+		var dojoConfig = {
+			async: true,
+			requestProvider: 'dojo/request/registry',
+			packages: [
+				{ name: 'dgrid', location: '//cdn.rawgit.com/SitePen/dgrid/v1.1.0' },
+				{ name: 'dijit', location: '//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit' },
+				{ name: 'dstore', location: '//cdn.rawgit.com/SitePen/dstore/v1.1.1' }
+			]
+		};
+		</script>
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
+		<link rel="stylesheet" href="//cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css">
+		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/dijit.css">
+		<link rel="stylesheet" href="styles.css">
 	</head>
-	<body>
-		<h1>Hello world!</h1>
+	<body class="tundra">
+		<h1>WorldView</h1>
+
+		<div id="main" class="row">
+			<div id="ontologies-column" class="column">
+				<div id="select-grids" class="row fixed">
+					<div class="select-grid">
+						<div id="ontology1"></div>
+						<div id="entities1"></div>
+					</div>
+					<div class="select-grid">
+						<div id="ontology2"></div>
+						<div id="entities2"></div>
+					</div>
+				</div>
+
+				<div class="axioms box" id="axioms1">
+				</div>
+			</div>
+			<div id="map-column" class="column">
+				<div id="map" class="row box"></div>
+				<div class="axioms box" id="axioms2">
+				</div>
+			</div>
+		</div>
+
+		<script src="mockData.js"></script>
+		<script src="app.js"></script>
 	</body>
 </html>
