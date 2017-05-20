@@ -1,0 +1,2214 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Abandoned"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AboveWater"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Acre"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Active"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AggregateFeature"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Approximate"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Aquaculture"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Aqueduct"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Area"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AreaOfComplexChannels"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AreaToBeSubmerged"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AtOrNear"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/AverageWaterElevation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Bridge"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/CanalOrDitch"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Channel"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Connector"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Contributing"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/CoolingPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Dam"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/DecorativePool"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Direction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Disposal"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Divergence"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Diversion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevated"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Evaporator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/FiltrationPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/FloodElevation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flow"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flume"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Foreshore"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Function"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Gaging"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Gate"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/GeneralCase"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/HighWaterElevation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Kilometer"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Levee"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/LockChamber"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Meter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/NonEarthenMaterial"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/NormalPool"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Operational"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Penstock"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Playa"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Route"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SettlingPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SewageTreatmentPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Siphon"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SoundingDatumLine"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Spillway"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpillwayElevation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SquareKilometer"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SquareMeter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SurfaceWaterNetwork"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/SwimmingPool"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/TailingsPond"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Tunnel"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/UnderConstruction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underground"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/UndergroundConduit"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underwater"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/VerticalRelationship"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Wall"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Wash"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/WaterStorage"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Weir"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Well"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://cegis.usgs.gov/SWO/Withdrawing"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.w3.org/2003/01/geo/wgs84_pos#Point"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/constuctionMaterial"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/event"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/inundationControlStatus"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/operationalStatus"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/product"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/relationshipToSurface"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/stage"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/status"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/temporality"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Aqueduct"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Area"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/AreaToBeSubmerged"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Bridge"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/CanalOrDitch"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Connector"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Dam"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Diversion"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Flume"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Foreshore"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Gate"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Levee"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/LockChamber"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Playa"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SoundingDatumLine"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Spillway"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Tunnel"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wall"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wash"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#alt"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#lat"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#long"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Abandoned"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AboveWater"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Acre"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Active"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AggregateFeature"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Approximate"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Aquaculture"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Aqueduct"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Area"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AreaOfComplexChannels"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/AggregateFeature"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AreaToBeSubmerged"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AtOrNear"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/AverageWaterElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Bridge"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/CanalOrDitch"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Channel"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Connector"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Contributing"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Divergence"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/CoolingPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Dam"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Dam"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/DecorativePool"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Direction"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Disposal"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Divergence"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Diversion"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevated"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Evaporator"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flow"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/FiltrationPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/FloodElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flow"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flume"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Foreshore"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Function"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Gaging"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Gate"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/GeneralCase"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/HighWaterElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Kilometer"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Length"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Levee"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/LockChamber"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Meter"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/NonEarthenMaterial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/NormalPool"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Operational"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Penstock"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Playa"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Route"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SettlingPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SewageTreatmentPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Siphon"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SoundingDatumLine"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+        <ObjectUnionOf>
+            <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+            <Class IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+            <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+        </ObjectUnionOf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialExtent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Spillway"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpillwayElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SquareKilometer"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SquareMeter"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialMeasurementUnit"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SurfaceWaterNetwork"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/SwimmingPool"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/TailingsPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Disposal"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+        <Class IRI="Thing"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Treatment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Tunnel"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/UnderConstruction"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underground"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/UndergroundConduit"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/AggregateFeature"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underwater"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/VerticalRelationship"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpatialRelation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Wall"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Wash"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/WaterStorage"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Flow"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Weir"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Well"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://cegis.usgs.gov/SWO/Withdrawing"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Divergence"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://www.w3.org/2003/01/geo/wgs84_pos#Point"/>
+        <Class IRI="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"/>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Abandoned"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Operational"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/AboveWater"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/AtOrNear"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevated"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underground"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Underwater"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/AggregateFeature"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FeatureObject"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Approximate"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/AverageWaterElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/FloodElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/HighWaterElevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/NormalPool"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpillwayElevation"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Area"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/AreaOfComplexChannels"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/UndergroundConduit"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Direction"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SoundingDatumLine"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/VerticalRelationship"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Ephemeral"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Estuary"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/IceMass"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Intermittent"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Perennial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Regulated"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Status"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SinkOrRise"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/SubmergedStream"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/IA-3"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Aqueduct"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Aqueduct"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/AreaToBeSubmerged"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/AreaToBeSubmerged"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Area"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Bridge"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Bridge"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/CanalOrDitch"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/CanalOrDitch"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Connector"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Connector"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Dam"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Dam"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Area"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Diversion"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Diversion"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Flume"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Flume"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Length"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Foreshore"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Foreshore"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SoundingDatumLine"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Gate"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Gate"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/InundationArea"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Levee"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Levee"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Levee"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Elevation"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/LockChamber"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/LockChamber"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Area"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Playa"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Playa"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Impoundment"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Spillway"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Spillway"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Tunnel"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Watercourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Tunnel"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wall"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wall"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wash"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/spatialExtent"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/Wash"/>
+        <NamedIndividual IRI="http://cegis.usgs.gov/SWO/SpatialQuality"/>
+    </ObjectPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/inundationControlStatus"/>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/status"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/operationalStatus"/>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/status"/>
+    </SubObjectPropertyOf>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/constuctionMaterial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Dam"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/constuctionMaterial"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/event"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/product"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/relationshipToSurface"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Pipeline"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/stage"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/temporality"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/event"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Event"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/flow"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/relationshipToSurface"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/RelationshipToSurface"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/stage"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Stage"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/temporality"/>
+        <Class IRI="http://cegis.usgs.gov/SWO/Temporality"/>
+    </ObjectPropertyRange>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Abandoned</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Intact but not maintained or intended for use</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/AboveWater</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Exposed at mean lower low water</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Approximate</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Conditions permit the feature to e confidently positioned between 0.02&quot; and 0.1&quot;, at map scale, of its true ground position</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Aquaculture</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For rearing of finfish, shellfish, or aquatic plants</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Aqueduct</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A structure designed to transport domestic or industrial water from a supply source to a distribution point, often by gravity</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/AreaOfComplexChannels</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An area where a stream or river flows in an intricate network of sediment-driven interlacing channels. Not named features. Areas of Complex Channels are common in Alaska where glacial till is available and there is a steep slope. They are also common in low-lying sedimentary coastal regions of the southeastern and Gulf Coast states. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/AreaToBeSubmerged</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">The known extent of the intended lake that will be created behind a dam under construction.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/AtOrNear</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">At or slightly above the surface</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/AverageWaterElevation</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The stage of a natural water body that prevails for the greater part of the year</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/BayOrInlet</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A water area that is an opening of the sea/ocean into the land, or of an estuary, lake, or river into its shore. BayInlets are used in the NHD to provide named areas for other hydrographic features, and must overlap Estuary, LakePond, SeaOcean, or StreamRiver. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Bridge</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A structure spanning and providing passage of a waterway over another waterway, railroad, or other obstacle. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/CanalOrDitch</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">An artificial open waterway constructed to transport water, to irrigate or drain land, to connect two or more bodies of water, or to serve as a waterway for watercraft.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Coastline</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A line of contact between the open sea and the land, including imaginary lines separating inland water bodies from the open sea. The NHD acquires coastline data from the National Ocean and Atmospheric Agency (NOAA) and it is not a product of the USGS. Coastline in the NHD is a representation of the Mean High Water (MHW) as calculated by NOAA and may not match orthoimagery. Coastline in the NHD could be altered but must have an accomplanying metadata record that identifies the scientific method used to calibrate the coastline to a known vertical datum. Coastline may be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Connector</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A known, but nonspecific, invisible connection between two nonadjacent network segments. An example would be connectors passing through a dam that connect the network from one side of the dam to the other. The pipelines that pass through dams are not usually visible and may pass through complex hydroelectric machinery. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Contributing</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A point on the surface water network where water is added to the network, typically through a conveyance such as a CanalDitch or pipeline</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/CoolingPond</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">undefined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Dam</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A barrier constructed to control the flow or raise the level of water. When DamWeir is a nonearthen structure, it will be coincident with a Nonearthen Shore Feature.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/DecorativePool</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For improving the aesthetic appearance of the landscape</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Direction</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Text or code to describe direction of flow</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Disposal</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">for disposal</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Divergence</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A point on the surface water network where water is either removed or added to the network, typically through a conveyance such as a canal/ditch or pipeline</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Diversion</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A stream channel within the hydrologic unit that was altered to divert surface water from one location to another (alters natural boundary location)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Elevated</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Supported above the earth</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Elevation</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The vertical distance from a given datum. related to stage of the water elevation</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Ephemeral</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Contains water only during or after a local rainstorm or heavy snowmelt</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Estuary</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An estuary is a semi-enclosed coastal body of water which has a free connection with the open sea and within which sea water is measurably diluted with fresh water derived from land drainage (Cameron and Pritchard, 1963). May be a named feature. An estuary is defined by the NOAA&#39;s Coastal Aquatic Framework (CAF) or local information concerning  the extent of the mixed zone of fresh and salt water. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Evaporator</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For the natural evaporation of water to allow harvesting of mineral concentrates</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/FiltrationPond</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">undefined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/FloodElevation</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The stage that prevails when a natural water body is at or near capacity</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Flume</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An open, inclined, artificial channel constructed of wood, metal, or concrete; generally elevated. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Foreshore</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">The area of shore that lies between the limits of the mean highwater (MHW) and mean low low water (MLLW) tidal marks and is exposed during low tides. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Gaging</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A structure used to measure the characteristics of a hydrographic feature.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Gate</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A structure that may be swung, drawn, or lowered to block an entrance or passageway.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/GeneralCase</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A closed feature used to to channel flowing water to another site</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/HighWaterElevation</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The stage that prevails when a natural water body is at or near capacity</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/IceMass</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A field of ice usually formed in regions of perennial frost. Ice Mass primarily consists of glaciers. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Impoundment</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A body of water formed by impounding </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Intermittent</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For long- or short-term storage of water</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/InundationArea</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">An area of land subject to flooding.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Levee</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">An embankment built to prevent flooding or to control or confine the flow of liquids.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/LockChamber</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An enclosure on a waterway used to raise and lower vessels as they pass from one level to another. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/NonEarthenMaterial</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The predominant material used in construction is concrete, brick, or stone</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/NonearthenShore</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A structure built of stone, brick, concrete, or other building materials that borders a body of water.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/NormalPool</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The stage of an artificailly impounded wter body that prevails for the greater part of the year</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Operational</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Useable and inteded for use</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Penstock</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A structure designed to transport domestic or industrial water from a supply source to a distribution point, often by gravity</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Perennial</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For long- or short-term storage of water</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Pipeline</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A closed conduit, with pumps, valves, and control devices for conveying fluids, gases, or finely divided solids. Not a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Playa</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">The flat area at the lowest part of an undrained desert basin, generally devoid of vegetation.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Rapids</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An area of swift current in a stream or river, characterized by standing waves or by boulders and rocks. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Regulated</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Structures, such as Dam/Weir or Levee, exist to control the water and innundate specific areas</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/RelationshipToSurface</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Vertical location relative to the surface</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Reservoir</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A constructed basin formed to contain water or other liquids. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SeaOrOcean</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The great body of salt water that covers much of the earth. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SettlingPond</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">undefined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SewageTreatmentPond</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">undefined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SinkOrRise</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The place at which a stream disappears underground or reappears at the surface in a karst area. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Siphon</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Designed to convey water by gravitational force over, or under, an obstruction</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SoundingDatumLine</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A line representing the bathymetric contour of mean low low water (MLLW) for which a foreshore feature is present or visible.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://cegis.usgs.gov/SWO/SpatialExtent</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Spatial Region</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SpatialMeasurementUnit</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Measurements are generalized representations of qualities of continuants, existing in the context of some whole</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SpatialQuality</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A dependent, enduring part of an independent entity that does not require any further processing in order to be realized</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Spillway</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A constructed passage for surplus water to run over or around a dam</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SpillwayElevation</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The stage of an artificially impounded water body as determined by the spillway</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SpringOrSeep</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A place where water issues from the ground naturally. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SquareMeter</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">conversion to acres (WBD AreaAcres) uses the factor of 0.0002471 (sq. meters times factor equals acres)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:isDefinedBy"/>
+        <IRI>http://cegis.usgs.gov/SWO/Stage</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">http://water.usgs.gov/edu/qa-measure-streamstage.html</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/StreamOrRiver</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A body of flowing water. May be a named feature</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SubmergedStream</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The original river course inundated by an impounded water body. These are mostly used in drowned river systems like the Tennessee Valley Authority (TVA) lakes. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SwampOrMarsh</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">A noncultivated, vegetated area that is inundated or saturated for a significant part of the year. The vegetation is adapted for life in saturated soil conditions.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/SwimmingPool</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">undefined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/TailingsPond</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">not defined in NHD</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Treatment</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For treatment</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Treatment</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">may be used alone without subtype</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Tunnel</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">An underground or underwater passage that carries water-bearing features such as CanalDitch or Pipeline.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Underground</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Buried</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/UndergroundConduit</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A set of naturally occurring subsurface drainage channels formed from the dissolution of soluble rocks in karst terrain or in terrain similar to karst but formed in nonsoluble rocks, as by melting of permafrost or ground ice, collapse after mining, and by outflow of liquid lava from beneath its solidified crust. Not a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Underwater</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Always submerged</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/VerticalRelationship</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The spatial relation between features that cross but do not exchange flow</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Wall</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">An upright structure of masonry, wood, plaster, or other building material serving to separate land from water with no additional structures present. If other associated structures, such as DamWeir, are present, use Nonearthern Shore.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Wash</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">The usually dry portion of a stream bed that contains water only during or after a local rainstorm or heavy snowmelt</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/WaterStorage</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">For long- or short-term storage of water</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Waterbody</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Flow table values are derived from the topologic connectivity of the geometric network and values of FlowDir attribute of NHDFlowline Features. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Waterfall</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A vertical or near-vertical descent of water over a step or ledge in the bed of a river. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Well</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A pit or hole dug or bored into the earth for the extraction of oil, water, other fluids, or gases. May be a named feature. </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/Withdrawing</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A point on the surface water network where water is removed from the network, typically through a conveyance such as a CanalDitch or pipeline</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/event</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">a process involving surface water</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/flow</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">surface water supported by a physical feature</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://cegis.usgs.gov/SWO/product</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The material a pipeline is channelling</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://cegis.usgs.gov/SWO/stage</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">stage</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#Point</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A point, typically described using a coordinate system relative to Earth, such as WGS84. Uniquely identified by lat/long/alt. i.e. spaciallyIntersects(P1, P2) :- lat(P1, LAT), long(P1, LONG), alt(P1, ALT), lat(P2, LAT), long(P2, LONG), alt(P2, ALT).  sameThing(P1, P2) :- type(P1, Point), type(P2, Point), spaciallyIntersects(P1, P2).</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#Point</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">point</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Anything with spatial extent, i.e. size, shape, or position.
+ e.g. people, places, bowling balls, as well as abstract areas like cubes.
+</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">SpatialThing</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#alt</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The WGS84 altitude of a SpatialThing (decimal meters 
+above the local reference ellipsoid).</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#alt</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">altitude</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#lat</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The WGS84 latitude of a SpatialThing (decimal degrees).</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#lat</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">latitude</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#lat_long</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A comma-separated representation of a latitude, longitude coordinate.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#lat_long</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">lat/long</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#long</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The WGS84 longitude of a SpatialThing (decimal degrees).</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#long</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">longitude</Literal>
+    </AnnotationAssertion>
+    <AnnotationPropertyDomain>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#alt"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing</IRI>
+    </AnnotationPropertyDomain>
+    <AnnotationPropertyDomain>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#lat"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing</IRI>
+    </AnnotationPropertyDomain>
+    <AnnotationPropertyDomain>
+        <AnnotationProperty IRI="http://www.w3.org/2003/01/geo/wgs84_pos#long"/>
+        <IRI>http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing</IRI>
+    </AnnotationPropertyDomain>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.2.2.1502) http://owlapi.sourceforge.net -->
+
