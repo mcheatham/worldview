@@ -1,26 +1,27 @@
 package edu.wright.cs.dase.usgs;
 
-import static spark.Spark.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
+import java.util.HashMap;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 
 public class Main {
+	
+	private static OWLOntology alignmentOnt;
+	private static String alignmentFilename;
+	private static String ont1Filename;
+	private static String ont2Filename;
+	private static OWLOntology mergedOntology;
 	
 	public static void main(String[] args) {
 		
@@ -29,10 +30,24 @@ public class Main {
 //			System.out.println(ont);
 //		}
 		
-		ArrayList<Entity> entities = getEntities("USGS.owl");
-		for (Entity e: entities) {
-			System.out.println(e);
-		}
+//		ArrayList<Entity> entities = getEntities("USGS.owl");
+//		for (Entity e: entities) {
+//			System.out.println(e);
+//		}
+		
+//		ArrayList<Axiom> axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
+//		
+//		axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
 		
 		
 //		port(8080);
@@ -82,21 +97,17 @@ public class Main {
 			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 			IRI iri = IRI.create(new File("./src/main/resources/public/ontologies/" + ontFilename));
 			OWLOntology ont = manager.loadOntologyFromOntologyDocument(iri);
-			OWLDataFactory df = OWLManager.getOWLDataFactory();
 
 			for (OWLClass e : ont.getClassesInSignature()) {
-				entities.add(new Entity(
-						ontFilename, e.getIRI().toString(), getEntityLabel(e, ont, df)));
+				entities.add(new Entity(ontFilename, e));
 			}
 
 			for (OWLObjectProperty e: ont.getObjectPropertiesInSignature()) {
-				entities.add(new Entity(
-						ontFilename, e.getIRI().toString(), getEntityLabel(e, ont, df)));
+				entities.add(new Entity(ontFilename, e));
 			}
 
 			for (OWLDataProperty e: ont.getDataPropertiesInSignature()) {
-				entities.add(new Entity(
-						ontFilename, e.getIRI().toString(), getEntityLabel(e, ont, df)));
+				entities.add(new Entity(ontFilename, e));
 			}
 			
 		} catch (Exception e) {
@@ -106,52 +117,68 @@ public class Main {
 		Collections.sort(entities);
 		return entities;
 	}
-	
-	
-	public static String getEntityLabel(OWLEntity e, OWLOntology ont, OWLDataFactory df) {
+
+
+	// return all of the axioms involving the ontology pair that contain a particular entity
+	public static ArrayList<Axiom> getAxioms(String entityURI, String ont1Filename, String ont2Filename) {
 		
-		String label = e.getIRI().toString();
-		String s = "";
+		ArrayList<Axiom> axioms = new ArrayList<>();
 		
-		Set<OWLAnnotation> annotations = e.getAnnotations(ont, df.getRDFSLabel());
+		String axiomFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
+				ont2Filename.replaceAll(".owl", "") + ".owl";
 		
-		// if there's an rdfs:label property, use it
-		if (annotations.size() > 0) {
-			OWLAnnotation annotation = annotations.iterator().next();
-		
-			if (annotation.getValue() instanceof OWLLiteral) {
-				OWLLiteral val = (OWLLiteral) annotation.getValue();
-				s = val.getLiteral();
-			} 
-			
-		} else { // otherwise, get the label from the end of the URI
-			
-			if (label.contains("#")) {
-				label = label.substring(label.indexOf('#')+1);
-			}
-			
-			if (label.contains("/")) {
-				label = label.substring(label.lastIndexOf('/')+1);
-			}
-			
-			// break up words (camelCase)
-			s += label.charAt(0);
-			
-			for (int i=1; i<label.length(); i++) {
-				
-				if (Character.isUpperCase(label.charAt(i)) && 
-						!Character.isUpperCase(label.charAt(i-1))) {
-					s += " ";
-				} 
-				
-				s += label.charAt(i);
+		// only read in the alignment ontology if we're using a different alignment 
+		// than the last time this method was called.
+		if (!axiomFilename.equals(alignmentFilename) || alignmentOnt != null) {
+			try {
+
+				OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+				IRI iri = IRI.create(new File("./src/main/resources/public/alignments/" + axiomFilename));
+				alignmentOnt = manager.loadOntologyFromOntologyDocument(iri);
+				alignmentFilename = axiomFilename;
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-    	
-		s = s.toLowerCase();
-    	return s.replaceAll("-|_", " ");
+		
+		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
+			if (ax.toString().contains(entityURI) && Axiom.isInteresting(ax)) {
+				axioms.add(new Axiom(ax, ont1Filename));
+			}
+		}
+		
+		return axioms;
 	}
 
 
-	
+//	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
+//			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
+//		
+//		// Create a merged ontology with everything from ont1 and ont2 (or make a copy of an existing one)
+//		if (!ont1Filename.equals(alignmentFilename) || alignmentOnt != null) {
+//			try {
+//
+//				OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+//				IRI iri = IRI.create(new File("./src/main/resources/public/alignments/" + axiomFilename));
+//				alignmentOnt = manager.loadOntologyFromOntologyDocument(iri);
+//				alignmentFilename = axiomFilename;
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			
+//		}
+//		// Add in the axiom
+//		// Invoke a reasoner
+//		// Get all of the entities from the axiom
+//		// For each one, get the coordinates all of the instances of that entity from the ontology (cache these) 
+//		// Sort these by distance from the lat, lng
+//		// Add the closest "limit" instances to an ArrayList
+//		// Put the ArrayList for this entity into the HashMap
+//		// Return the result
+//		
+//	}
+
 }

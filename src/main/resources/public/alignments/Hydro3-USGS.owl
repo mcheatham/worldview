@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<Ontology>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Falls"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/Waterfall"/>
+</EquivalentClasses>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#FreshwaterBay"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+</SubClassOf>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Lake"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+</SubClassOf>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Rapids"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/Rapids"/>
+</EquivalentClasses>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Reservoir"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/Reservoir"/>
+</EquivalentClasses>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#River"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/StreamOrRiver"/>
+</SubClassOf>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Spring"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/SpringOrSeep"/>
+</SubClassOf>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Wetlands"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+</EquivalentClasses>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Ocean"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/SeaOrOcean"/>
+</SubClassOf>
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#SaltWaterBay"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/BayOrInlet"/>
+</SubClassOf>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#DamWeir"/>
+  <ObjectUnionOf>
+    <Class IRI="http://cegis.usgs.gov/SWO/Dam"/>
+    <Class IRI="http://cegis.usgs.gov/SWO/Weir"/>
+  </ObjectUnionOf>
+</EquivalentClasses>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Levee"/>
+  <Class IRI="http://cegis.usgs.gov/SWO/Levee"/>
+</EquivalentClasses>
+<SubClassOf>
+  <ObjectUnionOf>
+    <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Boundary"/>
+    <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Hydrographic_Feature"/>
+    <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Hydrographic_Structure"/>
+  </ObjectUnionOf>
+  <ObjectUnionOf>
+    <Class IRI="http://cegis.usgs.gov/SWO/Feature"/>
+    <Class IRI="http://cegis.usgs.gov/SWO/Waterbody"/>
+  </ObjectUnionOf>
+</SubClassOf>
+<EquivalentClasses>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Coastline"/>
+  <ObjectUnionOf>
+    <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
+    <Class IRI="http://cegis.usgs.gov/SWO/NonEarthenShore"/>
+  </ObjectUnionOf>
+</EquivalentClasses>
+</Ontology>
