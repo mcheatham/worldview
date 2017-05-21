@@ -122,4 +122,6 @@ require([
 			]]
 		}
 	});
+
+	document.getElementById('wrapper').classList.remove('loading');
 });

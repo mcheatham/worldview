@@ -37,26 +37,34 @@
 	<body class="tundra">
 		<h1>WorldView</h1>
 
-		<div id="main" class="row">
-			<div id="ontologies-column" class="column">
-				<div id="select-grids" class="row fixed">
-					<div class="select-grid">
-						<div id="ontology1"></div>
-						<div id="entities1"></div>
+		<div id="wrapper" class="loading">
+			<div id="main" class="row">
+				<div id="ontologies-column" class="column">
+					<div id="select-grids" class="row fixed">
+						<div class="select-grid">
+							<div id="ontology1"></div>
+							<div id="entities1"></div>
+						</div>
+						<div class="select-grid">
+							<div id="ontology2"></div>
+							<div id="entities2"></div>
+						</div>
 					</div>
-					<div class="select-grid">
-						<div id="ontology2"></div>
-						<div id="entities2"></div>
+
+					<div class="axioms box" id="axioms1">
 					</div>
 				</div>
-
-				<div class="axioms box" id="axioms1">
+				<div id="map-column" class="column">
+					<div id="map" class="row box"></div>
+					<div class="axioms box" id="axioms2">
+					</div>
 				</div>
 			</div>
-			<div id="map-column" class="column">
-				<div id="map" class="row box"></div>
-				<div class="axioms box" id="axioms2">
-				</div>
+
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
 			</div>
 		</div>
 
