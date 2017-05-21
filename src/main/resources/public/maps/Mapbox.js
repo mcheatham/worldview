@@ -7,7 +7,7 @@ define([ 'dojo/_base/declare' ], function (declare) {
 			var map = new mapboxgl.Map({
 				container: node,
 				style: 'mapbox://styles/mapbox/outdoors-v10',
-				center: [ options.center.lat, options.center.lng ],
+				center: options.center,
 				zoom: options.zoom
 			});
 
@@ -22,7 +22,13 @@ define([ 'dojo/_base/declare' ], function (declare) {
 			});
 		},
 
-		addMarker: function (id, geojson) {
+		getCenter: function () {
+			return this.map.then(function (map) {
+				return map.getCenter();
+			});
+		},
+
+		_addShape: function (id, geojson) {
 			return this.map.then(function (map) {
 				map.addLayer({
 					id: id,
@@ -36,6 +42,22 @@ define([ 'dojo/_base/declare' ], function (declare) {
 						'fill-color': '#088',
 						'fill-opacity': 0.8
 					}
+				});
+				return id;
+			});
+		},
+
+		_removeShape: function (id) {
+			return this.map.then(function (map) {
+				map.removeSource(id);
+				map.removeLayer(id);
+			});
+		},
+
+		_fitBounds: function (bounds) {
+			return this.map.then(function (map) {
+				map.fitBounds(bounds, {
+					padding: { top: 20, left: 20, bottom: 20, right: 20 }
 				});
 			});
 		}

@@ -4,7 +4,7 @@ define([ 'dojo/_base/declare' ], function (declare) {
 
 		constructor: function (options, node) {
 			var map = L.map(node, {
-				center: [ options.center.lng, options.center.lat ],
+				center: [options.center[1], options.center[0]],
 				zoom: options.zoom
 			});
 			this.map = Promise.resolve(map);
@@ -21,9 +21,33 @@ define([ 'dojo/_base/declare' ], function (declare) {
 			}
 		},
 
-		addMarker: function (id, geojson) {
+		getCenter: function () {
 			return this.map.then(function (map) {
-				L.geoJSON(geojson).addTo(map);
+				var center = map.getCenter();
+				return [ center[1], center[0] ];
+			});
+		},
+
+		_addShape: function (id, geojson) {
+			return this.map.then(function (map) {
+				var layer = L.geoJSON(geojson);
+				layer.addTo(map);
+				return layer;
+			});
+		},
+
+		_removeShape: function (layer) {
+			return this.map.then(function (map) {
+				map.removeLayer(layer);
+			});
+		},
+
+		_fitBounds: function (bounds) {
+			return this.map.then(function (map) {
+				map.flyToBounds([ [ bounds[0][1], bounds[0][0] ], [ bounds[1][1], bounds[1][0] ] ], {
+					paddingTopLeft: [ 20, 20 ],
+					paddingBottomRight: [ 20, 20 ]
+				});
 			});
 		}
 	});
