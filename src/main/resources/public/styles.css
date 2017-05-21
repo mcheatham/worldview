@@ -3,7 +3,7 @@ body {
 	font-size: 14px;
 }
 
-*, .tundra .dijitInline {
+*, .dijitInline {
 	box-sizing: border-box;
 }
 
@@ -37,23 +37,23 @@ body {
 	flex-grow: 0;
 }
 
-.box, .dgrid, .tundra .dijitSelect, .tundra .dijitSelectMenu {
-	border-radius: 4px;
+.box, .dgrid, .dijitSelect, .dijitSelectMenu {
+	border-radius: 3px;
 }
-.box, .tundra .dijitSelect, .tundra .dijitReset {
+.box, .dijitSelect, .dijitReset {
 	border-color: #ddd;
 }
-.tundra .dijitSelect {
+.dijitSelect {
 	overflow: hidden;
 }
 
-.tundra .dijitSelect .dijitArrowButton {
+.dijitSelect .dijitArrowButton {
 	width: 16px;
 	background: #f7f7f7;
 	border: none;
 	position: relative;
 }
-.tundra .dijitSelect .dijitArrowButton:before {
+.dijitSelect .dijitArrowButton:before {
 	content: '\25BC';
 	font-size: 10px;
 	position: absolute;
@@ -62,27 +62,27 @@ body {
 	transform: translate(-50%, -50%);
 	color: #777;
 }
-.tundra .dijitSelect .dijitButtonContents {
+.dijitSelect .dijitButtonContents {
 	background: white;
 }
-.tundra .dijitSelect.dijitHasDropDownOpen {
+.dijitSelect.dijitHasDropDownOpen {
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 }
-.tundra .dijitSelectMenu {
+.dijitSelectMenu {
 	border: solid 1px #ddd;
 	border-collapse: separate;
 	border-top-right-radius: 0;
 	border-top-left-radius: 0;
 }
-.tundra .dijitMenuItemLabel {
+.dijitMenuItemLabel {
 	padding: 0 3px 2px 3px;
 }
-.tundra .dijitMenuTable {
+.dijitMenuTable {
 	box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
-.tundra .dijitSelect .dijitButtonContents, .dgrid, .axioms {
+.dijitSelect .dijitButtonContents, .dgrid, .axioms {
 	box-shadow: inset 0px 0px 4px 2px rgba(0, 0, 0, 0.03);
 }
 
