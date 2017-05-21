@@ -28,7 +28,24 @@ require([
 				handleAs: 'json',
 				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
 			}).then(function (data) {
-				entities2.set('collection', new Memory({ data: data }));
+				entities2.set('collection', new Memory({ data: data, idProperty: 'uri' }));
+			});
+		}
+	}
+
+	function getAxioms() {
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+		var ent1 = Object.keys(entities1.selection).filter(function (id) {
+			return entities1.selection[id];
+		})[0];
+
+		if (ent1 && ont1 && ont2) {
+			request.get('/axioms', {
+				handleAs: 'json',
+				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+			}).then(function (data) {
+				axioms.set('collection', new Memory({ data: data }));
 			});
 		}
 	}
@@ -64,6 +81,10 @@ require([
 		collection: new Memory()
 	}, 'entities2');
 
+	var axioms = new ListClass({
+		collection: new Memory()
+	}, 'axioms');
+
 	request.get('/ontologies', { handleAs: 'json' }).then(function (data) {
 		data = [ { id: '', label: ' ' } ].concat(data);
 		var store = new SelectStore({ data: data })
@@ -76,17 +97,20 @@ require([
 			handleAs: 'json',
 			query: { ontology: newValue }
 		}).then(function (data) {
-			entities1.set('collection', new Memory({ data: data }));
+			entities1.set('collection', new Memory({ data: data, idProperty: 'uri' }));
 		});
 		getRelatedEntities();
+		getAxioms();
 	});
 
 	entities1.on('dgrid-select', function () {
 		getRelatedEntities();
+		getAxioms();
 	});
 
 	ontology2.on('change', function () {
 		getRelatedEntities();
+		getAxioms();
 	});
 
 	var map = new Map({
