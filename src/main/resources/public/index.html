@@ -1,9 +1,74 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>USGS</title>
+		<title>WorldView</title>
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" href="//cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css">
+		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/dijit.css">
+		<link rel="stylesheet" href="styles.css">
+
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+		<!-- Uncomment these and comment the leaflet resources above to enable Mapbox -->
+		<!-- <link href='https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' /> -->
+		<!-- <script src='https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script> -->
+
+		<script>
+		var dojoConfig = {
+			async: true,
+			requestProvider: 'dojo/request/registry',
+			baseUrl: '/',
+			packages: [
+				{ name: 'worldview', location: '.' },
+				{ name: 'dgrid', location: '//cdn.rawgit.com/SitePen/dgrid/v1.1.0' },
+				{ name: 'dijit', location: '//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit' },
+				{ name: 'dstore', location: '//cdn.rawgit.com/SitePen/dstore/v1.1.1' }
+			]
+		};
+
+		// If using Mapbox, provide the token value with a Maven property, either on the command line or in a
+		// 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
+		var mapboxToken = '${mapboxToken}';
+		</script>
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
 	</head>
 	<body>
-		<h1>Hello world!</h1>
+		<h1>WorldView</h1>
+
+		<div id="wrapper" class="loading">
+			<div id="main" class="row">
+				<div id="ontologies-column" class="column">
+					<div id="select-grids" class="row">
+						<div class="select-grid">
+							<div id="ontology1"></div>
+							<div id="entities1"></div>
+						</div>
+						<div class="select-grid">
+							<div id="ontology2"></div>
+							<div id="entities2"></div>
+						</div>
+					</div>
+
+					<div class="axioms box" id="user-axioms">
+					</div>
+				</div>
+				<div id="map-column" class="column">
+					<div id="map" class="row box"></div>
+					<div class="axioms box" id="axioms">
+					</div>
+				</div>
+			</div>
+
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</div>
+
+		<script src="mockData.js"></script>
+		<script src="app.js"></script>
 	</body>
 </html>

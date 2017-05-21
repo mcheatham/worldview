@@ -1,5 +1,7 @@
 package edu.wright.cs.dase.usgs;
 
+import static spark.Spark.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,18 +50,14 @@ public class Main {
 //		for (Axiom a: axioms) {
 //			System.out.println(a);
 //		}
+
+		if (args.length > 0 && args[0].equals("serve")) {
+			port(8080);
+			staticFiles.location("/public");
+			init();
 		
-		
-//		port(8080);
-//		staticFiles.location("/public");
-//		
-//		get("/hello", (req, res) -> "Hello World");
-//		
-//		get("/example", (req, res) -> 
-//			example(Integer.parseInt(req.queryParams("first")), 
-//					Integer.parseInt(req.queryParams("second"))));
-//		
-//		get("/ontologies", (req, res) -> getOntologies());
+			// get("/ontologies", (req, res) -> getOntologies());
+		}
 	}
 	
 	
@@ -151,7 +149,7 @@ public class Main {
 		return axioms;
 	}
 
-
+	
 //	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
 //			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
 //		
@@ -182,3 +180,4 @@ public class Main {
 //	}
 
 }
+
