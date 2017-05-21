@@ -86,28 +86,42 @@ body {
 	box-shadow: inset 0px 0px 4px 2px rgba(0, 0, 0, 0.03);
 }
 
+.dijitInputField, .dgrid-row {
+	padding-left: 3px;
+}
+
 .dgrid {
-	height: 6em;
+	height: auto;
 }
 
 #map {
 	border-style: solid;
 	border-width: 1px;
-	height: 120px;
 }
+
 .dgrid-row {
 	cursor: pointer;
 }
 
+.select-grid {
+	display: flex;
+	flex-direction: column;
+}
 .select-grid > * {
 	margin-bottom: 4px;
+	flex-grow: 1;
 }
 .select-grid > *:last-child {
 	margin-bottom: 0;
 }
+.select-grid > .dijitSelect{
+	flex-grow: 0;
+}
 
 .axioms {
 	border: solid 1px #ddd;
+	height: 200px;
+	flex-grow: 0;
 }
 
 #main {
@@ -117,10 +131,6 @@ body {
 
 #ontologies {
 	width: 200px;
-}
-
-.dijitInputField, .dgrid-row {
-	padding-left: 3px;
 }
 
 #ontologies-column {
