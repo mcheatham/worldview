@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -25,6 +29,8 @@ public class Main {
 	
 	private static HashMap<String, OWLOntology> ontologies;
 	private static OWLOntologyManager manager;
+	private static String baseOntology = "USGS.owl"; // must have coordinate data
+	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS/query";
 
 	
 	public static void main(String[] args) {
@@ -42,40 +48,50 @@ public class Main {
 //			System.out.println(e);
 //		}
 		
-		ArrayList<Axiom> axioms = getAxioms(
-				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
-				"Hydro3.owl", "USGS.owl");
-		for (Axiom a: axioms) {
-			System.out.println(a);
-		}
+//		ArrayList<Axiom> axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
+//		
+//		axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
 		
-		axioms = getAxioms(
-				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-				"Hydro3.owl", "USGS.owl");
-		for (Axiom a: axioms) {
-			System.out.println(a);
+		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
+				"EquivalentClasses(<http://cegis.usgs.gov/SWO/SwampOrMarsh> <http://spatial.maine.edu/semgaz/HydroOntology#Wetlands> )", 
+				"Hydro3.owl", "USGS.owl", 75.0, 75.0, 10);
+		for (Entity e: coords.keySet()) {
+			System.out.println(e);
+			for (Coordinates c: coords.get(e)) {
+				System.out.println("\t" + c);
+			}
 		}
 
-		Gson gson = new Gson();
-
-		if (args.length > 0 && args[0].equals("serve")) {
-			port(8080);
-			staticFiles.location("/public");
-			init();
-		
-			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
-
-			get("/entities", (request, response) -> {
-				return getEntities(request.queryParams("ontology"));
-			}, gson::toJson);
-
-			get("/axioms", (request, response) -> {
-				String entity = request.queryParams("entity");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				return getAxioms(entity, ont1, ont2);
-			}, gson::toJson);
-		}
+//		Gson gson = new Gson();
+//
+//		if (args.length > 0 && args[0].equals("serve")) {
+//			port(8080);
+//			staticFiles.location("/public");
+//			init();
+//		
+//			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
+//
+//			get("/entities", (request, response) -> {
+//				return getEntities(request.queryParams("ontology"));
+//			}, gson::toJson);
+//
+//			get("/axioms", (request, response) -> {
+//				String entity = request.queryParams("entity");
+//				String ont1 = request.queryParams("ontology1");
+//				String ont2 = request.queryParams("ontology2");
+//				return getAxioms(entity, ont1, ont2);
+//			}, gson::toJson);
+//		}
 	}
 	
 	// list the ontologies
@@ -142,6 +158,25 @@ public class Main {
 		
 		return axioms;
 	}
+	
+	
+	// return an Axiom object based on this OWL statement
+	public static Axiom getAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
+		
+		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
+				ont2Filename.replaceAll(".owl", "") + ".owl";
+		
+		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		OWLOntology ont2 = getOntology(ont2Filename, false);
+		
+		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
+			if (ax.toString().equals(axiomOWL)) {
+				return new Axiom(ax, ont1Filename, ont2Filename, ont2);
+			}
+		}
+		
+		return null;
+	}
 
 	
 	// TODO
@@ -150,9 +185,80 @@ public class Main {
 		
 		HashMap<Entity, ArrayList<Coordinates>> entityCoordinates = new HashMap<>();
 		
+		// get an Axiom object using the OWL statement
+		Axiom theAxiom = getAxiom(axiomOWL, ont1Filename, ont2Filename);
 		
+		// get all of the entities in this axiom
+		ArrayList<Entity> entities = theAxiom.getEntities();
+		
+		// for each entity
+		for (Entity ent: entities) {
+		
+			ArrayList<Coordinates> coordinates = null;
+			
+			// if ent is in the base ontology, query Fuseki for the coordinates of all instances
+			// if ent is not in the base ontology, query based on the second half of the axiom
+			String query = null;
+			
+			if (ent.getOntology().equals(baseOntology)) {
+	        
+	            query = "SELECT ?shape WHERE {"
+	            	  + "?instance a " + ent.getURI() + " . " 
+	            	  + "?instance <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
+	            	  + "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape "
+	            	  + "}";
+	            
+	            coordinates = getCoordinates(query);
+	            entityCoordinates.put(ent, coordinates);
+				
+			} else {
+				// TODO
+			}
+			
+			if (coordinates == null) continue;
+			
+			// sort the instances based on the distance between each instance and the location
+			Collections.sort(coordinates, new DistanceComparator(lat, lng));
+		
+			// collect the first "limit" into the ArrayList
+			ArrayList<Coordinates> keepers = new ArrayList<>();
+			for (int i=0; i<limit; i++) {
+				keepers.add(coordinates.get(i));
+			}
+			entityCoordinates.put(ent, keepers);
+		}
 		
 		return entityCoordinates;
+	}
+	
+	
+	private static ArrayList<Coordinates> getCoordinates(String query) {
+		
+        System.out.println(query);
+        
+        ArrayList<Coordinates> coordinatesList = new ArrayList<>();
+        
+        QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query);
+
+        ResultSet results = qe.execSelect();
+        while (results.hasNext()) {
+        	QuerySolution result = results.next();
+        	String shape = result.getLiteral("?shape").toString();
+        	
+        	Coordinates coordinates = new Coordinates();
+        	shape = shape.substring(shape.indexOf("(")+2, shape.indexOf(")"));
+        	String[] pairs = shape.split(",");
+        	for (String pair: pairs) {
+        		String[] values = pair.trim().split("[ ]");
+        		double lat = Double.parseDouble(values[0].trim());
+        		double lng = Double.parseDouble(values[1].trim());
+        		coordinates.addPoint(lat, lng);
+        	}
+        	coordinatesList.add(coordinates);
+        }
+        qe.close();
+        
+        return coordinatesList;
 	}
 	
 	

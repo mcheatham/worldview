@@ -1,25 +1,29 @@
 package edu.wright.cs.dase.usgs;
 
+import java.util.ArrayList;
+
 public class Coordinates {
 
-	private double lat;
-	private double lng;
+	private ArrayList<Point> points;
 	
-	public Coordinates(double lat, double lng) {
-		this.lat = lat;
-		this.lng = lng;
+	public Coordinates() {
+		points = new ArrayList<>();
 	}
 	
-	public double getLat() {
-		return lat;
+	public void addPoint(double lat, double lng) {
+		points.add(new Point(lat, lng));
 	}
 	
-	public double getLng() {
-		return lng;
+	public Point getFirst() {
+		return points.get(0);
 	}
 	
 	@Override
 	public String toString() {
-		return "(" + lat + "," + lng + ")";
+		String s = "";
+		for (Point p: points) {
+			s += p.toString() + " ";
+		}
+		return s.trim();
 	}
 }
