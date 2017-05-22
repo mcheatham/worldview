@@ -109,21 +109,21 @@ require([
 		}
 	];
 
-	registry.register('/ontologies', function (url, options) {
-		logRequest(url, options);
-		return when(ontologies.map(function (ontology) {
-			return { id: ontology.id, label: ontology.label };
-		}));
-	});
+	// registry.register('/ontologies', function (url, options) {
+	// 	logRequest(url, options);
+	// 	return when(ontologies.map(function (ontology) {
+	// 		return { id: ontology.id, label: ontology.label };
+	// 	}));
+	// });
 
-	registry.register('/entities', function (url, options) {
-		logRequest(url, options);
-		var query = options.query;
-		var ontology = ontologies.find(function (ontology) {
-			return ontology.id === queryParam(query, 'ontology');
-		});
-		return when(ontology.entities);
-	});
+	// registry.register('/entities', function (url, options) {
+	// 	logRequest(url, options);
+	// 	var query = options.query;
+	// 	var ontology = ontologies.find(function (ontology) {
+	// 		return ontology.id === queryParam(query, 'ontology');
+	// 	});
+	// 	return when(ontology.entities);
+	// });
 
 	registry.register('/relatedEntities', function (url, options) {
 		logRequest(url, options);
@@ -140,36 +140,37 @@ require([
 		return when(ont2.entities);
 	});
 
-	registry.register('/axioms', function (url, options) {
-		logRequest(url, options);
-		var query = options.query;
-		var ont1 = ontologies.find(function (ontology) {
-			return ontology.id === queryParam(query, 'ontology1');
-		});
-		var ont2 = ontologies.find(function (ontology) {
-			return ontology.id === queryParam(query, 'ontology2');
-		});
-		var ent1 = ont1.entities.find(function (entity) {
-			return entity.uri === queryParam(query, 'entity');
-		});
-		return when(ont1.entities.map(function (entity) {
-			var ont2Entities = ont2.entities.slice();
-			var ent1 = ont2Entities.splice(Math.floor(Math.random() * ont2Entities.length), 1)[0];
-			var ent2 = ont2Entities.splice(Math.floor(Math.random() * ont2Entities.length), 1)[0];
+	// registry.register('/axioms', function (url, options) {
+	// 	logRequest(url, options);
+	// 	var query = options.query;
+	// 	var ont1 = ontologies.find(function (ontology) {
+	// 		return ontology.id === queryParam(query, 'ontology1');
+	// 	});
+	// 	var ont2 = ontologies.find(function (ontology) {
+	// 		return ontology.id === queryParam(query, 'ontology2');
+	// 	});
+	// 	var ent1 = ont1.entities.find(function (entity) {
+	// 		return entity.uri === queryParam(query, 'entity');
+	// 	});
+	// 	return when(ont1.entities.map(function (entity) {
+	// 		var ont2Entities = ont2.entities.slice();
+	// 		var ent1 = ont2Entities.splice(Math.floor(Math.random() * ont2Entities.length), 1)[0];
+	// 		var ent2 = ont2Entities.splice(Math.floor(Math.random() * ont2Entities.length), 1)[0];
 
-			return {
-				id: '<xml><' + Math.random() + '/></xml>',
-				label: 'A ' + entity.label + ' is a subclass of ' + ent1.label + ' that has the property ' + ent2.label,
-				entities: [ ent1, ent2 ]
-			};
-		}));
-	});
+	// 		return {
+	// 			id: '<xml><' + Math.random() + '/></xml>',
+	// 			label: 'A ' + entity.label + ' is a subclass of ' + ent1.label + ' that has the property ' + ent2.label,
+	// 			entities: [ ent1, ent2 ]
+	// 		};
+	// 	}));
+	// });
 
 	registry.register('/coordinates', function (url, options) {
 		logRequest(url, options);
 		var query = options.query;
 		var axiom = queryParam(query, 'axiom');
-		var center = queryParam(query, 'center');
+		var lat = queryParam(query, 'lat');
+		var lng = queryParam(query, 'lng');
 		var ont1 = ontologies.find(function (ontology) {
 			return ontology.id === queryParam(query, 'ontology1');
 		});
@@ -178,10 +179,10 @@ require([
 		});
 		var coords = coordinates[Math.floor(Math.random() * coordinates.length)];
 		return when([
-			{
-				entity: ont1.entities[0],
-				coordinates: coords.coordinates
-			}
+			// {
+			// 	entity: ont1.entities[0],
+			// 	coordinates: coords.coordinates
+			// }
 		]);
 	});
 });

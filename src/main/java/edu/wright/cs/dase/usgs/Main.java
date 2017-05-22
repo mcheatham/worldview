@@ -2,6 +2,8 @@ package edu.wright.cs.dase.usgs;
 
 import static spark.Spark.*;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,15 +53,27 @@ public class Main {
 //			System.out.println(a);
 //		}
 
+		Gson gson = new Gson();
+
 		if (args.length > 0 && args[0].equals("serve")) {
 			port(8080);
 			staticFiles.location("/public");
 			init();
 		
-			// get("/ontologies", (req, res) -> getOntologies());
+			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
+
+			get("/entities", (request, response) -> {
+				return getEntities(request.queryParams("ontology"));
+			}, gson::toJson);
+
+			get("/axioms", (request, response) -> {
+				String entity = request.queryParams("entity");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				return getAxioms(entity, ont1, ont2);
+			}, gson::toJson);
 		}
 	}
-	
 	
 	// list the ontologies
 	public static ArrayList<Ontology> getOntologies() {

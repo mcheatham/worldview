@@ -29,5 +29,8 @@ while (( $serving )); do
 	mvn package exec:java &
 	pid=$!
 	fswatch -1 src/main
-	kill $pid
+	ps -p $pid &> /dev/null
+	if (( $? == 0 )); then
+		kill $pid
+	fi
 done
