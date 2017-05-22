@@ -24,7 +24,7 @@ define([ 'dojo/_base/declare' ], function (declare) {
 		getCenter: function () {
 			return this.map.then(function (map) {
 				var center = map.getCenter();
-				return [ center[1], center[0] ];
+				return [ center.lng, center.lat ];
 			});
 		},
 
