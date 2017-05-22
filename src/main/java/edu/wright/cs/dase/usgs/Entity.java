@@ -28,7 +28,7 @@ public class Entity implements Comparable<Entity> {
 
 	@Override
 	public String toString() {
-		return URI + " (" + label + ")";
+		return URI + " (" + label + ") in " + ontology;
 	}
 
 	@Override

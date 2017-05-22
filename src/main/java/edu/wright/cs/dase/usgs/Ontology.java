@@ -1,5 +1,6 @@
 package edu.wright.cs.dase.usgs;
 
+
 public class Ontology {
 	
 	private String label;

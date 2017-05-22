@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLOntology;
 
 public class Axiom {
 	
@@ -12,19 +13,25 @@ public class Axiom {
 	private String owl;
 	private ArrayList<Entity> entities = new ArrayList<>();
 
-	public Axiom(OWLAxiom ax, String ontId) {
+	
+	public Axiom(OWLAxiom ax, String ont1Filename, String ont2Filename, 
+			OWLOntology ont2) {
 		this.owl = ax.toString();
-		this.entities = extractEntities(ax, ontId);
+		this.entities = extractEntities(ax, ont1Filename, ont2Filename, ont2);
 		this.text = ax.toString(); // TODO may use OWLtoEnglish converter later
 	}
 	
 	
-	private ArrayList<Entity> extractEntities(OWLAxiom ax, String ontId) {
+	private ArrayList<Entity> extractEntities(OWLAxiom ax, String ont1Filename, 
+			String ont2Filename, OWLOntology ont2) {
 		
 		ArrayList<Entity> entities = new ArrayList<>();
 		
 		for (OWLClass cls: ax.getClassesInSignature()) {
-			entities.add(new Entity(ontId, cls));
+			if (ont2.containsEntityInSignature(cls)) 
+				entities.add(new Entity(ont2Filename, cls));
+			else
+				entities.add(new Entity(ont1Filename, cls));
 		}
 		
 		return entities;

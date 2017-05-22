@@ -1,6 +1,8 @@
 package edu.wright.cs.dase.usgs;
 
-import static spark.Spark.*;
+import static spark.Spark.init;
+import static spark.Spark.port;
+import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,13 +21,14 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 public class Main {
 	
-	private static OWLOntology alignmentOnt;
-	private static String alignmentFilename;
-	private static String ont1Filename;
-	private static String ont2Filename;
-	private static OWLOntology mergedOntology;
+	private static HashMap<String, OWLOntology> ontologies;
+	private static OWLOntologyManager manager;
+
 	
 	public static void main(String[] args) {
+		
+		ontologies = new HashMap<>();
+		manager = OWLManager.createOWLOntologyManager();
 		
 //		ArrayList<Ontology> ontologies = getOntologies();
 //		for (Ontology ont: ontologies) {
@@ -37,19 +40,19 @@ public class Main {
 //			System.out.println(e);
 //		}
 		
-//		ArrayList<Axiom> axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
-//				"Hydro3.owl", "USGS.owl");
-//		for (Axiom a: axioms) {
-//			System.out.println(a);
-//		}
-//		
-//		axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-//				"Hydro3.owl", "USGS.owl");
-//		for (Axiom a: axioms) {
-//			System.out.println(a);
-//		}
+		ArrayList<Axiom> axioms = getAxioms(
+				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
+				"Hydro3.owl", "USGS.owl");
+		for (Axiom a: axioms) {
+			System.out.println(a);
+		}
+		
+		axioms = getAxioms(
+				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+				"Hydro3.owl", "USGS.owl");
+		for (Axiom a: axioms) {
+			System.out.println(a);
+		}
 
 		if (args.length > 0 && args[0].equals("serve")) {
 			port(8080);
@@ -84,34 +87,25 @@ public class Main {
 	}
 
 	
-	// return all of the entities within an ontology, ordered
-	// alphabetically
+	// return all of the entities within an ontology, ordered alphabetically
 	public static ArrayList<Entity> getEntities(String ontFilename) {
 		
 		ArrayList<Entity> entities = new ArrayList<>();
-		
-		try {
-			
-			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-			IRI iri = IRI.create(new File("./src/main/resources/public/ontologies/" + ontFilename));
-			OWLOntology ont = manager.loadOntologyFromOntologyDocument(iri);
 
-			for (OWLClass e : ont.getClassesInSignature()) {
-				entities.add(new Entity(ontFilename, e));
-			}
+		OWLOntology ont = getOntology(ontFilename, false);
 
-			for (OWLObjectProperty e: ont.getObjectPropertiesInSignature()) {
-				entities.add(new Entity(ontFilename, e));
-			}
-
-			for (OWLDataProperty e: ont.getDataPropertiesInSignature()) {
-				entities.add(new Entity(ontFilename, e));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (OWLClass e : ont.getClassesInSignature()) {
+			entities.add(new Entity(ontFilename, e));
 		}
-		
+
+		for (OWLObjectProperty e: ont.getObjectPropertiesInSignature()) {
+			entities.add(new Entity(ontFilename, e));
+		}
+
+		for (OWLDataProperty e: ont.getDataPropertiesInSignature()) {
+			entities.add(new Entity(ontFilename, e));
+		}
+
 		Collections.sort(entities);
 		return entities;
 	}
@@ -122,62 +116,62 @@ public class Main {
 		
 		ArrayList<Axiom> axioms = new ArrayList<>();
 		
-		String axiomFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
+		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
 				ont2Filename.replaceAll(".owl", "") + ".owl";
 		
-		// only read in the alignment ontology if we're using a different alignment 
-		// than the last time this method was called.
-		if (!axiomFilename.equals(alignmentFilename) || alignmentOnt != null) {
-			try {
-
-				OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-				IRI iri = IRI.create(new File("./src/main/resources/public/alignments/" + axiomFilename));
-				alignmentOnt = manager.loadOntologyFromOntologyDocument(iri);
-				alignmentFilename = axiomFilename;
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
-			if (ax.toString().contains(entityURI) && Axiom.isInteresting(ax)) {
-				axioms.add(new Axiom(ax, ont1Filename));
-			}
+			axioms.add(new Axiom(ax, ont1Filename, ont2Filename, ont2));
 		}
 		
 		return axioms;
 	}
 
 	
-//	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
-//			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
-//		
-//		// Create a merged ontology with everything from ont1 and ont2 (or make a copy of an existing one)
-//		if (!ont1Filename.equals(alignmentFilename) || alignmentOnt != null) {
-//			try {
-//
-//				OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-//				IRI iri = IRI.create(new File("./src/main/resources/public/alignments/" + axiomFilename));
-//				alignmentOnt = manager.loadOntologyFromOntologyDocument(iri);
-//				alignmentFilename = axiomFilename;
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			
-//		}
-//		// Add in the axiom
-//		// Invoke a reasoner
-//		// Get all of the entities from the axiom
-//		// For each one, get the coordinates all of the instances of that entity from the ontology (cache these) 
-//		// Sort these by distance from the lat, lng
-//		// Add the closest "limit" instances to an ArrayList
-//		// Put the ArrayList for this entity into the HashMap
-//		// Return the result
-//		
-//	}
+	// TODO
+	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
+			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
+		
+		HashMap<Entity, ArrayList<Coordinates>> entityCoordinates = new HashMap<>();
+		
+		
+		
+		return entityCoordinates;
+	}
+	
+	
+	private static OWLOntology getOntology(String ontFilename, boolean isAlignment) {
+		
+		OWLOntology ont = null;
+		
+		String path = "./src/main/resources/public/ontologies/";
+		if (isAlignment) {
+			path = "./src/main/resources/public/alignments/";
+		}
+		
+		if (ontologies.containsKey(ontFilename)) {
+			ont = ontologies.get(ontFilename);
+			
+		} else {
+			
+			try {
 
+				if (ontologies.size() > 5) {
+					ontologies.clear(); // don't let the cache get too big
+				}
+				
+				IRI iri = IRI.create(new File(path + ontFilename));
+				ont = manager.loadOntologyFromOntologyDocument(iri);
+				ontologies.put(ontFilename, ont);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return ont;
+	}
 }
 
