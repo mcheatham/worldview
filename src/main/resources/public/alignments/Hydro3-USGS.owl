@@ -66,7 +66,15 @@
   <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Coastline"/>
   <ObjectUnionOf>
     <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
-    <Class IRI="http://cegis.usgs.gov/SWO/NonEarthenShore"/>
+    <Class IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
   </ObjectUnionOf>
 </EquivalentClasses>
+<!-- the one below is just for testing -->
+<SubClassOf>
+  <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Watershed"/>
+  <ObjectUnionOf>
+    <Class IRI="http://cegis.usgs.gov/SWO/LakeOrPond"/>
+    <Class IRI="http://cegis.usgs.gov/SWO/SwampOrMarsh"/>
+  </ObjectUnionOf>
+</SubClassOf>
 </Ontology>

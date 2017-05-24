@@ -1,28 +1,27 @@
 package edu.wright.cs.dase.usgs;
 
-import static spark.Spark.init;
-import static spark.Spark.port;
-import static spark.Spark.staticFiles;
-
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.aksw.owl2sparql.OWLClassExpressionToSPARQLConverter;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
+
 
 
 public class Main {
@@ -49,7 +48,7 @@ public class Main {
 //		}
 		
 //		ArrayList<Axiom> axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Coastline", 
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Watershed", 
 //				"Hydro3.owl", "USGS.owl");
 //		for (Axiom a: axioms) {
 //			System.out.println(a);
@@ -63,7 +62,8 @@ public class Main {
 //		}
 		
 		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
-				"EquivalentClasses(<http://cegis.usgs.gov/SWO/SwampOrMarsh> <http://spatial.maine.edu/semgaz/HydroOntology#Wetlands> )", 
+				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
+				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
 				"Hydro3.owl", "USGS.owl", 75.0, 75.0, 10);
 		for (Entity e: coords.keySet()) {
 			System.out.println(e);
@@ -128,13 +128,7 @@ public class Main {
 			entities.add(new Entity(ontFilename, e));
 		}
 
-		for (OWLObjectProperty e: ont.getObjectPropertiesInSignature()) {
-			entities.add(new Entity(ontFilename, e));
-		}
-
-		for (OWLDataProperty e: ont.getDataPropertiesInSignature()) {
-			entities.add(new Entity(ontFilename, e));
-		}
+		// TODO need to handle properties?
 
 		Collections.sort(entities);
 		return entities;
@@ -153,7 +147,8 @@ public class Main {
 		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
-			axioms.add(new Axiom(ax, ont1Filename, ont2Filename, ont2));
+			if (ax.toString().contains(entityURI))
+				axioms.add(new Axiom(ax, ont1Filename, ont2Filename, ont2));
 		}
 		
 		return axioms;
@@ -179,7 +174,8 @@ public class Main {
 	}
 
 	
-	// TODO
+	// return a list of the limit closest entities relevant to the axiom as measured from 
+	// the provided latitude and longitude
 	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
 			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
 		
@@ -191,28 +187,41 @@ public class Main {
 		// get all of the entities in this axiom
 		ArrayList<Entity> entities = theAxiom.getEntities();
 		
+		OWLClassExpressionToSPARQLConverter converter = new OWLClassExpressionToSPARQLConverter();
+		
 		// for each entity
 		for (Entity ent: entities) {
 		
 			ArrayList<Coordinates> coordinates = null;
 			
 			// if ent is in the base ontology, query Fuseki for the coordinates of all instances
-			// if ent is not in the base ontology, query based on the second half of the axiom
 			String query = null;
 			
 			if (ent.getOntology().equals(baseOntology)) {
-	        
-	            query = "SELECT ?shape WHERE {"
-	            	  + "?instance a " + ent.getURI() + " . " 
-	            	  + "?instance <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
-	            	  + "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape "
-	            	  + "}";
-	            
-	            coordinates = getCoordinates(query);
-	            entityCoordinates.put(ent, coordinates);
-				
-			} else {
-				// TODO
+
+					OWLClassExpression ce = ent.getEntity();
+					Query q = converter.asQuery(ce, "?x");
+					
+					PrefixMapping pm = new PrefixMappingImpl();
+					if(q.toString().contains("rdf-schema#")) {
+						pm.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+					}
+					if(q.toString().contains("rdf-syntax-ns#")) {
+						pm.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+					}
+					if(q.toString().contains("XMLSchema#")) {
+						pm.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+					}
+					q.setPrefixMapping(pm);
+					
+					query = q.toString();
+					query = query.replace("SELECT DISTINCT  ?x", "SELECT DISTINCT  ?shape");
+					query = query.substring(0, query.lastIndexOf("}"));
+					query +=  ". ?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
+							+ "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape . } LIMIT 1000";
+					
+					coordinates = getCoordinates(query);
+					entityCoordinates.put(ent, coordinates);
 			}
 			
 			if (coordinates == null) continue;
@@ -222,7 +231,8 @@ public class Main {
 		
 			// collect the first "limit" into the ArrayList
 			ArrayList<Coordinates> keepers = new ArrayList<>();
-			for (int i=0; i<limit; i++) {
+			int numToAdd = Math.min(coordinates.size(), limit);
+			for (int i=0; i<numToAdd; i++) {
 				keepers.add(coordinates.get(i));
 			}
 			entityCoordinates.put(ent, keepers);

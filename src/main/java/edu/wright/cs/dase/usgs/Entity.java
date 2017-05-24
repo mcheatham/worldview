@@ -1,17 +1,19 @@
 package edu.wright.cs.dase.usgs;
 
-import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 
 public class Entity implements Comparable<Entity> {
 	
 	private String ontology;
 	private String URI;
 	private String label;
+	private OWLClassExpression entity;
 	
-	public Entity(String ontology, OWLEntity ent) {
+	public Entity(String ontology, OWLClassExpression ent) {
 		this.ontology = ontology;
 		this.URI = ent.toString();
 		this.label = getEntityLabel(ent);
+		this.entity = ent;
 	}
 
 	public String getOntology() {
@@ -25,6 +27,10 @@ public class Entity implements Comparable<Entity> {
 	public String getLabel() {
 		return label;
 	}
+	
+	public OWLClassExpression getEntity() {
+		return entity;
+	}
 
 	@Override
 	public String toString() {
@@ -36,9 +42,11 @@ public class Entity implements Comparable<Entity> {
 		return label.compareTo(o.label);
 	}
 	
-	private String getEntityLabel(OWLEntity e) {
+	private String getEntityLabel(OWLClassExpression e) {
 		
-		String label = e.getIRI().toString();
+		if (!e.isClassExpressionLiteral()) return e.toString();
+		
+		String label = e.asOWLClass().getIRI().toString();
 		String s = "";
 		
 //		Set<OWLAnnotation> annotations = e.getAnnotations(ont, df.getRDFSLabel());
@@ -77,6 +85,31 @@ public class Entity implements Comparable<Entity> {
 //		}
     	
 		s = s.toLowerCase();
-    	return s.replaceAll("-|_", " ");
+    	return s.replaceAll("-|_", "");
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((URI == null) ? 0 : URI.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entity other = (Entity) obj;
+		if (URI == null) {
+			if (other.URI != null)
+				return false;
+		} else if (!URI.equals(other.URI))
+			return false;
+		return true;
 	}
 }
