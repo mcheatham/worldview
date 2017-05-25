@@ -10,8 +10,8 @@ public class Coordinates {
 		points = new ArrayList<>();
 	}
 	
-	public void addPoint(double lat, double lng) {
-		points.add(new Point(lat, lng));
+	public void addPoint(double lng, double lat) {
+		points.add(new Point(lng, lat));
 	}
 	
 	public Point getFirst() {

@@ -24,7 +24,8 @@ define([ 'dojo/_base/declare' ], function (declare) {
 
 		getCenter: function () {
 			return this.map.then(function (map) {
-				return map.getCenter();
+				var center = map.getCenter();
+				return [ center.lng, center.lat ];
 			});
 		},
 
@@ -32,15 +33,15 @@ define([ 'dojo/_base/declare' ], function (declare) {
 			return this.map.then(function (map) {
 				map.addLayer({
 					id: id,
-					type: 'fill',
 					source: {
 						type: 'geojson',
 						data: geojson
 					},
-					layout: {},
+					type: 'fill',
 					paint: {
-						'fill-color': '#088',
-						'fill-opacity': 0.8
+						'fill-color': '#ff0000',
+						'fill-opacity': 0.8,
+						'fill-outline-color': '#aa4400'
 					}
 				});
 				return id;

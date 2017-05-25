@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import com.google.gson.Gson;
+
+import static spark.Spark.*;
+
 import org.aksw.owl2sparql.OWLClassExpressionToSPARQLConverter;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
@@ -21,8 +25,6 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
-
-
 
 public class Main {
 	
@@ -72,26 +74,35 @@ public class Main {
 			}
 		}
 
-//		Gson gson = new Gson();
-//
-//		if (args.length > 0 && args[0].equals("serve")) {
-//			port(8080);
-//			staticFiles.location("/public");
-//			init();
-//		
-//			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
-//
-//			get("/entities", (request, response) -> {
-//				return getEntities(request.queryParams("ontology"));
-//			}, gson::toJson);
-//
-//			get("/axioms", (request, response) -> {
-//				String entity = request.queryParams("entity");
-//				String ont1 = request.queryParams("ontology1");
-//				String ont2 = request.queryParams("ontology2");
-//				return getAxioms(entity, ont1, ont2);
-//			}, gson::toJson);
-//		}
+		if (args.length > 0 && args[0].equals("serve")) {
+			Gson gson = new Gson();
+
+			port(8080);
+			staticFiles.location("/public");
+			init();
+		
+			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
+
+			get("/entities", (request, response) -> {
+				return getEntities(request.queryParams("ontology"));
+			}, gson::toJson);
+
+			get("/axioms", (request, response) -> {
+				String entity = request.queryParams("entity");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				return getAxioms(entity, ont1, ont2);
+			}, gson::toJson);
+
+			get("/coordinates", (request, response) -> {
+				String axiom = request.queryParams("axiom");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				Double lat = new Double(request.queryParams("lat"));
+				Double lng = new Double(request.queryParams("lng"));
+				return getCoordinates(axiom, ont1, ont2, lat, lng, 10);
+			}, gson::toJson);
+		}
 	}
 	
 	// list the ontologies
@@ -262,7 +273,7 @@ public class Main {
         		String[] values = pair.trim().split("[ ]");
         		double lat = Double.parseDouble(values[0].trim());
         		double lng = Double.parseDouble(values[1].trim());
-        		coordinates.addPoint(lat, lng);
+        		coordinates.addPoint(lng, lat);
         	}
         	coordinatesList.add(coordinates);
         }
