@@ -27,9 +27,9 @@ require([
 
 		if (ent1 && ont1 && ont2) {
 			return request.get('/relatedEntities', {
-				handleAs: 'json',
 				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
 			}).then(function (data) {
+				data = JSON.parse(data);
 				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			});
 		}
@@ -46,9 +46,9 @@ require([
 
 		if (ent1 && ont1 && ont2) {
 			return request.get('/axioms', {
-				handleAs: 'json',
 				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
 			}).then(function (data) {
+				data = JSON.parse(data);
 				axioms.set('collection', new TrackableMemory({
 					data: data,
 					idProperty: 'owl'
@@ -81,7 +81,7 @@ require([
 
 	var ListClass = List.createSubclass([ Selection ], {
 		selectionMode: 'single',
-		renderRow: function (item, options) {
+		renderRow: function (item) {
 			var div = document.createElement('div');
 			div.textContent = item[this.label || 'label'];
 			if (item.marked) {
@@ -122,9 +122,9 @@ require([
 
 	ontology1.on('change', function (newValue) {
 		showOverlay(request.get('/entities', {
-			handleAs: 'json',
 			query: { ontology: newValue }
 		}).then(function (data) {
+			data = JSON.parse(data);
 			entities1.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			axioms.set('collection', new TrackableMemory());
 		}));
@@ -139,9 +139,9 @@ require([
 	ontology2.on('change', function (newValue) {
 		showOverlay(
 			request.get('/entities', {
-				handleAs: 'json',
 				query: { ontology: newValue }
 			}).then(function (data) {
+				data = JSON.parse(data);
 				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			}),
 			getAxioms()
@@ -156,7 +156,6 @@ require([
 		var ont2 = ontology2.get('value');
 
 		// Axioms should relate ent1 to entities int ont2. Highlight those entities.
-		var addedEntities = {};
 		var entities2Collection = entities2.get('collection');
 		axiom.entities.forEach(function (entity) {
 			// Currently, axiom entities aren't properly attributed to their source ontology. Ignore the ontology
@@ -169,11 +168,10 @@ require([
 		});
 
 		map.getCenter().then(function (center) {
-			console.log('map center:', center);
 			showOverlay(request.get('/coordinates', {
-				handleAs: 'json',
 				query: { axiom: axiomId, ontology1: ont1, ontology2: ont2, lng: center[0], lat: center[1] }
 			}).then(function (data) {
+				data = JSON.parse(data);
 				map.clearShapes();
 
 				var allCoords = [];
@@ -206,11 +204,12 @@ require([
 		zoom: 5
 	}, 'map');
 
-	request.get('/ontologies', { handleAs: 'json' }).then(function (data) {
+	request.get('/ontologies').then(function (data) {
+		data = JSON.parse(data);
 		var store = new SelectStore({
 			data: [ { identifier: '', label: ' ' } ].concat(data),
 			idProperty: 'identifier'
-		})
+		});
 		ontology1.set('store', store);
 		ontology1.getOptions('').disabled = true;
 
@@ -219,7 +218,7 @@ require([
 				return item.label === 'USGS';
 			}),
 			idProperty: 'identifier'
-		})
+		});
 		ontology2.set('store', store);
 		ontology2.set('value', store.getIdentity(store.data[0]));
 	}).otherwise(showError).then(function () {
