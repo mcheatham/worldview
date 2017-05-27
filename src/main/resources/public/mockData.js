@@ -165,24 +165,24 @@ require([
 	// 	}));
 	// });
 
-	registry.register('/coordinates', function (url, options) {
-		logRequest(url, options);
-		var query = options.query;
-		var axiom = queryParam(query, 'axiom');
-		var lat = queryParam(query, 'lat');
-		var lng = queryParam(query, 'lng');
-		var ont1 = ontologies.find(function (ontology) {
-			return ontology.id === queryParam(query, 'ontology1');
-		});
-		var ont2 = ontologies.find(function (ontology) {
-			return ontology.id === queryParam(query, 'ontology2');
-		});
-		var coords = coordinates[Math.floor(Math.random() * coordinates.length)];
-		return when([
-			// {
-			// 	entity: ont1.entities[0],
-			// 	coordinates: coords.coordinates
-			// }
-		]);
-	});
+	// registry.register('/coordinates', function (url, options) {
+	// 	logRequest(url, options);
+	// 	var query = options.query;
+	// 	var axiom = queryParam(query, 'axiom');
+	// 	var lat = queryParam(query, 'lat');
+	// 	var lng = queryParam(query, 'lng');
+	// 	var ont1 = ontologies.find(function (ontology) {
+	// 		return ontology.id === queryParam(query, 'ontology1');
+	// 	});
+	// 	var ont2 = ontologies.find(function (ontology) {
+	// 		return ontology.id === queryParam(query, 'ontology2');
+	// 	});
+	// 	var coords = coordinates[Math.floor(Math.random() * coordinates.length)];
+	// 	return when([
+	// 		// {
+	// 		// 	entity: ont1.entities[0],
+	// 		// 	coordinates: coords.coordinates
+	// 		// }
+	// 	]);
+	// });
 });

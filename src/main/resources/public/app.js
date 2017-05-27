@@ -173,19 +173,27 @@ require([
 				query: { axiom: axiomId, ontology1: ont1, ontology2: ont2, lng: center[0], lat: center[1] }
 			}).then(function (data) {
 				map.clearShapes();
-				data.forEach(function (entry) {
-					map.addShape(entry.entity.URI, {
-						type: 'Feature',
-						geometry: {
-							type: 'Polygon',
-							coordinates: [ entry.coordinates ]
-						}
+
+				var allCoords = [];
+
+				Object.keys(data).forEach(function (entityUri) {
+					data[entityUri].forEach(function (shape, index) {
+						var coords = shape.points.map(function (point) {
+							return [ point.lng, point.lat ];
+						});
+						allCoords = allCoords.concat(coords);
+						map.addShape(entityUri + '-' + index, {
+							type: 'Feature',
+							geometry: {
+								type: 'Polygon',
+								coordinates: [ coords ]
+							}
+						});
 					});
 				});
-				if (data.length > 0) {
-					map.fitBounds(data.reduce(function (allCoords, entry) {
-						return allCoords.concat(entry.coordinates);
-					}, []));
+
+				if (allCoords.length > 0) {
+					map.fitBounds(allCoords);
 				}
 			}));
 		});
