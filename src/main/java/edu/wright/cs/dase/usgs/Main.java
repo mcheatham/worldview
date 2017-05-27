@@ -15,6 +15,7 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
@@ -95,8 +96,12 @@ public class Main {
 				return getOntologies();
 			}, gson::toJson);
 
-			get("/entities", (request, response) -> {
-				return getEntities(request.queryParams("ontology"));
+			get("/classes", (request, response) -> {
+				return getClasses(request.queryParams("ontology"));
+			}, gson::toJson);
+			
+			get("/properties", (request, response) -> {
+				return getProperties(request.queryParams("ontology"));
 			}, gson::toJson);
 
 			get("/axioms", (request, response) -> {
@@ -148,14 +153,30 @@ public class Main {
 
 	
 	// return all of the entities within an ontology, ordered alphabetically
-	public static ArrayList<Entity> getEntities(String ontFilename) {
+	public static ArrayList<ClassEntity> getClasses(String ontFilename) {
 		
-		ArrayList<Entity> entities = new ArrayList<>();
+		ArrayList<ClassEntity> entities = new ArrayList<>();
 
 		OWLOntology ont = getOntology(ontFilename, false);
 
 		for (OWLClass e : ont.getClassesInSignature()) {
-			entities.add(new Entity(ontFilename, e));
+			entities.add(new ClassEntity(ontFilename, e));
+		}
+
+		Collections.sort(entities);
+		return entities;
+	}
+	
+	
+	// return all of the entities within an ontology, ordered alphabetically
+	public static ArrayList<PropertyEntity> getProperties(String ontFilename) {
+		
+		ArrayList<PropertyEntity> entities = new ArrayList<>();
+
+		OWLOntology ont = getOntology(ontFilename, false);
+
+		for (OWLObjectProperty e : ont.getObjectPropertiesInSignature()) {
+			entities.add(new PropertyEntity(ontFilename, e));
 		}
 
 		Collections.sort(entities);
@@ -237,29 +258,31 @@ public class Main {
 			
 			if (ent.getOntology().equals(baseOntology)) {
 
-					OWLClassExpression ce = ent.getEntity();
-					Query q = converter.asQuery(ce, "?x");
-					
-					PrefixMapping pm = new PrefixMappingImpl();
-					if(q.toString().contains("rdf-schema#")) {
-						pm.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-					}
-					if(q.toString().contains("rdf-syntax-ns#")) {
-						pm.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-					}
-					if(q.toString().contains("XMLSchema#")) {
-						pm.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
-					}
-					q.setPrefixMapping(pm);
-					
-					query = q.toString();
-					query = query.replace("SELECT DISTINCT  ?x", "SELECT DISTINCT  ?shape");
-					query = query.substring(0, query.lastIndexOf("}"));
-					query +=  ". ?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
-							+ "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape . } LIMIT 1000";
-					
-					coordinates = getCoordinates(query);
-					entityCoordinates.put(ent, coordinates);
+				if (ent instanceof PropertyEntity) continue;
+
+				OWLClassExpression ce = ((ClassEntity) ent).getEntity();
+				Query q = converter.asQuery(ce, "?x");
+
+				PrefixMapping pm = new PrefixMappingImpl();
+				if(q.toString().contains("rdf-schema#")) {
+					pm.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+				}
+				if(q.toString().contains("rdf-syntax-ns#")) {
+					pm.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+				}
+				if(q.toString().contains("XMLSchema#")) {
+					pm.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+				}
+				q.setPrefixMapping(pm);
+
+				query = q.toString();
+				query = query.replace("SELECT DISTINCT  ?x", "SELECT DISTINCT  ?shape");
+				query = query.substring(0, query.lastIndexOf("}"));
+				query +=  ". ?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
+						+ "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape . } LIMIT 1000";
+
+				coordinates = getCoordinates(query);
+				entityCoordinates.put(ent, coordinates);
 			}
 			
 			if (coordinates == null) continue;

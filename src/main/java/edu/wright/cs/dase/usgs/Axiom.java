@@ -38,12 +38,11 @@ public class Axiom {
 					ontFilename = ont1Filename;
 			}
 
-			entities.add(new Entity(ontFilename, expr));
+			entities.add(new ClassEntity(ontFilename, expr));
 		}
 	}
 	
 	
-	// TODO this may need work to support a wider variety of axiom types
 	public static boolean isInteresting(OWLAxiom ax) {
 		AxiomType<?> type = ax.getAxiomType();
 		
@@ -51,6 +50,9 @@ public class Axiom {
 			return true;
 			
 		if (type == AxiomType.SUBCLASS_OF) 
+			return true;
+		
+		if (type == AxiomType.DISJOINT_CLASSES) 
 			return true;
 			
 		return false;

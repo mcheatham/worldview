@@ -14,13 +14,11 @@ public class Entity implements Comparable<Entity>, Serializable {
 	private String ontology;
 	private String URI;
 	private String label;
-	private OWLClassExpression entity;
 	
-	public Entity(String ontology, OWLClassExpression ent) {
+	public Entity(String ontology, String URI, String label) {
 		this.ontology = ontology;
-		this.URI = ent.toString();
-		this.label = getEntityLabel(ent);
-		this.entity = ent;
+		this.URI = URI;
+		this.label = label;
 	}
 
 	public String getOntology() {
@@ -33,10 +31,6 @@ public class Entity implements Comparable<Entity>, Serializable {
 
 	public String getLabel() {
 		return label;
-	}
-	
-	public OWLClassExpression getEntity() {
-		return entity;
 	}
 
 	@Override

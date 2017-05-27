@@ -64,16 +64,16 @@ public class AutomatedAlignment {
 			}
 		}
 		
-		ArrayList<Entity> ont1Entities = Main.getEntities(ont1);
-		ArrayList<Entity> ont2Entities = Main.getEntities(ont2);
+		ArrayList<ClassEntity> ont1Entities = Main.getClasses(ont1);
+		ArrayList<ClassEntity> ont2Entities = Main.getClasses(ont2);
 		
-		for (Entity e1: ont1Entities) {		
+		for (ClassEntity e1: ont1Entities) {		
 			
 			if (e1.getEntity().isAnonymous()) continue;
 			
 			ArrayList<Similarity> similarities = new ArrayList<>();
 
-			for (Entity e2: ont2Entities) {	
+			for (ClassEntity e2: ont2Entities) {	
 				similarities.add(new Similarity(e2, computeSimilarity(e1, e2)));
 			}
 			
@@ -103,7 +103,7 @@ public class AutomatedAlignment {
 	}
 	
 	
-	public static double computeSimilarity(Entity ent1, Entity ent2) {
+	public static double computeSimilarity(ClassEntity ent1, ClassEntity ent2) {
 		double syntacticSim = getSyntacticSimilarity(ent1, ent2);
 		double semanticSim = getSemanticSimilarity(ent1, ent2);
 		double structuralSim = getStructuralSimilarity(ent1, ent2);
@@ -155,7 +155,7 @@ public class AutomatedAlignment {
 	}
 	
 	
-	public static double getStructuralSimilarity(Entity ent1, Entity ent2) {
+	public static double getStructuralSimilarity(ClassEntity ent1, ClassEntity ent2) {
 		
 		if (ent1.getEntity().isAnonymous()) return 0.0;
 		if (ent2.getEntity().isAnonymous()) return 0.0;
