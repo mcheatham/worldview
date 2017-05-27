@@ -36,6 +36,9 @@ public class Main {
 	private static HashMap<String, ArrayList<Entity>> relations;
 	private static String ont1Relations = "";
 	private static String ont2Relations = "";
+	private static double synWeight = 0.0;
+	private static double semWeight = 0.0;
+	private static double structWeight = 0.0;
 
 	
 	public static void main(String[] args) {
@@ -75,15 +78,15 @@ public class Main {
 //			}
 //		}
 
-//		ArrayList<Entity> entities = getEntities("Hydro3.owl");
-//		for (Entity e: entities) {
-//			System.out.println(e);
-//			
-//			ArrayList<Entity> relatedEntities = getRelatedEntities(e, "Hydro3.owl", "USGS.owl");
-//			for (int i=0; i<3; i++) {
-//				System.out.println("\t" + relatedEntities.get(i));
-//			}
-//		}
+		ArrayList<ClassEntity> entities = getClasses("Hydro3.owl");
+		for (Entity e: entities) {
+			System.out.println(e);
+			
+			ArrayList<Entity> relatedEntities = getRelatedEntities(e.getURI(), "Hydro3.owl", "USGS.owl", .2, .5, .3);
+			for (int i=0; i<3; i++) {
+				System.out.println("\t" + relatedEntities.get(i));
+			}
+		}
 
 		if (args.length > 0 && args[0].equals("serve")) {
 			Gson gson = new Gson();
@@ -124,7 +127,10 @@ public class Main {
 				String entity = request.queryParams("entity");
 				String ont1 = request.queryParams("ontology1");
 				String ont2 = request.queryParams("ontology2");
-				return getRelatedEntities(entity, ont1, ont2);
+				Double syn = new Double(request.queryParams("syn"));
+				Double sem = new Double(request.queryParams("sem"));
+				Double struct = new Double(request.queryParams("struct"));
+				return getRelatedEntities(entity, ont1, ont2, syn, sem, struct);
 			}, gson::toJson);
 		}
 	}
@@ -223,11 +229,16 @@ public class Main {
 	}
 	
 	
-	public static ArrayList<Entity> getRelatedEntities(String entityURI, String ont1, String ont2) {
-		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2)) {
-			relations = AutomatedAlignment.getSimilarities(ont1, ont2);
+	public static ArrayList<Entity> getRelatedEntities(String entityURI, String ont1, String ont2, 
+			double syn, double sem, double struct) {
+		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2) || 
+				synWeight != syn || semWeight != sem || structWeight != struct) {
+			relations = AutomatedAlignment.getSimilarities(ont1, ont2, syn, sem, struct);
 			ont1Relations = ont1;
 			ont2Relations = ont2;
+			synWeight = syn;
+			semWeight = sem;
+			structWeight = struct;
 		}
 		return relations.get(entityURI);
 	}

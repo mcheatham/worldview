@@ -32,28 +32,13 @@ public class AutomatedAlignment {
 	
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, ArrayList<Entity>> getSimilarities(
-			String ont1, String ont2) {
-		
-		// try to read in a file with this information first
-		File file = new File(getSimFilename(ont1, ont2));
-		
-		// TODO
-		if (file.exists()) {
-			try {
-				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-				HashMap<String, ArrayList<Entity>> map = (HashMap<String, ArrayList<Entity>>) ois.readObject();
-				ois.close();
-				return map;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+			String ont1, String ont2, double syn, double sem, double struct) {
 		
 		// if the file doesn't exist, then proceed with the steps below
 		HashMap<String, ArrayList<Entity>> simMap = new HashMap<>();
 		
 		// read in the Wikipedia cache to speed up the semantic similarity computation
-		file = new File("wikipedia.dat");
+		File file = new File("wikipedia.dat");
 		if (file.exists()) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -74,7 +59,7 @@ public class AutomatedAlignment {
 			ArrayList<Similarity> similarities = new ArrayList<>();
 
 			for (ClassEntity e2: ont2Entities) {	
-				similarities.add(new Similarity(e2, computeSimilarity(e1, e2)));
+				similarities.add(new Similarity(e2, computeSimilarity(e1, e2, syn, sem, struct)));
 			}
 			
 			Collections.sort(similarities);
@@ -87,12 +72,9 @@ public class AutomatedAlignment {
 			simMap.put(e1.getURI(), orderedEntities);
 		}
 		
-		// write the map and Wikipedia cache to a file
+		// write the Wikipedia cache to a file
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-			oos.writeObject(simMap);
-			oos.close();
-			oos = new ObjectOutputStream(new FileOutputStream(new File("wikipedia.dat")));
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("wikipedia.dat")));
 			oos.writeObject(wikipediaResults);
 			oos.close();
 		} catch (Exception e) {
@@ -103,12 +85,14 @@ public class AutomatedAlignment {
 	}
 	
 	
-	public static double computeSimilarity(ClassEntity ent1, ClassEntity ent2) {
+	public static double computeSimilarity(ClassEntity ent1, ClassEntity ent2, 
+			double synWeight, double semWeight, double structWeight) {
+		
 		double syntacticSim = getSyntacticSimilarity(ent1, ent2);
 		double semanticSim = getSemanticSimilarity(ent1, ent2);
 		double structuralSim = getStructuralSimilarity(ent1, ent2);
 		
-		return (syntacticSim + 5 * structuralSim + 3 * semanticSim) / 3.0; // TODO
+		return (synWeight * syntacticSim + semWeight * semanticSim + structWeight * structuralSim);
 	}
 	
 	
@@ -173,13 +157,6 @@ public class AutomatedAlignment {
 	}
 	
 	
-	private static String getSimFilename(String ont1, String ont2) {
-		String label1 = ont1.substring(0, ont1.indexOf(".owl"));
-		String label2 = ont2.substring(0, ont2.indexOf(".owl"));
-		return label1 + "-" + label2 + "-similarities.dat";
-	}
-	
-	
 	private static Set<OWLNamedObject> getRelatedEntities(OWLClassExpression ent, Set<OWLAxiom> axioms) {
 		Set<OWLNamedObject> related = new HashSet<>();
 		
@@ -188,7 +165,6 @@ public class AutomatedAlignment {
 			if (!ax.toString().contains(ent.toString())) continue;
 
 			String axType = ax.getAxiomType().toString();
-			if (axType.contains("Disjoint")) continue;
 			
 			if (axType.contains("Class") || axType.contains("Property")) {
 				
@@ -267,8 +243,6 @@ public class AutomatedAlignment {
 				overlap++;
 			}
 		}
-		
-//		if (s.contains(label)) return 1.0; else return 0.0;
 		
 		return count == 0 ? 0.0 : overlap / (double) count;
 	}
