@@ -32,7 +32,7 @@ public class Main {
 	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private static String baseOntology = "USGS.owl"; // must have coordinate data
 	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS/query";
-	private static HashMap<Entity, ArrayList<Entity>> relations;
+	private static HashMap<String, ArrayList<Entity>> relations;
 	private static String ont1Relations = "";
 	private static String ont2Relations = "";
 
@@ -91,7 +91,9 @@ public class Main {
 			staticFiles.location("/public");
 			init();
 		
-			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
+			get("/ontologies", (reqest, response) -> {
+				return getOntologies();
+			}, gson::toJson);
 
 			get("/entities", (request, response) -> {
 				return getEntities(request.queryParams("ontology"));
@@ -111,6 +113,13 @@ public class Main {
 				Double lat = new Double(request.queryParams("lat"));
 				Double lng = new Double(request.queryParams("lng"));
 				return getCoordinates(axiom, ont1, ont2, lat, lng, 10);
+			}, gson::toJson);
+
+			get("/relatedEntities", (request, response) -> {
+				String entity = request.queryParams("entity");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				return getRelatedEntities(entity, ont1, ont2);
 			}, gson::toJson);
 		}
 	}
@@ -193,13 +202,13 @@ public class Main {
 	}
 	
 	
-	public static ArrayList<Entity> getRelatedEntities(Entity ent, String ont1, String ont2) {
+	public static ArrayList<Entity> getRelatedEntities(String entityURI, String ont1, String ont2) {
 		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2)) {
 			relations = AutomatedAlignment.getSimilarities(ont1, ont2);
 			ont1Relations = ont1;
 			ont2Relations = ont2;
 		}
-		return relations.get(ent);
+		return relations.get(entityURI);
 	}
 
 	
