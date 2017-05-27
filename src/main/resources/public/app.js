@@ -131,7 +131,9 @@ require([
 	});
 
 	entities1.on('dgrid-select', function () {
-		showOverlay(getAxioms());
+		showOverlay(getRelatedEntities().then(function () {
+			return getAxioms();
+		}));
 	});
 
 	ontology2.on('change', function (newValue) {
