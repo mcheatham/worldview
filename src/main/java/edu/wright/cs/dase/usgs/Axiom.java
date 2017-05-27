@@ -26,7 +26,6 @@ public class Axiom {
 	}
 	
 	
-	// TODO this needs work -- only classes are currently supported
 	private void extractEntities(String ont1Filename, 
 			String ont2Filename, OWLOntology ont2) {
 
@@ -48,12 +47,10 @@ public class Axiom {
 	public static boolean isInteresting(OWLAxiom ax) {
 		AxiomType<?> type = ax.getAxiomType();
 		
-		if (type == AxiomType.EQUIVALENT_CLASSES || type == AxiomType.EQUIVALENT_DATA_PROPERTIES 
-				|| type == AxiomType.EQUIVALENT_OBJECT_PROPERTIES)
+		if (type == AxiomType.EQUIVALENT_CLASSES)
 			return true;
 			
-		if (type == AxiomType.SUBCLASS_OF || type == AxiomType.SUB_DATA_PROPERTY 
-				|| type == AxiomType.SUB_OBJECT_PROPERTY) 
+		if (type == AxiomType.SUBCLASS_OF) 
 			return true;
 			
 		return false;

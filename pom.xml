@@ -50,6 +50,11 @@
             <artifactId>owl2sparql-core</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+  			<groupId>com.wcohen</groupId>
+ 		 	<artifactId>com.wcohen.secondstring</artifactId>
+  			<version>0.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

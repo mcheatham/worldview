@@ -14,6 +14,9 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import com.google.gson.Gson;
+import static spark.Spark.*;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -26,16 +29,16 @@ import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
 
 public class Main {
 	
-	private static HashMap<String, OWLOntology> ontologies;
-	private static OWLOntologyManager manager;
+	private static HashMap<String, OWLOntology> ontologies = new HashMap<>();
+	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private static String baseOntology = "USGS.owl"; // must have coordinate data
 	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS/query";
+	private static HashMap<Entity, ArrayList<Entity>> relations;
+	private static String ont1Relations = "";
+	private static String ont2Relations = "";
 
 	
 	public static void main(String[] args) {
-		
-		ontologies = new HashMap<>();
-		manager = OWLManager.createOWLOntologyManager();
 		
 //		ArrayList<Ontology> ontologies = getOntologies();
 //		for (Ontology ont: ontologies) {
@@ -61,37 +64,48 @@ public class Main {
 //			System.out.println(a);
 //		}
 		
-		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
-				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
-				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
-				"Hydro3.owl", "USGS.owl", 75.0, 75.0, 10);
-		for (Entity e: coords.keySet()) {
-			System.out.println(e);
-			for (Coordinates c: coords.get(e)) {
-				System.out.println("\t" + c);
-			}
-		}
-
-//		Gson gson = new Gson();
-//
-//		if (args.length > 0 && args[0].equals("serve")) {
-//			port(8080);
-//			staticFiles.location("/public");
-//			init();
-//		
-//			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
-//
-//			get("/entities", (request, response) -> {
-//				return getEntities(request.queryParams("ontology"));
-//			}, gson::toJson);
-//
-//			get("/axioms", (request, response) -> {
-//				String entity = request.queryParams("entity");
-//				String ont1 = request.queryParams("ontology1");
-//				String ont2 = request.queryParams("ontology2");
-//				return getAxioms(entity, ont1, ont2);
-//			}, gson::toJson);
+//		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
+//				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
+//				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
+//				"Hydro3.owl", "USGS.owl", 75.0, 75.0, 10);
+//		for (Entity e: coords.keySet()) {
+//			System.out.println(e);
+//			for (Coordinates c: coords.get(e)) {
+//				System.out.println("\t" + c);
+//			}
 //		}
+
+//		ArrayList<Entity> entities = getEntities("Hydro3.owl");
+//		for (Entity e: entities) {
+//			System.out.println(e);
+//			
+//			ArrayList<Entity> relatedEntities = getRelatedEntities(e, "Hydro3.owl", "USGS.owl");
+//			for (int i=0; i<3; i++) {
+//				System.out.println("\t" + relatedEntities.get(i));
+//			}
+//		}
+		
+		
+		Gson gson = new Gson();
+
+		if (args.length > 0 && args[0].equals("serve")) {
+			port(8080);
+			staticFiles.location("/public");
+			init();
+		
+			get("/ontologies", (reqest, response) -> getOntologies(), gson::toJson);
+
+			get("/entities", (request, response) -> {
+				return getEntities(request.queryParams("ontology"));
+			}, gson::toJson);
+
+			get("/axioms", (request, response) -> {
+				String entity = request.queryParams("entity");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				return getAxioms(entity, ont1, ont2);
+			}, gson::toJson);
+		}
 	}
 	
 	// list the ontologies
@@ -127,8 +141,6 @@ public class Main {
 		for (OWLClass e : ont.getClassesInSignature()) {
 			entities.add(new Entity(ontFilename, e));
 		}
-
-		// TODO need to handle properties?
 
 		Collections.sort(entities);
 		return entities;
@@ -171,6 +183,17 @@ public class Main {
 		}
 		
 		return null;
+	}
+	
+	
+	// TODO cache the relations
+	public static ArrayList<Entity> getRelatedEntities(Entity ent, String ont1, String ont2) {
+		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2)) {
+			relations = AutomatedAlignment.getSimilarities(ont1, ont2);
+			ont1Relations = ont1;
+			ont2Relations = ont2;
+		}
+		return relations.get(ent);
 	}
 
 	
@@ -272,7 +295,7 @@ public class Main {
 	}
 	
 	
-	private static OWLOntology getOntology(String ontFilename, boolean isAlignment) {
+	public static OWLOntology getOntology(String ontFilename, boolean isAlignment) {
 		
 		OWLOntology ont = null;
 		

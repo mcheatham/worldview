@@ -1,8 +1,15 @@
 package edu.wright.cs.dase.usgs;
 
-import org.semanticweb.owlapi.model.OWLClassExpression;
+import java.io.Serializable;
 
-public class Entity implements Comparable<Entity> {
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLNamedObject;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
+
+public class Entity implements Comparable<Entity>, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private String ontology;
 	private String URI;
@@ -42,52 +49,56 @@ public class Entity implements Comparable<Entity> {
 		return label.compareTo(o.label);
 	}
 	
-	private String getEntityLabel(OWLClassExpression e) {
+	
+	public static String getEntityLabel(OWLClassExpression e) {
+		if (e.isAnonymous()) return e.toString();
+		return getEntityLabel((OWLNamedObject) e);
+	}
+	
+	
+	public static String getEntityLabel(OWLDataPropertyExpression e) {
+		if (e.isAnonymous()) return e.toString();
+		return getEntityLabel((OWLNamedObject) e);
+	}
+	
+	
+	public static String getEntityLabel(OWLObjectPropertyExpression e) {
+		if (e.isAnonymous()) return e.toString();
+		return getEntityLabel((OWLNamedObject) e);
+	}
+	
+	
+	public static String getEntityLabel(OWLNamedObject e) {
 		
-		if (!e.isClassExpressionLiteral()) return e.toString();
-		
-		String label = e.asOWLClass().getIRI().toString();
+		String label = e.getIRI().toString();
 		String s = "";
-		
-//		Set<OWLAnnotation> annotations = e.getAnnotations(ont, df.getRDFSLabel());
-//		
-//		// if there's an rdfs:label property, use it
-//		if (annotations.size() > 0) {
-//			OWLAnnotation annotation = annotations.iterator().next();
-//		
-//			if (annotation.getValue() instanceof OWLLiteral) {
-//				OWLLiteral val = (OWLLiteral) annotation.getValue();
-//				s = val.getLiteral();
-//			} 
-//			
-//		} else { // otherwise, get the label from the end of the URI
-			
-			if (label.contains("#")) {
-				label = label.substring(label.indexOf('#')+1);
-			}
-			
-			if (label.contains("/")) {
-				label = label.substring(label.lastIndexOf('/')+1);
-			}
-			
-			// break up words (camelCase)
-			s += label.charAt(0);
-			
-			for (int i=1; i<label.length(); i++) {
-				
-				if (Character.isUpperCase(label.charAt(i)) && 
-						!Character.isUpperCase(label.charAt(i-1))) {
-					s += " ";
-				} 
-				
-				s += label.charAt(i);
-			}
-//		}
-    	
+
+		if (label.contains("#")) {
+			label = label.substring(label.indexOf('#')+1);
+		}
+
+		if (label.contains("/")) {
+			label = label.substring(label.lastIndexOf('/')+1);
+		}
+
+		// break up words (camelCase)
+		s += label.charAt(0);
+
+		for (int i=1; i<label.length(); i++) {
+
+			if (Character.isUpperCase(label.charAt(i)) && 
+					!Character.isUpperCase(label.charAt(i-1))) {
+				s += " ";
+			} 
+
+			s += label.charAt(i);
+		}
+
 		s = s.toLowerCase();
-    	return s.replaceAll("-|_", "");
+		return s.replaceAll("-|_", "");
 	}
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
