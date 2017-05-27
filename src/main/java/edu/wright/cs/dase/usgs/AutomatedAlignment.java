@@ -27,6 +27,7 @@ import com.wcohen.ss.ScaledLevenstein;
 public class AutomatedAlignment {
 	
 	private static ScaledLevenstein lev = new ScaledLevenstein();
+	private static HashMap<String, String> wikipediaResults = new HashMap<>();
 	
 	
 	@SuppressWarnings("unchecked")
@@ -51,6 +52,18 @@ public class AutomatedAlignment {
 		// if the file doesn't exist, then proceed with the steps below
 		HashMap<Entity, ArrayList<Entity>> simMap = new HashMap<>();
 		
+		// read in the Wikipedia cache to speed up the semantic similarity computation
+		file = new File("wikipedia.dat");
+		if (file.exists()) {
+			try {
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+				wikipediaResults = (HashMap<String, String>) ois.readObject();
+				ois.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		ArrayList<Entity> ont1Entities = Main.getEntities(ont1);
 		ArrayList<Entity> ont2Entities = Main.getEntities(ont2);
 		
@@ -74,10 +87,13 @@ public class AutomatedAlignment {
 			simMap.put(e1, orderedEntities);
 		}
 		
-		// write the map to a file
+		// write the map and Wikipedia cache to a file
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
 			oos.writeObject(simMap);
+			oos.close();
+			oos = new ObjectOutputStream(new FileOutputStream(new File("wikipedia.dat")));
+			oos.writeObject(wikipediaResults);
 			oos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,11 +105,10 @@ public class AutomatedAlignment {
 	
 	public static double computeSimilarity(Entity ent1, Entity ent2) {
 		double syntacticSim = getSyntacticSimilarity(ent1, ent2);
-//		double semanticSim = getSemanticSimilarity(ent1, ent2);
+		double semanticSim = getSemanticSimilarity(ent1, ent2);
 		double structuralSim = getStructuralSimilarity(ent1, ent2);
 		
-		return (syntacticSim + 5 * structuralSim) / 2.0; // TODO
-//		return structuralSim;
+		return (syntacticSim + 5 * structuralSim + 3 * semanticSim) / 3.0; // TODO
 	}
 	
 	
@@ -113,17 +128,30 @@ public class AutomatedAlignment {
 	
 	public static double getSemanticSimilarity(Entity ent1, Entity ent2) {
 		
-		// query Wikipedia (with redirection) for the entity labels -> result1, result2
+		String label1 = ent1.getLabel();
+		String label2 = ent2.getLabel();
 		
-		// for each result, convert it to a string -> desc1, desc2
-		//    if it is an article, the string is the article's text
-		//    if it is not an article, the string is the snippets' text -> desc1, desc2
+		// first check the cache to avoid querying Wikipedia unnecessarily
+		String wiki1 = wikipediaResults.get(label1);
+		String wiki2 = wikipediaResults.get(label2);
+				
+		// if this wasn't in the cache, query Wikipedia (with redirection) for the entity labels
+		if (wiki1 == null) {
+			wiki1 = WikipediaOperations.getClosestArticle(label1);
+			wikipediaResults.put(label1, wiki1);
+		}
 		
-		// if desc1 == desc2 return 0.0
-		// if desc1 contains label2 or desc2 contains label1 return 0.5
-		// otherwise return 0.0
+		if (wiki2 == null) {
+			wiki2 = WikipediaOperations.getClosestArticle(label2);
+			wikipediaResults.put(label2, wiki2);
+		}
 		
-		return 0.0; // TODO
+		// if the results are identical, the entities are perfectly similar
+		if (wiki1.equals(wiki2)) return 1.0;
+		
+		// otherwise return the greatest overlap between one entity's label
+		// and the other entity's Wikipedia results
+		return 0.75 * Math.max(overlap(wiki1, label2), overlap(wiki2, label1));
 	}
 	
 	
@@ -141,13 +169,7 @@ public class AutomatedAlignment {
 		Set<OWLNamedObject> set1 = getRelatedEntities(ent1.getEntity(), axioms1);
 		Set<OWLNamedObject> set2 = getRelatedEntities(ent2.getEntity(), axioms2);
 		
-		double structSim = setSim(set1, set2);
-		
-//		if (ent1.getLabel().equals("lake") && ent2.getLabel().equals("high water elevation")) {
-//			System.out.println("\t\t" + set1 + " " + set2 + " " + structSim);
-//		}
-		
-		return structSim;
+		return setSim(set1, set2);
 	}
 	
 	
@@ -230,5 +252,24 @@ public class AutomatedAlignment {
 		if (labelSet1.size() == 0) return 0.0;
 		return sum / labelSet1.size();
 	}
+
 	
+	private static double overlap(String s, String label) {
+		
+		int count = 0;
+		int overlap = 0;
+		
+		String[] tokens = label.split("[ ]");
+		for (String token: tokens) {
+			if (Stopwords.isStopword(s)) continue;
+			count++;
+			if (s.contains(token)) {
+				overlap++;
+			}
+		}
+		
+//		if (s.contains(label)) return 1.0; else return 0.0;
+		
+		return count == 0 ? 0.0 : overlap / (double) count;
+	}
 }

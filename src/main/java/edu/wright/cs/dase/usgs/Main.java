@@ -84,7 +84,6 @@ public class Main {
 //			}
 //		}
 
-
 		if (args.length > 0 && args[0].equals("serve")) {
 			Gson gson = new Gson();
 
@@ -273,8 +272,6 @@ public class Main {
 	
 	
 	private static ArrayList<Coordinates> getCoordinates(String query) {
-		
-        System.out.println(query);
         
         ArrayList<Coordinates> coordinatesList = new ArrayList<>();
         
