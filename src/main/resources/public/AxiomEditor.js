@@ -3,6 +3,7 @@ define([
 	'dijit/_FocusMixin',
 	'dijit/form/_FormValueMixin',
 	'dijit/form/FilteringSelect',
+	'dijit/form/NumberTextBox',
 	'dijit/registry',
 	'dojo/dom-construct',
 	'dojo/store/Memory'
@@ -11,6 +12,7 @@ define([
 	_FocusMixin,
 	_FormValueMixin,
 	FilteringSelect,
+	NumberTextBox,
 	registry,
 	domConstruct,
 	Memory
@@ -113,68 +115,78 @@ define([
 	 * Ex) EquivalentProperty(FlowsInto ObjectInverseOf (FlowsOutOf))
 	 */
 	var relationships = {
-		EquivalentClasses: [ 'class', 'class', '{ class }' ],
-		SubClassOf: [ 'class (Sub-class)', 'class (Super-class)', ],
-		DisjointClasses: [ 'class', 'class', 'class*' ],
-		ObjectIntersectionOf: [ 'class', 'class', 'class*' ],
-		ObjectUnionOf: [ 'class', 'class', 'class*' ],
-		ObjectComplementOf: [ 'class' ],
-		ObjectSomeValuesFrom: [ 'property', 'class' ],
-		ObjectAllValuesFrom: [ 'property', 'class' ],
-		ObjectMinCardinality: [ 'count', 'property', 'class?' ],
-		ObjectMaxCardinality: [ 'count', 'property', 'class?' ],
-		ObjectExactCardinality: [ 'count', 'property', 'class?' ],
-		ObjectInverseOf: [ 'property' ]
+		EquivalentClasses: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
+		SubClassOf: [ 'ClassExpression (sub)', 'ClassExpression (super)', ],
+		DisjointClasses: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
+		ObjectIntersectionOf: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
+		ObjectUnionOf: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
+		ObjectComplementOf: [ 'ClassExpression' ],
+		ObjectSomeValuesFrom: [ 'ObjectPropertyExpression', 'ClassExpression' ],
+		ObjectAllValuesFrom: [ 'ObjectPropertyExpression', 'ClassExpression' ],
+		ObjectMinCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
+		ObjectMaxCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
+		ObjectExactCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
+		ObjectInverseOf: [ 'ObjectProperty' ],
+	};
+
+	var expressions = {
+		ObjectPropertyExpression: [ 'ObjectProperty', 'InverseObjectProperty' ],
+		InverseObjectProperty: [ 'ObjectInverseOf' ],
+		ClassExpression: [ 'Class', 'ObjectIntersectionOf', 'ObjectUnionOf', 'ObjectComplementOf',
+			'ObjectSomeValuesFrom', 'ObjectAllValuesFrom', 'ObjectMinCardinality', 'ObjectMaxCardinality',
+			'ObjectExactCardinality' ]
 	};
 
 	var RelationshipField = _WidgetBase.createSubclass([ _FormValueMixin ], {
 		baseClass: 'relationship-editor',
+		type: 'Relationship',
 
 		buildRendering: function () {
 			this.inherited(arguments);
 			this.focusNode = this.domNode;
 
-			var left = domConstruct.create('div', { className: 'relationship-select' }, this.domNode);
+			this.selectBox = domConstruct.create('div', { className: 'relationship-select' }, this.domNode);
+
+			this.display = domConstruct.create('span', { className: 'relationship-name' }, this.selectBox);
+			this.display.textContent = this._getPlaceholderText();
+
 			this.members = domConstruct.create('div', { className: 'relationship-members' }, this.domNode);
-
-			this.select = new FilteringSelect({
-				labelAttr: 'name',
-				store: new Memory({
-					data: Object.keys(relationships).map(function (relationship) {
-						return { id: relationship, name: relationship };
-					})
-				})
-			});
-			this.select.placeAt(left);
-
-			this.display = domConstruct.create('span', { className: 'relationship-name' }, left);
-			this.display.textContent = 'Select a relationship...';
 		},
 
 		postCreate: function () {
 			this.inherited(arguments);
 
-			this.select.on('change', function (value) {
+			this.on('change', function (value) {
+				console.log('changed to ' + value);
+
 				registry.findWidgets(this.members).forEach(function (widget) {
 					widget.destroy();
 				});
+
+				this.display.classList.remove('has-value');
+				this.display.classList.remove('has-children');
 
 				if (value) {
 					this.display.textContent = value;
 					this.display.classList.add('has-value');
 
-					var rel1 = new RelationshipField();
-					rel1.placeAt(this.members);
-					var rel2 = new RelationshipField();
-					rel2.placeAt(this.members);
+					var args = relationships[value];
+					if (args) {
+						this.display.classList.add('has-children');
 
-					setTimeout(function () {
-						rel1.focus();
-					}.bind(this));
+						var children = args.map(function (arg) {
+							var field = new RelationshipField({ type: arg });
+							field.placeAt(this.members);
+							return field;
+						}.bind(this));
+
+						setTimeout(function () {
+							children[0].focus();
+						}.bind(this));
+					}
 				}
 				else {
-					this.display.textContent = 'Select a relationship...';
-					this.display.classList.remove('has-value');
+					this.display.textContent = this._getPlaceholderText();
 					setTimeout(function () {
 						this.domNode.focus();
 					}.bind(this));
@@ -200,18 +212,74 @@ define([
 					else if (event.key === 'ArrowDown') {
 						event.stopPropagation();
 						this._enableSelect();
-						setTimeout(function () {
-							this.select.loadDropDown();
-						}.bind(this), 100);
+
+						if (this.type !== 'nonNegativeInteger') {
+							setTimeout(function () {
+								this.field.loadDropDown();
+							}.bind(this), 100);
+						}
 					}
+				}
+				else if (event.key === 'Enter') {
+					event.stopPropagation();
+					this.domNode.focus();
 				}
 			}.bind(this));
 
 			this.on('focusout', function (event) {
-				if (!this.select.domNode.contains(event.relatedTarget)) {
+				if (!this.field.domNode.contains(event.relatedTarget)) {
 					this.domNode.classList.remove('focused');
 				}
 			}.bind(this));
+		},
+
+		_setTypeAttr: function (type) {
+			this.type = type;
+
+			if (this.field) {
+				this.field.destroy();
+			}
+
+			if (type === 'nonNegativeInteger') {
+				this.field = new NumberTextBox({
+					required: false,
+					constraints: { min: 0, places: 0 }
+				});
+			}
+			else {
+				this.field = new FilteringSelect({
+					labelAttr: 'name',
+					required: false,
+					store: new Memory({ data: this._getItems(type) })
+				});
+			}
+
+			this.field.placeAt(this.selectBox);
+			this.field.domNode.classList.add('relationship-input');
+			this.field.on('change', function (newValue) {
+				this._handleOnChange(newValue);
+			}.bind(this));
+		},
+
+		_getPlaceholderText: function () {
+			return this.type[0].toUpperCase() + this.type.slice(1);
+		},
+
+		_getItems: function (selector) {
+			if (selector === 'Relationship') {
+				return Object.keys(relationships).map(function (relationship) {
+					return { id: relationship, name: relationship };
+				});
+			}
+
+			var list = expressions[selector];
+			if (list == null) {
+				return [];
+			}
+
+			return list.map(function (item) {
+				return { id: item, name: item };
+			});
 		},
 
 		_disableSelect: function () {
@@ -224,7 +292,7 @@ define([
 		_enableSelect: function () {
 			this.domNode.classList.add('focused');
 			setTimeout(function () {
-				this.select.focus();
+				this.field.focus();
 			}.bind(this));
 		}
 	});

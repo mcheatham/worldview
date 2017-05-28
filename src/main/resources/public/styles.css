@@ -73,27 +73,31 @@ body {
 	overflow: hidden;
 }
 
-.dijitComboBox {
+.dijitValidationTextBox {
 	/* for positioning of validation icon */
 	position: relative;
 }
 
-.dijitComboBox .dijitValidationContainer {
+.dijitValidationTextBox .dijitValidationContainer {
 	position: absolute;
 	right: 3px;
 	width: 18px;
 }
-.dijitComboBox .dijitValidationIcon {
+.dijitValidationTextBox .dijitValidationIcon {
 	width: 16px;
 	background: none;
 }
-.dijitComboBoxError .dijitValidationContainer::before {
+.dijitValidationTextBoxError .dijitValidationContainer::before {
 	content: '\26A0';
 	color: #da0;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -45%);
+}
+
+.dijitNumberTextBox input.dijitInputInner {
+	text-align: left;
 }
 
 .dijitTooltipContainer {
@@ -315,24 +319,27 @@ body {
 	flex-direction: row;
 	border: solid 1px hsla(240, 100%, 50%, 0.1);
 	border-radius: 3px;
-	padding: 2px 3px;
+	padding: 2px 3px 3px 3px;
 	cursor: pointer;
 	align-items: center;
 	background: hsla(240, 100%, 80%, 0.1);
 }
-.relationship-select .dijitComboBox,
 .relationship-select .dijitComboBox .dijitArrowButton {
 	display: none;
 }
 .relationship-select {
 	min-width: 11em;
 }
+.relationship-input {
+	display: none;
+}
 
 .relationship-select > .relationship-name {
 	display: block;
 	color: rgba(75, 75, 75, 0.5);
 }
-.relationship-select .dijitComboBox {
+.relationship-select .dijitComboBox,
+.relationship-select .dijitTextBox {
 	border: none;
 	width: 100%;
 }
@@ -343,7 +350,7 @@ body {
 .relationship-select > .relationship-name.has-value {
 	color: black;
 }
-.relationship-select > .relationship-name.has-value::after {
+.relationship-select > .relationship-name.has-children::after {
 	content: ':';
 }
 
@@ -357,7 +364,7 @@ body {
 .relationship-editor.focused > .relationship-select > .relationship-name {
 	display: none;
 }
-.relationship-editor.focused > .relationship-select > .dijitComboBox {
+.relationship-editor.focused > .relationship-select > .relationship-input {
 	display: block;
 }
 
