@@ -7,6 +7,7 @@ require([
 	'dijit/form/Select',
 	'dojo/request',
 	'worldview/Map',
+	'worldview/AxiomEditor',
 	'dojo/domReady!'
 ], function (
 	List,
@@ -16,7 +17,8 @@ require([
 	MemoryStore,
 	Select,
 	request,
-	Map
+	Map,
+	AxiomEditor
 ) {
 	function getRelatedEntities() {
 		var ont1 = ontology1.get('value');
@@ -223,5 +225,10 @@ require([
 		ontology2.set('value', store.getIdentity(store.data[0]));
 	}).otherwise(showError).then(function () {
 		wrapper.classList.remove('loading');
+	});
+
+	var axiomEditor = new AxiomEditor({}, 'axiom-entry');
+	axiomEditor.on('submit', function () {
+		console.log('created axiom: ' + axiomEditor.get('value'));
 	});
 });
