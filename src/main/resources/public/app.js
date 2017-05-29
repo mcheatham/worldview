@@ -3,8 +3,9 @@ require([
 	'dgrid/Selection',
 	'dstore/Memory',
 	'dstore/Trackable',
-	'dojo/store/Memory',
+	'dstore/legacy/DstoreAdapter',
 	'dijit/form/Select',
+	'dijit/registry',
 	'dojo/request',
 	'worldview/Map',
 	'worldview/AxiomEditor',
@@ -14,72 +15,31 @@ require([
 	Selection,
 	Memory,
 	Trackable,
-	MemoryStore,
+	DstoreAdapter,
 	Select,
+	registry,
 	request,
 	Map,
 	AxiomEditor
 ) {
-	function getRelatedEntities() {
-		var ont1 = ontology1.get('value');
-		var ont2 = ontology2.get('value');
-		var ent1 = Object.keys(entities1.selection).filter(function (id) {
-			return entities1.selection[id];
-		})[0];
+	var ONTOLOGY2_ID = 'USGS.owl';
 
-		if (ent1 && ont1 && ont2) {
-			return request.get('/relatedEntities', {
-				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
-			}).then(function (data) {
-				data = JSON.parse(data);
-				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
-			});
+	var TrackableMemory = Memory.createSubclass([ Trackable ], {
+		setItems: function (data) {
+			var current = this.fetchSync().slice();
+			current.forEach(function (item) {
+				this.removeSync(this.getIdentity(item));
+			}, this);
+			data.forEach(function (item) {
+				this.putSync(item);
+			}, this);
 		}
-	}
+	});
 
-	function getAxioms() {
-		var ont1 = ontology1.get('value');
-		var ont2 = ontology2.get('value');
-		var ent1 = Object.keys(entities1.selection).filter(function (id) {
-			return entities1.selection[id];
-		})[0];
-
-		clearEntityMarkers();
-
-		if (ent1 && ont1 && ont2) {
-			return request.get('/axioms', {
-				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
-			}).then(function (data) {
-				data = JSON.parse(data);
-				axioms.set('collection', new TrackableMemory({
-					data: data,
-					idProperty: 'owl'
-				}));
-			});
-		}
-	}
-
-	function showOverlay(/*promise1, promise2, ...*/) {
-		wrapper.classList.add('busy');
-		Promise.all(Array.prototype.slice.call(arguments)).catch(showError).then(function () {
-			wrapper.classList.remove('busy');
-		});
-	}
-
-	function showError(error) {
-		console.error(error);
-		alert(error.message);
-	}
-
-	function clearEntityMarkers() {
-		var collection = entities2.get('collection');
-		collection.fetchSync({ marked: true }).forEach(function (item) {
-			item.marked = false;
-			collection.putSync(item);
-		});
-	}
-
-	var TrackableMemory = Memory.createSubclass([ Trackable ]);
+	var ontologyStore = new TrackableMemory({ idProperty: 'identifier' });
+	var entityStore1 = new TrackableMemory({ idProperty: 'URI' });
+	var entityStore2 = new TrackableMemory({ idProperty: 'URI' });
+	var axiomStore = new TrackableMemory({ idProperty: 'owl' });
 
 	var ListClass = List.createSubclass([ Selection ], {
 		selectionMode: 'single',
@@ -93,42 +53,42 @@ require([
 		},
 	});
 
-	var SelectStore = MemoryStore.createSubclass([], {
-		getLabel: function (item) {
-			return item.label;
-		}
-	});
-
+	// The wrapper element contains the entire UI and is used to manage the loading overlay
 	var wrapper = document.getElementById('wrapper');
 
 	var ontology1 = new Select({
-		store: new SelectStore()
+		store: new DstoreAdapter(ontologyStore),
+		labelAttr: 'label'
 	}, 'ontology1');
 
 	var entities1 = new ListClass({
-		collection: new TrackableMemory()
+		collection: entityStore1
 	}, 'entities1');
 
 	var ontology2 = new Select({
-		store: new SelectStore()
+		store: new DstoreAdapter(ontologyStore.filter({ identifier: ONTOLOGY2_ID })),
+		labelAttr: 'label'
 	}, 'ontology2');
 
 	var entities2 = new ListClass({
-		collection: new TrackableMemory()
+		collection: entityStore2
 	}, 'entities2');
 
 	var axioms = new ListClass({
-		collection: new TrackableMemory(),
+		collection: axiomStore,
 		label: 'text'
 	}, 'axioms');
 
 	ontology1.on('change', function (newValue) {
+		wrapper.classList[newValue ? 'add' : 'remove']('ontology1-selected');
+
 		showOverlay(request.get('/entities', {
 			query: { ontology: newValue }
 		}).then(function (data) {
 			data = JSON.parse(data);
-			entities1.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
-			axioms.set('collection', new TrackableMemory());
+			entityStore1.setItems(data);
+			entityStore1.ontology = newValue;
+			axiomStore.setItems([]);
 		}));
 	});
 
@@ -139,12 +99,15 @@ require([
 	});
 
 	ontology2.on('change', function (newValue) {
+		wrapper.classList[newValue ? 'add' : 'remove']('ontology2-selected');
+
 		showOverlay(
 			request.get('/entities', {
 				query: { ontology: newValue }
 			}).then(function (data) {
 				data = JSON.parse(data);
-				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
+				entityStore2.setItems(data);
+				entityStore2.ontology = newValue;
 			}),
 			getAxioms()
 		);
@@ -158,14 +121,13 @@ require([
 		var ont2 = ontology2.get('value');
 
 		// Axioms should relate ent1 to entities int ont2. Highlight those entities.
-		var entities2Collection = entities2.get('collection');
 		axiom.entities.forEach(function (entity) {
 			// Currently, axiom entities aren't properly attributed to their source ontology. Ignore the ontology
 			// contained in the entity for now and just check if entities2 contains each entity.
-			var _entity = entities2Collection.getSync(entity.URI);
+			var _entity = entityStore2.getSync(entity.URI);
 			if (_entity) {
 				_entity.marked = true;
-				entities2Collection.putSync(_entity);
+				entityStore2.putSync(_entity);
 			}
 		});
 
@@ -208,27 +170,88 @@ require([
 
 	request.get('/ontologies').then(function (data) {
 		data = JSON.parse(data);
-		var store = new SelectStore({
-			data: [ { identifier: '', label: ' ' } ].concat(data),
-			idProperty: 'identifier'
-		});
-		ontology1.set('store', store);
+		ontologyStore.setItems([ { identifier: '', label: ' ' } ].concat(data));
+
+		ontology1.set('store', new DstoreAdapter(ontologyStore));
 		ontology1.getOptions('').disabled = true;
 
-		store = new SelectStore({
-			data: data.filter(function (item) {
-				return item.label === 'USGS';
-			}),
-			idProperty: 'identifier'
-		});
-		ontology2.set('store', store);
-		ontology2.set('value', store.getIdentity(store.data[0]));
+		ontology2.set('store', new DstoreAdapter(ontologyStore.filter({ identifier: ONTOLOGY2_ID })));
+		ontology2.set('value', 'USGS');
 	}).otherwise(showError).then(function () {
 		wrapper.classList.remove('loading');
 	});
 
-	var axiomEditor = new AxiomEditor({}, 'axiom-entry');
+	var axiomEditor = new AxiomEditor({
+		ontologyStore: ontologyStore,
+		entityStore1: entityStore1,
+		entityStore2: entityStore2,
+		axiomStore: axiomStore
+	});
+	var axiomEntryNode = document.getElementById('axiom-entry');
+	axiomEditor.placeAt(axiomEntryNode);
+
 	axiomEditor.on('submit', function () {
 		console.log('created axiom: ' + axiomEditor.get('value'));
 	});
+
+	// Start all the widgets
+	registry.findWidgets(wrapper).forEach(function (widget) {
+		widget.startup();
+	});
+
+	function getRelatedEntities() {
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+		var ent1 = Object.keys(entities1.selection).filter(function (id) {
+			return entities1.selection[id];
+		})[0];
+
+		if (ent1 && ont1 && ont2) {
+			return request.get('/relatedEntities', {
+				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+			}).then(function (data) {
+				data = JSON.parse(data);
+				entityStore2.setItems(data);
+			});
+		}
+	}
+
+	function getAxioms() {
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+		var ent1 = Object.keys(entities1.selection).filter(function (id) {
+			return entities1.selection[id];
+		})[0];
+
+		clearEntityMarkers();
+
+		if (ent1 && ont1 && ont2) {
+			return request.get('/axioms', {
+				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+			}).then(function (data) {
+				data = JSON.parse(data);
+				axiomStore.setItems(data);
+			});
+		}
+	}
+
+	function showOverlay(/*promise1, promise2, ...*/) {
+		wrapper.classList.add('busy');
+		Promise.all(Array.prototype.slice.call(arguments)).catch(showError).then(function () {
+			wrapper.classList.remove('busy');
+		});
+	}
+
+	function showError(error) {
+		console.error(error);
+		alert(error.message);
+	}
+
+	function clearEntityMarkers() {
+		var collection = entities2.get('collection');
+		collection.fetchSync({ marked: true }).forEach(function (item) {
+			item.marked = false;
+			collection.putSync(item);
+		});
+	}
 });

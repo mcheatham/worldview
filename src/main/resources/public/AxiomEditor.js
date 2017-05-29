@@ -1,20 +1,20 @@
 define([
 	'dijit/_WidgetBase',
-	'dijit/_FocusMixin',
+	'dijit/form/_ComboBoxMenu',
 	'dijit/form/_FormValueMixin',
 	'dijit/form/FilteringSelect',
 	'dijit/form/NumberTextBox',
-	'dijit/registry',
 	'dojo/dom-construct',
+	'dojo/on',
 	'dojo/store/Memory'
 ], function (
 	_WidgetBase,
-	_FocusMixin,
+	_ComboBoxMenu,
 	_FormValueMixin,
 	FilteringSelect,
 	NumberTextBox,
-	registry,
 	domConstruct,
+	on,
 	Memory
 ) {
 	/**
@@ -115,88 +115,179 @@ define([
 	 * Ex) EquivalentProperty(FlowsInto ObjectInverseOf (FlowsOutOf))
 	 */
 	var relationships = {
-		EquivalentClasses: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
-		SubClassOf: [ 'ClassExpression (sub)', 'ClassExpression (super)', ],
-		DisjointClasses: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
-		ObjectIntersectionOf: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
-		ObjectUnionOf: [ 'ClassExpression', 'ClassExpression', '{ ClassExpression }' ],
-		ObjectComplementOf: [ 'ClassExpression' ],
-		ObjectSomeValuesFrom: [ 'ObjectPropertyExpression', 'ClassExpression' ],
-		ObjectAllValuesFrom: [ 'ObjectPropertyExpression', 'ClassExpression' ],
-		ObjectMinCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
-		ObjectMaxCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
-		ObjectExactCardinality: [ 'nonNegativeInteger', 'ObjectPropertyExpression', '[ ClassExpression ]' ],
-		ObjectInverseOf: [ 'ObjectProperty' ],
+		// One class from each ontology
+		EquivalentClasses: {
+			terms: [
+				{ name: 'ClassExpression' },
+				{ name: 'ClassExpression' }
+			],
+			sources: 'different'
+		},
+		SubClassOf: {
+			terms: [
+				{ name: 'ClassExpression', note: '(sub)' },
+				{ name: 'ClassExpression', note: '(super)' }
+			],
+			sources: 'different'
+		},
+		DisjointClasses: {
+			terms: [
+				{ name: 'ClassExpression' },
+				{ name: 'ClassExpression' }
+			],
+			sources: 'different'
+		},
+
+		// All classes from the same ontology
+		ObjectIntersectionOf: {
+			terms: [
+				{ name: 'ClassExpression' },
+				{ name: 'ClassExpression' },
+				{ name: '{ ClassExpression }' }
+			],
+			sources: 'same'
+		},
+		ObjectUnionOf: {
+			terms: [
+				{ name: 'ClassExpression' },
+				{ name: 'ClassExpression' },
+				{ name: '{ ClassExpression }' }
+			],
+			sources: 'same'
+		},
+
+		ObjectComplementOf: {
+			terms: [ { name: 'ClassExpression' } ]
+		},
+		ObjectSomeValuesFrom: {
+			terms: [ 
+				{ name: 'ObjectPropertyExpression' },
+				{ name: 'ClassExpression' }
+			]
+		},
+		ObjectAllValuesFrom: {
+			terms: [
+				{ name: 'ObjectPropertyExpression' },
+				{ name: 'ClassExpression' }
+			]
+		},
+
+		// Class and property from the same ontology
+		ObjectMinCardinality: {
+			terms: [
+				{ name: 'nonNegativeInteger' },
+				{ name: 'ObjectPropertyExpression' },
+				{ name: '[ ClassExpression ]' }
+			],
+			sources: 'same'
+		},
+		ObjectMaxCardinality: {
+			terms: [
+				{ name: 'nonNegativeInteger' },
+				{ name: 'ObjectPropertyExpression' },
+				{ name: '[ ClassExpression ]' }
+			],
+			sources: 'same'
+		},
+		ObjectExactCardinality: {
+			terms: [
+				{ name: 'nonNegativeInteger' },
+				{ name: 'ObjectPropertyExpression' },
+				{ name: '[ ClassExpression ]' }
+			],
+			sources: 'same'
+		},
+
+		ObjectInverseOf: {
+			terms: [ { name: 'ObjectProperty' } ]
+		}
 	};
 
 	var expressions = {
-		ObjectPropertyExpression: [ 'ObjectProperty', 'InverseObjectProperty' ],
-		InverseObjectProperty: [ 'ObjectInverseOf' ],
+		ObjectPropertyExpression: [ 'ObjectProperty', 'ObjectInverseOf' ],
 		ClassExpression: [ 'Class', 'ObjectIntersectionOf', 'ObjectUnionOf', 'ObjectComplementOf',
 			'ObjectSomeValuesFrom', 'ObjectAllValuesFrom', 'ObjectMinCardinality', 'ObjectMaxCardinality',
 			'ObjectExactCardinality' ]
 	};
 
+	var SelectorMenu = _ComboBoxMenu.createSubclass([], {
+		_createOption: function (item) {
+			var option = this.inherited(arguments);
+
+			if (!item.entity) {
+				option.classList.add('relationship');
+			}
+
+			return option;
+		}
+	});
+
+	var Selector = FilteringSelect.createSubclass([], {
+		dropDownClass: SelectorMenu,
+
+		/**
+		 * Override dijit/popup's behavior of trying to copy the popup widget's border style onto the popup wrapper
+		 */
+		openDropDown: function () {
+			var retVal = this.inherited(arguments);
+			this.dropDown._popupWrapper.style.border = '';
+			return retVal;
+		}
+	});
+
 	var RelationshipField = _WidgetBase.createSubclass([ _FormValueMixin ], {
 		baseClass: 'relationship-editor',
-		type: 'Relationship',
+		term: null,
+		field: null,
+		operands: null,
+		sources: null,
+		ontologyStore: null,
+		entityStore1: null,
+		entityStore2: null,
+
+		constructor: function () {
+			this.operands = [];
+			this.term = { name: 'Relationship' };
+		},
 
 		buildRendering: function () {
 			this.inherited(arguments);
 			this.focusNode = this.domNode;
 
 			this.selectBox = domConstruct.create('div', { className: 'relationship-select' }, this.domNode);
-
-			this.display = domConstruct.create('span', { className: 'relationship-name' }, this.selectBox);
-			this.display.textContent = this._getPlaceholderText();
-
-			this.members = domConstruct.create('div', { className: 'relationship-members' }, this.domNode);
+			this.operandsNode = domConstruct.create('div', { className: 'relationship-operands' }, this.domNode);
 		},
 
 		postCreate: function () {
 			this.inherited(arguments);
 
 			this.on('change', function (value) {
-				console.log('changed to ' + value);
+				if (this.term.name === 'nonNegativeInteger') {
+					return;
+				}
 
-				registry.findWidgets(this.members).forEach(function (widget) {
-					widget.destroy();
-				});
+				var store = this.editor.get('store');
+				var item = store.get(value);
 
-				this.display.classList.remove('has-value');
-				this.display.classList.remove('has-children');
+				this._createTemplate(value);
 
-				if (value) {
-					this.display.textContent = value;
-					this.display.classList.add('has-value');
-
-					var args = relationships[value];
-					if (args) {
-						this.display.classList.add('has-children');
-
-						var children = args.map(function (arg) {
-							var field = new RelationshipField({ type: arg });
-							field.placeAt(this.members);
-							return field;
-						}.bind(this));
-
-						setTimeout(function () {
-							children[0].focus();
-						}.bind(this));
+				this.emit('expression-change', {
+					detail: {
+						item: item,
+						widget: this
 					}
-				}
-				else {
-					this.display.textContent = this._getPlaceholderText();
-					setTimeout(function () {
-						this.domNode.focus();
-					}.bind(this));
-				}
+				});
 			}.bind(this));
 
-			this.on('click', function (event) {
-				if (event.target === this.display) {
-					this._enableSelect();
+			on(this.operandsNode, 'expression-change', function (event) {
+				// We don't care about expression changes here unless expression selector sources have a relationship
+				if (this.sources == null) {
+					console.log('sources is null');
+					return;
 				}
+
+				// this.set('firstSource', event.detail.item.entity.ontology);
+				this._updateStoreRelationships(event.detail.widget, event.detail.item.entity.ontology);
 			}.bind(this));
 
 			this.on('keydown', function (event) {
@@ -215,7 +306,7 @@ define([
 
 						if (this.type !== 'nonNegativeInteger') {
 							setTimeout(function () {
-								this.field.loadDropDown();
+								this.editor.loadDropDown();
 							}.bind(this), 100);
 						}
 					}
@@ -227,59 +318,44 @@ define([
 			}.bind(this));
 
 			this.on('focusout', function (event) {
-				if (!this.field.domNode.contains(event.relatedTarget)) {
+				if (!this.editor.domNode.contains(event.relatedTarget)) {
 					this.domNode.classList.remove('focused');
 				}
 			}.bind(this));
 		},
 
-		_setTypeAttr: function (type) {
-			this.type = type;
-
-			if (this.field) {
-				this.field.destroy();
+		_createTemplate: function (value) {
+			while (this.operands.length > 0) {
+				this.operands.pop().destroy();
 			}
 
-			if (type === 'nonNegativeInteger') {
-				this.field = new NumberTextBox({
-					required: false,
-					constraints: { min: 0, places: 0 }
-				});
+			if (value) {
+				var info = relationships[value];
+				if (info) {
+					this.sources = info.sources;
+
+					this.operands = info.terms.map(function (term) {
+						var editor = new RelationshipField({
+							term: term,
+							ontologyStore: this.ontologyStore,
+							entityStore1: this.entityStore1,
+							entityStore2: this.entityStore2
+						});
+						editor.placeAt(this.operandsNode);
+						return editor;
+					}.bind(this));
+
+					setTimeout(function () {
+						this.operands[0].focus();
+					}.bind(this));
+				}
 			}
 			else {
-				this.field = new FilteringSelect({
-					labelAttr: 'name',
-					required: false,
-					store: new Memory({ data: this._getItems(type) })
-				});
+				// this.display.textContent = this._getPlaceholderText();
+				setTimeout(function () {
+					this.domNode.focus();
+				}.bind(this));
 			}
-
-			this.field.placeAt(this.selectBox);
-			this.field.domNode.classList.add('relationship-input');
-			this.field.on('change', function (newValue) {
-				this._handleOnChange(newValue);
-			}.bind(this));
-		},
-
-		_getPlaceholderText: function () {
-			return this.type[0].toUpperCase() + this.type.slice(1);
-		},
-
-		_getItems: function (selector) {
-			if (selector === 'Relationship') {
-				return Object.keys(relationships).map(function (relationship) {
-					return { id: relationship, name: relationship };
-				});
-			}
-
-			var list = expressions[selector];
-			if (list == null) {
-				return [];
-			}
-
-			return list.map(function (item) {
-				return { id: item, name: item };
-			});
 		},
 
 		_disableSelect: function () {
@@ -292,13 +368,164 @@ define([
 		_enableSelect: function () {
 			this.domNode.classList.add('focused');
 			setTimeout(function () {
-				this.field.focus();
+				this.editor.focus();
+			}.bind(this));
+		},
+
+		_getItems: function () {
+			// A selector may have other information, e.g., "ClassExpression (sub)"
+			var items;
+			var name = this.term.name;
+
+			if (name === 'Relationship') {
+				items = [ 'EquivalentClasses', 'SubClassOf', 'DisjointClasses' ].map(function (relationship) {
+					return { id: relationship, name: relationship };
+				});
+			}
+			else {
+				var list = expressions[name];
+				if (list == null) {
+					items = [];
+				}
+				else {
+					items = list.reduce(function (items, item) {
+						if (item === 'Class') {
+							var storeItems; 
+
+							if (this.term.store) {
+								storeItems = this.term.store.fetchSync();
+							}
+							else {
+								storeItems = this.entityStore1.fetchSync().concat(this.entityStore2.fetchSync());
+							}
+
+							return items.concat(storeItems.map(function (item) {
+								return {
+									id: item.URI,
+									name: item.label,
+									entity: item
+								};
+							}));
+						}
+						else {
+							return items.concat([{ id: item, name: item }]);
+						}
+					}.bind(this), []);
+				}
+			}
+				
+			return items.sort(function (a, b) {
+				if (a.value && !b.value) {
+					return 1;
+				}
+				if (!a.value && b.value) {
+					return -1;
+				}
+				if (a.name < b.name) {
+					return -1;
+				}
+				if (a.name > b.name) {
+					return 1;
+				}
+				return 0;
+			});
+		},
+
+		_setOntologyStoreAttr: function (store) {
+			this.ontologyStore = store;
+			this.operands.forEach(function (operand) {
+				operand.set('ontologyStore', store);
+			});
+		},
+
+		_setEntityStore1Attr: function (store) {
+			this.entityStore1 = store;
+			this.operands.forEach(function (operand) {
+				operand.set('entityStore1', store);
+			});
+		},
+
+		_setEntityStore2Attr: function (store) {
+			this.entityStore2 = store;
+			this.operands.forEach(function (operand) {
+				operand.set('entityStore2', store);
+			});
+		},
+
+		_updateStoreRelationships: function (widget, source) {
+			var store = this.entityStore1.ontology === source ? this.entityStore1 : this.entityStore2;
+			var otherStore = store === this.entityStore1 ? this.entityStore2 : this.entityStore1;
+
+			console.log('updated widget', widget, 'to source', source);
+			console.log('store:', store);
+			console.log('otherStore:', otherStore);
+
+			if (this.sources === 'same') {
+				this.operands.filter(function (operand) {
+					return operand !== widget;
+				}).forEach(function (operand) {
+					var term = operand.get('term');
+					term.store = store;
+					term.value = operand.get('value');
+					operand.set('term', term);
+				});
+			}
+			else if (this.sources === 'different') {
+				this.operands.filter(function (operand) {
+					return operand !== widget;
+				}).forEach(function (operand) {
+					var term = operand.get('term');
+					term.store = otherStore;
+					term.value = operand.get('value');
+					operand.set('term', term);
+					console.log('set term of', operand, 'to', term);
+				});
+			}
+		},
+
+		_setTermAttr: function (term) {
+			this.term = term;
+			console.log('settign term to', term);
+
+			if (this.editor) {
+				this.editor.destroy();
+			}
+
+			if (term.name === 'nonNegativeInteger') {
+				this.editor = new NumberTextBox({
+					required: false,
+					constraints: { min: 0, places: 0 }
+				});
+			}
+			else {
+				this.editor = new Selector({
+					labelAttr: 'name',
+					required: false,
+					store: new Memory({ data: this._getItems() })
+				});
+			}
+
+			if (term.value) {
+				console.log('setting value of', this.editor, 'to', term.value);
+				this.editor.set('value', term.value);
+			}
+
+			this.editor.set('placeHolder', term.name);
+			this.editor.placeAt(this.selectBox);
+			this.editor.domNode.classList.add('relationship-input');
+			this.editor.on('change', function (newValue) {
+				this._handleOnChange(newValue);
 			}.bind(this));
 		}
 	});
                                 
 	return _WidgetBase.createSubclass([ _FormValueMixin ], {
 		baseClass: 'axiom-editor',
+
+		ontologyStore: null,
+		entityStore1: null,
+		entityStore2: null,
+		axiomStore: null,
 
 		buildRendering: function () {
 			this.inherited(arguments);
@@ -309,6 +536,25 @@ define([
 
 			this.relationship = new RelationshipField();
 			this.contentNode.appendChild(this.relationship.domNode);
+		},
+
+		_setOntologyStoreAttr: function (store) {
+			this.ontologyStore = store;
+			this.relationship.set('ontologyStore', store);
+		},
+
+		_setEntityStore1Attr: function (store) {
+			this.entityStore1 = store;
+			this.relationship.set('entityStore1', store);
+		},
+
+		_setEntityStore2Attr: function (store) {
+			this.entityStore2 = store;
+			this.relationship.set('entityStore2', store);
+		},
+
+		_setAxiomStoreAttr: function (store) {
+			this.axiomStore = store;
 		}
 	});
 });

@@ -39,8 +39,8 @@ body {
 
 .box,
 .dgrid,
-.dijitSelect,
-.dijitSelectMenu,
+.dijitComboBox,
+.dijitComboBoxMenuPopup,
 .dijitTooltip,
 .dijitTooltipContainer,
 .dijitComboBoxMenu,
@@ -56,12 +56,15 @@ body {
 
 .box,
 .dijitSelect,
-.dijitReset,
 .dijitComboBox,
+.dijitComboBoxMenuPopup,
 .dijitTooltipContainer,
 .dijitArrowButton {
-	border-color: #ddd;
-	border-width: 1px;
+	border: solid 1px #ddd;
+}
+
+.dijitComboBoxMenu {
+	border: none;
 }
 
 .dijitTextBox {
@@ -79,8 +82,8 @@ body {
 }
 
 .dijitValidationTextBox .dijitValidationContainer {
-	position: absolute;
-	right: 3px;
+	float: right;
+	position: relative;
 	width: 18px;
 }
 .dijitValidationTextBox .dijitValidationIcon {
@@ -105,21 +108,28 @@ body {
 	background: #f7f7f7;
 }
 .dijitTooltipRight {
-	margin-left: 4px;
+	transform: translateX(10px);
 }
 .dijitTooltipLeft {
-	margin-right: 4px;
+	transform: translateX(-10px);
 }
 .dijitTooltipTop {
-	margin-bottom: 4px;
+	transform: translateY(-10px);
 }
 .dijitTooltipBottom {
-	margin-top: 4px;
+	transform: translateY(10px);
 }
 
 .dijitSelect .dijitArrowButtonContainer {
 	border-width: 0;
 	border-left-width: 1px;
+}
+
+.dijitComboBox .dijitArrowButtonContainer {
+	display: none;
+}
+.dijitComboBoxFocused .dijitArrowButtonContainer {
+	display: block;
 }
 
 .dijitComboBox .dijitArrowButton,
@@ -155,8 +165,7 @@ body {
 .dijitMenuItemLabel {
 	padding: 0 3px 2px 3px;
 }
-.dijitMenuTable,
-.dijitComboBoxMenu,
+.dijitPopup,
 .dijitTooltip {
 	box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.04);
 }
@@ -303,12 +312,21 @@ body {
 	display: none;
 }
 
-.axiom-editor {
-	position: relative;
+#axiom-entry {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	padding: 1em;
+	position: relative;
+}
+
+.axiom-editor {
+	display: none;
+	margin: 0 auto;
+}
+
+.ontology1-selected.ontology2-selected .axiom-editor {
+	display: block;
 }
 
 .editor-content {
@@ -325,14 +343,14 @@ body {
 	background: hsla(240, 100%, 80%, 0.1);
 }
 .relationship-select .dijitComboBox .dijitArrowButton {
-	display: none;
+	background: none;
 }
 .relationship-select {
-	min-width: 11em;
+	min-width: 13em;
 }
-.relationship-input {
-	display: none;
-}
+/* .relationship-input { */
+/* 	display: none; */
+/* } */
 
 .relationship-select > .relationship-name {
 	display: block;
@@ -361,24 +379,28 @@ body {
 .relationship-editor > :last-child {
 	flex-grow: 1;
 }
-.relationship-editor.focused > .relationship-select > .relationship-name {
-	display: none;
-}
-.relationship-editor.focused > .relationship-select > .relationship-input {
-	display: block;
-}
+/* .relationship-editor.focused > .relationship-select > .relationship-name { */
+/* 	display: none; */
+/* } */
+/* .relationship-editor.focused > .relationship-select > .relationship-input { */
+/* 	display: block; */
+/* } */
 
-.relationship-members:not(:empty) {
+.relationship-operands:not(:empty) {
 	margin-top: 3px;
 }
-.relationship-members {
+.relationship-operands {
 	display: flex;
 	flex-direction: column;
 }
-.relationship-members > * {
+.relationship-operands > * {
 	margin-left: 2em;
 	margin-bottom: 3px;
 }
-.relationship-members > *:last-child {
+.relationship-operands > *:last-child {
 	margin-bottom: 0;
+}
+
+.dijitMenuItem.relationship {
+	font-style: italic;
 }
