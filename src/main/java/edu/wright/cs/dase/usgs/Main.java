@@ -82,7 +82,7 @@ public class Main {
 		for (Entity e: entities) {
 			System.out.println(e);
 			
-			ArrayList<Entity> relatedEntities = getRelatedEntities(e.getURI(), "Hydro3.owl", "USGS.owl", .2, .5, .3);
+			ArrayList<Entity> relatedEntities = getRelatedClasses(e.getURI(), "Hydro3.owl", "USGS.owl", .2, .5, .3);
 			for (int i=0; i<3; i++) {
 				System.out.println("\t" + relatedEntities.get(i));
 			}
@@ -108,10 +108,10 @@ public class Main {
 			}, gson::toJson);
 
 			get("/axioms", (request, response) -> {
-				String entity = request.queryParams("entity");
+				String cls = request.queryParams("class");
 				String ont1 = request.queryParams("ontology1");
 				String ont2 = request.queryParams("ontology2");
-				return getAxioms(entity, ont1, ont2);
+				return getAxioms(cls, ont1, ont2);
 			}, gson::toJson);
 
 			get("/coordinates", (request, response) -> {
@@ -123,14 +123,14 @@ public class Main {
 				return getCoordinates(axiom, ont1, ont2, lat, lng, 10);
 			}, gson::toJson);
 
-			get("/relatedEntities", (request, response) -> {
-				String entity = request.queryParams("entity");
+			get("/relatedClasses", (request, response) -> {
+				String cls = request.queryParams("class");
 				String ont1 = request.queryParams("ontology1");
 				String ont2 = request.queryParams("ontology2");
 				Double syn = new Double(request.queryParams("syn"));
 				Double sem = new Double(request.queryParams("sem"));
 				Double struct = new Double(request.queryParams("struct"));
-				return getRelatedEntities(entity, ont1, ont2, syn, sem, struct);
+				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
 			}, gson::toJson);
 		}
 	}
@@ -229,7 +229,7 @@ public class Main {
 	}
 	
 	
-	public static ArrayList<Entity> getRelatedEntities(String entityURI, String ont1, String ont2, 
+	public static ArrayList<Entity> getRelatedClasses(String entityURI, String ont1, String ont2, 
 			double syn, double sem, double struct) {
 		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2) || 
 				synWeight != syn || semWeight != sem || structWeight != struct) {

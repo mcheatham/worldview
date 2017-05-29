@@ -18,19 +18,26 @@ require([
 	request,
 	Map
 ) {
-	function getRelatedEntities() {
+	function getRelatedClasses() {
 		var ont1 = ontology1.get('value');
 		var ont2 = ontology2.get('value');
-		var ent1 = Object.keys(entities1.selection).filter(function (id) {
-			return entities1.selection[id];
+		var cls1 = Object.keys(classes1.selection).filter(function (id) {
+			return classes1.selection[id];
 		})[0];
 
-		if (ent1 && ont1 && ont2) {
-			return request.get('/relatedEntities', {
-				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+		if (cls1 && ont1 && ont2) {
+			return request.get('/relatedClasses', {
+				query: {
+					ontology1: ont1,
+					ontology2: ont2,
+					class: cls1,
+					syn: 0.3,
+					sem: 0.3,
+					struct: 0.4
+				}
 			}).then(function (data) {
 				data = JSON.parse(data);
-				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
+				classes2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			});
 		}
 	}
@@ -38,15 +45,15 @@ require([
 	function getAxioms() {
 		var ont1 = ontology1.get('value');
 		var ont2 = ontology2.get('value');
-		var ent1 = Object.keys(entities1.selection).filter(function (id) {
-			return entities1.selection[id];
+		var cls1 = Object.keys(classes1.selection).filter(function (id) {
+			return classes1.selection[id];
 		})[0];
 
-		clearEntityMarkers();
+		clearClassMarkers();
 
-		if (ent1 && ont1 && ont2) {
+		if (cls1 && ont1 && ont2) {
 			return request.get('/axioms', {
-				query: { ontology1: ont1, ontology2: ont2, entity: ent1 }
+				query: { ontology1: ont1, ontology2: ont2, class: cls1 }
 			}).then(function (data) {
 				data = JSON.parse(data);
 				axioms.set('collection', new TrackableMemory({
@@ -69,8 +76,8 @@ require([
 		alert(error.message);
 	}
 
-	function clearEntityMarkers() {
-		var collection = entities2.get('collection');
+	function clearClassMarkers() {
+		var collection = classes2.get('collection');
 		collection.fetchSync({ marked: true }).forEach(function (item) {
 			item.marked = false;
 			collection.putSync(item);
@@ -103,17 +110,17 @@ require([
 		store: new SelectStore()
 	}, 'ontology1');
 
-	var entities1 = new ListClass({
+	var classes1 = new ListClass({
 		collection: new TrackableMemory()
-	}, 'entities1');
+	}, 'classes1');
 
 	var ontology2 = new Select({
 		store: new SelectStore()
 	}, 'ontology2');
 
-	var entities2 = new ListClass({
+	var classes2 = new ListClass({
 		collection: new TrackableMemory()
-	}, 'entities2');
+	}, 'classes2');
 
 	var axioms = new ListClass({
 		collection: new TrackableMemory(),
@@ -121,28 +128,28 @@ require([
 	}, 'axioms');
 
 	ontology1.on('change', function (newValue) {
-		showOverlay(request.get('/entities', {
+		showOverlay(request.get('/classes', {
 			query: { ontology: newValue }
 		}).then(function (data) {
 			data = JSON.parse(data);
-			entities1.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
+			classes1.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			axioms.set('collection', new TrackableMemory());
 		}));
 	});
 
-	entities1.on('dgrid-select', function () {
-		showOverlay(getRelatedEntities().then(function () {
+	classes1.on('dgrid-select', function () {
+		showOverlay(getRelatedClasses().then(function () {
 			return getAxioms();
 		}));
 	});
 
 	ontology2.on('change', function (newValue) {
 		showOverlay(
-			request.get('/entities', {
+			request.get('/classes', {
 				query: { ontology: newValue }
 			}).then(function (data) {
 				data = JSON.parse(data);
-				entities2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
+				classes2.set('collection', new TrackableMemory({ data: data, idProperty: 'URI' }));
 			}),
 			getAxioms()
 		);
@@ -155,15 +162,15 @@ require([
 		var ont1 = ontology1.get('value');
 		var ont2 = ontology2.get('value');
 
-		// Axioms should relate ent1 to entities int ont2. Highlight those entities.
-		var entities2Collection = entities2.get('collection');
-		axiom.entities.forEach(function (entity) {
-			// Currently, axiom entities aren't properly attributed to their source ontology. Ignore the ontology
-			// contained in the entity for now and just check if entities2 contains each entity.
-			var _entity = entities2Collection.getSync(entity.URI);
-			if (_entity) {
-				_entity.marked = true;
-				entities2Collection.putSync(_entity);
+		// Axioms should relate cls1 to classes int ont2. Highlight those classes.
+		var classes2Collection = classes2.get('collection');
+		axiom.entities.forEach(function (ent) {
+			// Currently, axiom classes aren't properly attributed to their source ontology. Ignore the ontology
+			// contained in the class for now and just check if classes2 contains each class.
+			var _class = classes2Collection.getSync(ent.URI);
+			if (_class) {
+				_class.marked = true;
+				classes2Collection.putSync(_class);
 			}
 		});
 
@@ -176,13 +183,13 @@ require([
 
 				var allCoords = [];
 
-				Object.keys(data).forEach(function (entityUri) {
-					data[entityUri].forEach(function (shape, index) {
+				Object.keys(data).forEach(function (classUri) {
+					data[classUri].forEach(function (shape, index) {
 						var coords = shape.points.map(function (point) {
 							return [ point.lng, point.lat ];
 						});
 						allCoords = allCoords.concat(coords);
-						map.addShape(entityUri + '-' + index, {
+						map.addShape(classUri + '-' + index, {
 							type: 'Feature',
 							geometry: {
 								type: 'Polygon',
