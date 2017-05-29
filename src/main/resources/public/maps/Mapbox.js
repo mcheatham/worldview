@@ -1,23 +1,42 @@
-define([ 'dojo/_base/declare' ], function (declare) {
-	return declare([], {
+define([ './_Map' ], function (_Map) {
+	var initialized;
+
+	return _Map.createSubclass([], {
 		map: null,
 
 		constructor: function (options, node) {
-			mapboxgl.accessToken = mapboxToken;
-			var map = new mapboxgl.Map({
-				container: node,
-				style: 'mapbox://styles/mapbox/outdoors-v10',
-				center: options.center,
-				zoom: options.zoom
-			});
-
 			this.map = new Promise(function (resolve) {
-				map.on('load', function () {
-					map.addSource('contours', {
-						type: 'vector',
-						url: 'mapbox://mapbox.mapbox-terrain-v2'
+				if (!initialized) {
+					initialized = new Promise(function (resolve) {
+						require([
+							'dojo/dom-construct',
+							'dojo/text!https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css',
+							'https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'
+						], function (domConstruct, styles, mapbox) {
+							domConstruct.create('style', { innerHTML: styles }, 'head');
+							resolve(mapbox);
+						});
 					});
-					resolve(map);
+				}
+
+				initialized.then(function (mapbox) {
+					/* global mapConfig */
+					mapbox.accessToken = mapConfig.mapboxToken;
+
+					var map = new mapbox.Map({
+						container: node,
+						style: 'mapbox://styles/mapbox/outdoors-v10',
+						center: options.center,
+						zoom: options.zoom
+					});
+
+					map.on('load', function () {
+						map.addSource('contours', {
+							type: 'vector',
+							url: 'mapbox://mapbox.mapbox-terrain-v2'
+						});
+						resolve(map);
+					});
 				});
 			});
 		},

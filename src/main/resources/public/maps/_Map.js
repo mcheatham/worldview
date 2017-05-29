@@ -1,13 +1,11 @@
 define([
-	'dojo/_base/declare',
-	'./maps/Leaflet',
-	'./maps/Mapbox'
-], function (declare, Leaflet, Mapbox) {
-	var Map = declare([], {
+	'dojo/_base/declare'
+], function (declare) {
+	return declare([], {
 		_shapes: null,
 
 		constructor: function () {
-			this._shapes = []
+			this._shapes = [];
 		},
 
 		fitBounds: function (coords) {
@@ -38,15 +36,8 @@ define([
 			var promises = [];
 			while (this._shapes.length > 0) {
 				promises.push(this._removeShape(this._shapes.pop()));
-			};
+			}
 			return Promise.all(promises);
 		}
 	});
-
-	if (typeof mapboxgl !== 'undefined' && mapboxToken && mapboxToken.indexOf('{mapboxToken}') === -1) {
-		return Map.createSubclass([ Mapbox ]);
-	}
-	else {
-		return Map.createSubclass([ Leaflet ]);
-	}
 });

@@ -6,7 +6,6 @@ require([
 	'dojo/store/Memory',
 	'dijit/form/Select',
 	'dojo/request',
-	'worldview/Map',
 	'dojo/domReady!'
 ], function (
 	List,
@@ -15,8 +14,7 @@ require([
 	Trackable,
 	MemoryStore,
 	Select,
-	request,
-	Map
+	request
 ) {
 	function getRelatedClasses() {
 		var ont1 = ontology1.get('value');
@@ -206,12 +204,7 @@ require([
 		});
 	});
 
-	var map = new Map({
-		center: [-68.13734351262877, 45.137451890638886],
-		zoom: 5
-	}, 'map');
-
-	request.get('/ontologies').then(function (data) {
+	var ontologyLoad = request.get('/ontologies').then(function (data) {
 		data = JSON.parse(data);
 		var store = new SelectStore({
 			data: [ { identifier: '', label: ' ' } ].concat(data),
@@ -228,7 +221,27 @@ require([
 		});
 		ontology2.set('store', store);
 		ontology2.set('value', store.getIdentity(store.data[0]));
-	}).otherwise(showError).then(function () {
+	});
+
+	var map;
+
+	/* global mapConfig */
+	var mapLoad = new Promise(function (resolve, reject) {
+		require([ 'worldview/maps/' + mapConfig.provider ], function (MapClass) {
+			try {
+				map = new MapClass({
+					center: [-68.13734351262877, 45.137451890638886],
+					zoom: 5
+				}, 'map');
+				resolve();
+			}
+			catch (error) {
+				reject(error);
+			}
+		});
+	});
+
+	Promise.all([ ontologyLoad, mapLoad ]).catch(showError).then(function () {
 		wrapper.classList.remove('loading');
 	});
 });

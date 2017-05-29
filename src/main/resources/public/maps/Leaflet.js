@@ -1,24 +1,47 @@
-define([ 'dojo/_base/declare' ], function (declare) {
-	return declare([], {
+define([ './_Map' ], function (_Map) {
+	var initialized;
+	var leaflet;
+
+	return _Map.createSubclass([], {
 		map: null,
 
 		constructor: function (options, node) {
-			var map = L.map(node, {
-				center: [options.center[1], options.center[0]],
-				zoom: options.zoom
-			});
-			this.map = Promise.resolve(map);
+			this.map = new Promise(function (resolve) {
+				if (!initialized) {
+					initialized = new Promise(function (resolve) {
+						require([
+							'dojo/dom-construct',
+							'dojo/text!https://unpkg.com/leaflet@1.0.3/dist/leaflet.css',
+							'https://unpkg.com/leaflet@1.0.3/dist/leaflet.js'
+						], function (domConstruct, styles, leaflet) {
+							domConstruct.create('style', { innerHTML: styles }, document.head);
+							resolve(leaflet);
+						});
+					});
+				}
 
-			if (options.tiles === 'thunderforest' || !options.token) {
-				L.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png', {
-					detectRetina: true,
-				}).addTo(map);
-			}
-			else {
-				L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=' + options.token, {
-					detectRetina: true,
-				}).addTo(map);
-			}
+				initialized.then(function (_leaflet) {
+					leaflet = _leaflet;
+
+					var map = leaflet.map(node, {
+						center: [options.center[1], options.center[0]],
+						zoom: options.zoom
+					});
+
+					if (options.tiles === 'thunderforest' || !options.token) {
+						leaflet.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png', {
+							detectRetina: true,
+						}).addTo(map);
+					}
+					else {
+						leaflet.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=' + options.token, {
+							detectRetina: true,
+						}).addTo(map);
+					}
+
+					resolve(map);
+				});
+			});
 		},
 
 		getCenter: function () {
@@ -30,7 +53,7 @@ define([ 'dojo/_base/declare' ], function (declare) {
 
 		_addShape: function (id, geojson) {
 			return this.map.then(function (map) {
-				var layer = L.geoJSON(geojson);
+				var layer = leaflet.geoJSON(geojson);
 				layer.addTo(map);
 				return layer;
 			});
