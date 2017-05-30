@@ -10,13 +10,6 @@
 		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/dijit.css">
 		<link rel="stylesheet" href="styles.css">
 
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
-		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-
-		<!-- Uncomment these and comment the leaflet resources above to enable Mapbox -->
-		<!-- <link href='https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' /> -->
-		<!-- <script src='https://api.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script> -->
-
 		<script>
 		var dojoConfig = {
 			async: true,
@@ -30,9 +23,25 @@
 			]
 		};
 
-		// If using Mapbox, provide the token value with a Maven property, either on the command line or in a
-		// 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
-		var mapboxToken = '${mapboxToken}';
+		var mapConfig = {
+			// To use Mapbox or Google, the associated token/key property must be provided
+			provider: 'Google',
+
+			// If using Mapbox, provide the token value with a Maven property, either on the command line or in a
+			// 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
+			mapboxToken: '${mapboxToken}',
+
+			// If using Google Maps, provide the token value with a Maven property, either on the command line or in
+			// a 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
+			googleMapsKey: '${googleMapsKey}',
+		};
+
+		if (
+			mapConfig.provider === 'Google' && !mapConfig.googleMapsKey ||
+			mapConfig.provider === 'Mapbox' && !mapConfig.mapboxToken
+		) {
+			mapConfig.provider === 'Leaflet'
+		}
 		</script>
 		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
 	</head>
@@ -53,7 +62,7 @@
 						</div>
 					</div>
 
-					<div class="axioms box" id="user-axioms">
+					<div class="axioms box" id="axiom-entry">
 					</div>
 				</div>
 				<div id="map-column" class="column">
@@ -72,6 +81,7 @@
 			</div>
 		</div>
 
+		<script src="mockData.js"></script>
 		<script src="app.js"></script>
 	</body>
 </html>
