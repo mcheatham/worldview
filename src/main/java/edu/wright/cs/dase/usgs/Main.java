@@ -1,9 +1,13 @@
 package edu.wright.cs.dase.usgs;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import com.google.gson.Gson;
 
@@ -54,12 +58,25 @@ public class Main {
 //		}
 		
 //		ArrayList<Axiom> axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Watershed", 
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
 //				"Hydro3.owl", "USGS.owl");
 //		for (Axiom a: axioms) {
 //			System.out.println(a);
 //		}
 //		
+//		String s = "<EquivalentClasses>"
+//				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
+//				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
+//				+ "</EquivalentClasses>";
+//		addAxiom(s, "Hydro3.owl", "USGS.owl");
+//		
+//		axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
+		
 //		axioms = getAxioms(
 //				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
 //				"Hydro3.owl", "USGS.owl");
@@ -229,6 +246,47 @@ public class Main {
 	}
 	
 	
+	// add the new axiom to the alignment file, refresh the alignment
+	public static void addAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
+		
+		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
+				ont2Filename.replaceAll(".owl", "") + ".owl";
+		
+		// append the new axiom to the end of the alignment file
+		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
+		File copy = new File("./src/main/resources/public/alignments/" + alignmentFilename + ".bak");
+		try {
+			PrintWriter pw = new PrintWriter(copy);
+			Scanner scanner = new Scanner(orig);
+			while (scanner.hasNext()) {
+				String line = scanner.nextLine();
+				if (!line.contains("</Ontology>")) {
+					pw.println(line);
+				} else {
+					pw.println(axiomOWL);
+					pw.println(line);
+				}
+			}
+			scanner.close();
+			pw.close();
+			
+			orig.delete();
+			copy.renameTo(orig);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// invalidate that ontology in the cache
+		ontologies.remove(alignmentFilename);
+	}
+	
+	
+	// remove the new axiom from the alignment ontology and update the corresponding alignment file
+	public static void removeAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
+		// TODO
+	}
+	
+	
 	public static ArrayList<Entity> getRelatedClasses(String entityURI, String ont1, String ont2, 
 			double syn, double sem, double struct) {
 		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2) || 
@@ -294,8 +352,6 @@ public class Main {
 						+ "?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geom . \n"
 						+ "?geom <http://www.opengis.net/ont/geosparql#hasWKT> ?shape . \n"
 						+ "}";
-				
-//				System.out.println(query); // TODO
 				
 				coordinates = getCoordinates(query);
 				entityCoordinates.put(ent, coordinates);
