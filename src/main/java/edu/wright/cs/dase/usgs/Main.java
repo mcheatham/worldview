@@ -70,7 +70,7 @@ public class Main {
 //		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
 //				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
 //				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
-//				"Hydro3.owl", "USGS.owl", 75.0, 75.0, 10);
+//				"Hydro3.owl", "USGS.owl", 75.0, 75.0);
 //		for (Entity e: coords.keySet()) {
 //			System.out.println(e);
 //			for (Coordinates c: coords.get(e)) {
@@ -78,15 +78,15 @@ public class Main {
 //			}
 //		}
 
-		ArrayList<ClassEntity> entities = getClasses("Hydro3.owl");
-		for (Entity e: entities) {
-			System.out.println(e);
-			
-			ArrayList<Entity> relatedEntities = getRelatedClasses(e.getURI(), "Hydro3.owl", "USGS.owl", .2, .5, .3);
-			for (int i=0; i<3; i++) {
-				System.out.println("\t" + relatedEntities.get(i));
-			}
-		}
+//		ArrayList<ClassEntity> entities = getClasses("Hydro3.owl");
+//		for (Entity e: entities) {
+//			System.out.println(e);
+//			
+//			ArrayList<Entity> relatedEntities = getRelatedClasses(e.getURI(), "Hydro3.owl", "USGS.owl", .2, .5, .3);
+//			for (int i=0; i<3; i++) {
+//				System.out.println("\t" + relatedEntities.get(i));
+//			}
+//		}
 
 		if (args.length > 0 && args[0].equals("serve")) {
 			Gson gson = new Gson();
@@ -120,7 +120,7 @@ public class Main {
 				String ont2 = request.queryParams("ontology2");
 				Double lat = new Double(request.queryParams("lat"));
 				Double lng = new Double(request.queryParams("lng"));
-				return getCoordinates(axiom, ont1, ont2, lat, lng, 10);
+				return getCoordinates(axiom, ont1, ont2, lat, lng);
 			}, gson::toJson);
 
 			get("/relatedClasses", (request, response) -> {
@@ -247,7 +247,7 @@ public class Main {
 	// return a list of the limit closest entities relevant to the axiom as measured from 
 	// the provided latitude and longitude
 	public static HashMap<Entity, ArrayList<Coordinates>> getCoordinates(String axiomOWL, 
-			String ont1Filename, String ont2Filename, double lat, double lng, int limit) {
+			String ont1Filename, String ont2Filename, double lat, double lng) {
 		
 		HashMap<Entity, ArrayList<Coordinates>> entityCoordinates = new HashMap<>();
 		
@@ -289,25 +289,17 @@ public class Main {
 				query = q.toString();
 				query = query.replace("SELECT DISTINCT  ?x", "SELECT DISTINCT  ?shape");
 				query = query.substring(0, query.lastIndexOf("}"));
-				query +=  ". ?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geometry . "
-						+ "?geometry <http://www.opengis.net/ont/geosparql#asWKT> ?shape . } LIMIT 1000";
-
+				query +=  ".\n ?x <http://jena.apache.org/spatial#nearby> (" 
+						+ lat + " " + lng + " 300 'km') . \n"
+						+ "?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geom . \n"
+						+ "?geom <http://www.opengis.net/ont/geosparql#hasWKT> ?shape . \n"
+						+ "}";
+				
+//				System.out.println(query); // TODO
+				
 				coordinates = getCoordinates(query);
 				entityCoordinates.put(ent, coordinates);
 			}
-			
-			if (coordinates == null) continue;
-			
-			// sort the instances based on the distance between each instance and the location
-			Collections.sort(coordinates, new DistanceComparator(lat, lng));
-		
-			// collect the first "limit" into the ArrayList
-			ArrayList<Coordinates> keepers = new ArrayList<>();
-			int numToAdd = Math.min(coordinates.size(), limit);
-			for (int i=0; i<numToAdd; i++) {
-				keepers.add(coordinates.get(i));
-			}
-			entityCoordinates.put(ent, keepers);
 		}
 		
 		return entityCoordinates;

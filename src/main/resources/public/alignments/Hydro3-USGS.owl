@@ -64,10 +64,7 @@
 </SubClassOf>
 <EquivalentClasses>
   <Class IRI="http://spatial.maine.edu/semgaz/HydroOntology#Coastline"/>
-  <ObjectUnionOf>
-    <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
-    <Class IRI="http://cegis.usgs.gov/SWO/NonearthenShore"/>
-  </ObjectUnionOf>
+  <Class IRI="http://cegis.usgs.gov/SWO/Coastline"/>
 </EquivalentClasses>
 <!-- the one below is just for testing -->
 <SubClassOf>
