@@ -2,12 +2,15 @@ package edu.wright.cs.dase.usgs;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringBufferInputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.google.gson.Gson;
 
@@ -15,6 +18,8 @@ import static spark.Spark.*;
 
 import org.aksw.owl2sparql.OWLClassExpressionToSPARQLConverter;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -22,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.RemoveAxiom;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -57,25 +63,35 @@ public class Main {
 //			System.out.println(e);
 //		}
 		
-//		ArrayList<Axiom> axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-//				"Hydro3.owl", "USGS.owl");
-//		for (Axiom a: axioms) {
-//			System.out.println(a);
-//		}
-//		
-//		String s = "<EquivalentClasses>"
-//				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
-//				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
-//				+ "</EquivalentClasses>";
-//		addAxiom(s, "Hydro3.owl", "USGS.owl");
-//		
-//		axioms = getAxioms(
-//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-//				"Hydro3.owl", "USGS.owl");
-//		for (Axiom a: axioms) {
-//			System.out.println(a);
-//		}
+		ArrayList<Axiom> axioms = getAxioms(
+				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+				"Hydro3.owl", "USGS.owl");
+		for (Axiom a: axioms) {
+			System.out.println(a);
+		}
+		
+		String s = "<EquivalentClasses>"
+				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
+				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
+				+ "</EquivalentClasses>";
+		addAxiom(s, "Hydro3.owl", "USGS.owl");
+		
+		axioms = getAxioms(
+				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+				"Hydro3.owl", "USGS.owl");
+		for (Axiom a: axioms) {
+			System.out.println(a);
+		}
+		
+		removeAxiom(s, "Hydro3.owl", "USGS.owl");
+		
+		axioms = getAxioms(
+				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+				"Hydro3.owl", "USGS.owl");
+		for (Axiom a: axioms) {
+			System.out.println(a);
+		}
+		
 		
 //		axioms = getAxioms(
 //				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
@@ -249,41 +265,74 @@ public class Main {
 	// add the new axiom to the alignment file, refresh the alignment
 	public static void addAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
 		
+		// get the alignment ontology
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
 				ont2Filename.replaceAll(".owl", "") + ".owl";
 		
-		// append the new axiom to the end of the alignment file
 		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
-		File copy = new File("./src/main/resources/public/alignments/" + alignmentFilename + ".bak");
+		
+		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		
+		// create an ontology that is just this axiom
+		InputStream in = new StringBufferInputStream("<Ontology>" + axiomOWL + "</Ontology>");
 		try {
-			PrintWriter pw = new PrintWriter(copy);
-			Scanner scanner = new Scanner(orig);
-			while (scanner.hasNext()) {
-				String line = scanner.nextLine();
-				if (!line.contains("</Ontology>")) {
-					pw.println(line);
-				} else {
-					pw.println(axiomOWL);
-					pw.println(line);
-				}
-			}
-			scanner.close();
-			pw.close();
+			OWLOntology axiomOnt = manager.loadOntologyFromOntologyDocument(in);
+
+			// add the axiom into the alignmentOnt
+			Set<OWLAxiom> temp = axiomOnt.getAxioms();
+			if (temp == null || temp.size() == 0) return;
 			
-			orig.delete();
-			copy.renameTo(orig);
+			OWLAxiom axArg = temp.iterator().next();
+			manager.applyChange(new AddAxiom(alignmentOnt, axArg));
+
+			// write out the alignment ontology to its file
+			manager.saveOntology(alignmentOnt, new OWLXMLDocumentFormat(), IRI.create(orig));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		// invalidate that ontology in the cache
-		ontologies.remove(alignmentFilename);
+
 	}
 	
 	
 	// remove the new axiom from the alignment ontology and update the corresponding alignment file
 	public static void removeAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
-		// TODO
+
+		// get the alignment ontology
+		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
+				ont2Filename.replaceAll(".owl", "") + ".owl";
+		
+		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
+		
+		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		
+		// create an ontology that is just this axiom
+		InputStream in = new StringBufferInputStream("<Ontology>" + axiomOWL + "</Ontology>");
+		try {
+			OWLOntology axiomOnt = manager.loadOntologyFromOntologyDocument(in);
+
+			// remove the axiom from the alignmentOnt
+			Set<OWLAxiom> temp = axiomOnt.getAxioms();
+			if (temp == null || temp.size() == 0) return;
+			
+			OWLAxiom axArg = temp.iterator().next();
+			OWLAxiom toRemove = null;
+			for (OWLAxiom ax: alignmentOnt.getAxioms()) {
+				if (axArg.toString().equals(ax.toString())) {
+					toRemove = ax;
+					break;
+				}
+			}
+		
+			if (toRemove == null) return;
+			manager.applyChange(new RemoveAxiom(alignmentOnt, toRemove));
+
+			// write out the alignment ontology to its file
+			manager.saveOntology(alignmentOnt, new OWLXMLDocumentFormat(), IRI.create(orig));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
