@@ -1,15 +1,11 @@
 package edu.wright.cs.dase.usgs;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringBufferInputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -63,34 +59,34 @@ public class Main {
 //			System.out.println(e);
 //		}
 		
-		ArrayList<Axiom> axioms = getAxioms(
-				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-				"Hydro3.owl", "USGS.owl");
-		for (Axiom a: axioms) {
-			System.out.println(a);
-		}
-		
-		String s = "<EquivalentClasses>"
-				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
-				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
-				+ "</EquivalentClasses>";
-		addAxiom(s, "Hydro3.owl", "USGS.owl");
-		
-		axioms = getAxioms(
-				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-				"Hydro3.owl", "USGS.owl");
-		for (Axiom a: axioms) {
-			System.out.println(a);
-		}
-		
-		removeAxiom(s, "Hydro3.owl", "USGS.owl");
-		
-		axioms = getAxioms(
-				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
-				"Hydro3.owl", "USGS.owl");
-		for (Axiom a: axioms) {
-			System.out.println(a);
-		}
+//		ArrayList<Axiom> axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
+//		
+//		String s = "<EquivalentClasses>"
+//				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
+//				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
+//				+ "</EquivalentClasses>";
+//		addAxiom(s, "Hydro3.owl", "USGS.owl");
+//		
+//		axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
+//		
+//		removeAxiom(s, "Hydro3.owl", "USGS.owl");
+//		
+//		axioms = getAxioms(
+//				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
+//				"Hydro3.owl", "USGS.owl");
+//		for (Axiom a: axioms) {
+//			System.out.println(a);
+//		}
 		
 		
 //		axioms = getAxioms(
@@ -100,16 +96,16 @@ public class Main {
 //			System.out.println(a);
 //		}
 		
-//		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
-//				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
-//				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
-//				"Hydro3.owl", "USGS.owl", 75.0, 75.0);
-//		for (Entity e: coords.keySet()) {
-//			System.out.println(e);
-//			for (Coordinates c: coords.get(e)) {
-//				System.out.println("\t" + c);
-//			}
-//		}
+		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
+				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
+				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
+				"Hydro3.owl", "USGS.owl", 38.99237332729, -82.3558901826);
+		for (Entity e: coords.keySet()) {
+			System.out.println(e);
+			for (Coordinates c: coords.get(e)) {
+				System.out.println("\t" + c);
+			}
+		}
 
 //		ArrayList<ClassEntity> entities = getClasses("Hydro3.owl");
 //		for (Entity e: entities) {
@@ -121,51 +117,51 @@ public class Main {
 //			}
 //		}
 
-		if (args.length > 0 && args[0].equals("serve")) {
-			Gson gson = new Gson();
-
-			port(8080);
-			staticFiles.location("/public");
-			init();
-		
-			get("/ontologies", (reqest, response) -> {
-				return getOntologies();
-			}, gson::toJson);
-
-			get("/classes", (request, response) -> {
-				return getClasses(request.queryParams("ontology"));
-			}, gson::toJson);
-			
-			get("/properties", (request, response) -> {
-				return getProperties(request.queryParams("ontology"));
-			}, gson::toJson);
-
-			get("/axioms", (request, response) -> {
-				String cls = request.queryParams("class");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				return getAxioms(cls, ont1, ont2);
-			}, gson::toJson);
-
-			get("/coordinates", (request, response) -> {
-				String axiom = request.queryParams("axiom");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				Double lat = new Double(request.queryParams("lat"));
-				Double lng = new Double(request.queryParams("lng"));
-				return getCoordinates(axiom, ont1, ont2, lat, lng);
-			}, gson::toJson);
-
-			get("/relatedClasses", (request, response) -> {
-				String cls = request.queryParams("class");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				Double syn = new Double(request.queryParams("syn"));
-				Double sem = new Double(request.queryParams("sem"));
-				Double struct = new Double(request.queryParams("struct"));
-				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
-			}, gson::toJson);
-		}
+//		if (args.length > 0 && args[0].equals("serve")) {
+//			Gson gson = new Gson();
+//
+//			port(8080);
+//			staticFiles.location("/public");
+//			init();
+//		
+//			get("/ontologies", (reqest, response) -> {
+//				return getOntologies();
+//			}, gson::toJson);
+//
+//			get("/classes", (request, response) -> {
+//				return getClasses(request.queryParams("ontology"));
+//			}, gson::toJson);
+//			
+//			get("/properties", (request, response) -> {
+//				return getProperties(request.queryParams("ontology"));
+//			}, gson::toJson);
+//
+//			get("/axioms", (request, response) -> {
+//				String cls = request.queryParams("class");
+//				String ont1 = request.queryParams("ontology1");
+//				String ont2 = request.queryParams("ontology2");
+//				return getAxioms(cls, ont1, ont2);
+//			}, gson::toJson);
+//
+//			get("/coordinates", (request, response) -> {
+//				String axiom = request.queryParams("axiom");
+//				String ont1 = request.queryParams("ontology1");
+//				String ont2 = request.queryParams("ontology2");
+//				Double lat = new Double(request.queryParams("lat"));
+//				Double lng = new Double(request.queryParams("lng"));
+//				return getCoordinates(axiom, ont1, ont2, lat, lng);
+//			}, gson::toJson);
+//
+//			get("/relatedClasses", (request, response) -> {
+//				String cls = request.queryParams("class");
+//				String ont1 = request.queryParams("ontology1");
+//				String ont2 = request.queryParams("ontology2");
+//				Double syn = new Double(request.queryParams("syn"));
+//				Double sem = new Double(request.queryParams("sem"));
+//				Double struct = new Double(request.queryParams("struct"));
+//				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
+//			}, gson::toJson);
+//		}
 	}
 	
 	// list the ontologies
@@ -377,32 +373,45 @@ public class Main {
 			if (ent.getOntology().equals(baseOntology)) {
 
 				if (ent instanceof PropertyEntity) continue;
+				
+				String spatialStuff = ""
+					+ "?geom <http://jena.apache.org/spatial#nearby> (" 
+					+ lat + " " + lng + " <RANGE> 'km') . \n"
+					+ "?geom <http://cegis.usgs.gov/SWO/isGeometryOf> ?x . \n"
+					+ "?geom <http://www.opengis.net/ont/geosparql#asWKT> ?shape . \n";
 
 				OWLClassExpression ce = ((ClassEntity) ent).getEntity();
 				Query q = converter.asQuery(ce, "?x");
 
-				PrefixMapping pm = new PrefixMappingImpl();
-				if(q.toString().contains("rdf-schema#")) {
-					pm.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-				}
-				if(q.toString().contains("rdf-syntax-ns#")) {
-					pm.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-				}
-				if(q.toString().contains("XMLSchema#")) {
-					pm.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
-				}
-				q.setPrefixMapping(pm);
-
-				query = q.toString();
-				query = query.replace("SELECT DISTINCT  ?x", "SELECT DISTINCT  ?shape");
-				query = query.substring(0, query.lastIndexOf("}"));
-				query +=  ".\n ?x <http://jena.apache.org/spatial#nearby> (" 
-						+ lat + " " + lng + " 300 'km') . \n"
-						+ "?x <http://www.opengis.net/ont/geosparql#hasGeometry> ?geom . \n"
-						+ "?geom <http://www.opengis.net/ont/geosparql#hasWKT> ?shape . \n"
-						+ "}";
+				String classStuff = q.toString();
+				int beginIndex = classStuff.indexOf("{")+1;
+				int endIndex = classStuff.lastIndexOf("}");
+				classStuff = classStuff.substring(beginIndex, endIndex).trim();
 				
-				coordinates = getCoordinates(query);
+				
+				// perform count queries first, to set the search radius appropriately
+				String countQuery = "PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+						+ "SELECT (COUNT(?shape) AS ?count) WHERE {\n"
+						+ spatialStuff + classStuff + "}";
+				
+				int range = 1;
+				int count = 0;
+				int attempts = 0;
+				int step = 2;
+				
+				while (count == 0 && ++attempts < 5) {
+					String filledQuery = countQuery.replaceAll("<RANGE>", "" + range);
+					count = getCountInRange(filledQuery);
+					range *= step;
+				}
+				range /= step; // go back one level 
+				
+				query = "PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+						+ "SELECT ?shape WHERE {\n"
+						+ spatialStuff + classStuff + "}";
+				
+				String filledQuery = query.replaceAll("<RANGE>", "" + range);		
+				coordinates = getCoordinates(filledQuery);
 				entityCoordinates.put(ent, coordinates);
 			}
 		}
@@ -436,6 +445,21 @@ public class Main {
         qe.close();
         
         return coordinatesList;
+	}
+	
+	
+	private static int getCountInRange(String query) {
+        
+        QueryExecution qe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query);
+
+        ResultSet results = qe.execSelect();
+        QuerySolution result = results.next();
+        String countString = result.getLiteral("?count").toString();
+        countString = countString.substring(0, countString.indexOf("^"));
+        int count = Integer.parseInt(countString);
+        qe.close();
+        
+        return count;
 	}
 	
 	
