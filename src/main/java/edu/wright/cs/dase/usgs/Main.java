@@ -96,16 +96,16 @@ public class Main {
 //			System.out.println(a);
 //		}
 		
-		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
-				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
-				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
-				"Hydro3.owl", "USGS.owl", 38.99237332729, -82.3558901826);
-		for (Entity e: coords.keySet()) {
-			System.out.println(e);
-			for (Coordinates c: coords.get(e)) {
-				System.out.println("\t" + c);
-			}
-		}
+//		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
+//				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
+//				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
+//				"Hydro3.owl", "USGS.owl", 38.99237332729, -82.3558901826);
+//		for (Entity e: coords.keySet()) {
+//			System.out.println(e);
+//			for (Coordinates c: coords.get(e)) {
+//				System.out.println("\t" + c);
+//			}
+//		}
 
 //		ArrayList<ClassEntity> entities = getClasses("Hydro3.owl");
 //		for (Entity e: entities) {
@@ -117,51 +117,51 @@ public class Main {
 //			}
 //		}
 
-//		if (args.length > 0 && args[0].equals("serve")) {
-//			Gson gson = new Gson();
-//
-//			port(8080);
-//			staticFiles.location("/public");
-//			init();
-//		
-//			get("/ontologies", (reqest, response) -> {
-//				return getOntologies();
-//			}, gson::toJson);
-//
-//			get("/classes", (request, response) -> {
-//				return getClasses(request.queryParams("ontology"));
-//			}, gson::toJson);
-//			
-//			get("/properties", (request, response) -> {
-//				return getProperties(request.queryParams("ontology"));
-//			}, gson::toJson);
-//
-//			get("/axioms", (request, response) -> {
-//				String cls = request.queryParams("class");
-//				String ont1 = request.queryParams("ontology1");
-//				String ont2 = request.queryParams("ontology2");
-//				return getAxioms(cls, ont1, ont2);
-//			}, gson::toJson);
-//
-//			get("/coordinates", (request, response) -> {
-//				String axiom = request.queryParams("axiom");
-//				String ont1 = request.queryParams("ontology1");
-//				String ont2 = request.queryParams("ontology2");
-//				Double lat = new Double(request.queryParams("lat"));
-//				Double lng = new Double(request.queryParams("lng"));
-//				return getCoordinates(axiom, ont1, ont2, lat, lng);
-//			}, gson::toJson);
-//
-//			get("/relatedClasses", (request, response) -> {
-//				String cls = request.queryParams("class");
-//				String ont1 = request.queryParams("ontology1");
-//				String ont2 = request.queryParams("ontology2");
-//				Double syn = new Double(request.queryParams("syn"));
-//				Double sem = new Double(request.queryParams("sem"));
-//				Double struct = new Double(request.queryParams("struct"));
-//				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
-//			}, gson::toJson);
-//		}
+		if (args.length > 0 && args[0].equals("serve")) {
+			Gson gson = new Gson();
+
+			port(8080);
+			staticFiles.location("/public");
+			init();
+		
+			get("/ontologies", (reqest, response) -> {
+				return getOntologies();
+			}, gson::toJson);
+
+			get("/classes", (request, response) -> {
+				return getClasses(request.queryParams("ontology"));
+			}, gson::toJson);
+			
+			get("/properties", (request, response) -> {
+				return getProperties(request.queryParams("ontology"));
+			}, gson::toJson);
+
+			get("/axioms", (request, response) -> {
+				String cls = request.queryParams("class");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				return getAxioms(cls, ont1, ont2);
+			}, gson::toJson);
+
+			get("/coordinates", (request, response) -> {
+				String axiom = request.queryParams("axiom");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				Double lat = new Double(request.queryParams("lat"));
+				Double lng = new Double(request.queryParams("lng"));
+				return getCoordinates(axiom, ont1, ont2, lat, lng);
+			}, gson::toJson);
+
+			get("/relatedClasses", (request, response) -> {
+				String cls = request.queryParams("class");
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				Double syn = new Double(request.queryParams("syn"));
+				Double sem = new Double(request.queryParams("sem"));
+				Double struct = new Double(request.queryParams("struct"));
+				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
+			}, gson::toJson);
+		}
 	}
 	
 	// list the ontologies
