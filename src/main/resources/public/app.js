@@ -242,9 +242,13 @@ require([
 			}).then(function (data) {
 				data = JSON.parse(data);
 				data.forEach(function (item) {
-					classStore.putSync(item);
+					var storeItem = classStore.getSync(classStore.getIdentity(item.ent));
+					storeItem.sim = item.sim;
+					classStore.putSync(storeItem);
 				});
-			});
+
+				classes2.set('collection', classStore.filter({ ontology: ont2 }).sort('sim', true));
+			}.bind(this));
 		}
 	}
 
