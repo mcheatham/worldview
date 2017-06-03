@@ -231,7 +231,7 @@ public class Main {
 		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
-			if (ax.toString().contains(entityURI))
+			if (ax.toString().contains(entityURI) && Axiom.isInteresting(ax))
 				axioms.add(new Axiom(ax, ont1Filename, ont2Filename, ont2));
 		}
 		
