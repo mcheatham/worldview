@@ -4,6 +4,11 @@ define([
 	return declare([], {
 		_shapes: null,
 
+		fillColor: '#ff0000',
+		fillOpacity: 0,
+		strokeColor: '#aa4400',
+		strokeOpacity: 0.8,
+
 		constructor: function () {
 			this._shapes = [];
 		},

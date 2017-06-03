@@ -37,15 +37,15 @@ define([ './_Map' ], function (_Map) {
 						paths: coordinates.map(function (coord) {
 							return { lng: coord[0], lat: coord[1] };
 						}),
-						fillColor: '#ff0000',
-						fillOpacity: 0.8,
-						strokeColor: '#aa4400',
-						strokeOpacity: 0.8
+						fillColor: this.fillColor,
+						fillOpacity: this.fillOpacity,
+						strokeColor: this.strokeColor,
+						strokeOpacity: this.strokeOpacity
 					});
 					shape.setMap(map);
 					return shape;
-				});
-			});
+				}.bind(this));
+			}.bind(this));
 		},
 
 		_removeShape: function (layer) {
