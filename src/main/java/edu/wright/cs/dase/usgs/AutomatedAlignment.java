@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,11 +30,12 @@ public class AutomatedAlignment {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static HashMap<String, ArrayList<Entity>> getSimilarities(
+	// change to ArrayList of EntitySim objects, which contain the Entity and its similarity
+	public static HashMap<String, ArrayList<Similarity>> getSimilarities(
 			String ont1, String ont2, double syn, double sem, double struct) {
 		
 		// if the file doesn't exist, then proceed with the steps below
-		HashMap<String, ArrayList<Entity>> simMap = new HashMap<>();
+		HashMap<String, ArrayList<Similarity>> simMap = new HashMap<>();
 		
 		// read in the Wikipedia cache to speed up the semantic similarity computation
 		File file = new File("wikipedia.dat");
@@ -62,14 +62,7 @@ public class AutomatedAlignment {
 				similarities.add(new Similarity(e2, computeSimilarity(e1, e2, syn, sem, struct)));
 			}
 			
-			Collections.sort(similarities);
-
-			ArrayList<Entity> orderedEntities = new ArrayList<>();
-			for (Similarity sim: similarities) {
-				orderedEntities.add(sim.getEntity());
-			}
-			
-			simMap.put(e1.getURI(), orderedEntities);
+			simMap.put(e1.getURI(), similarities);
 		}
 		
 		// write the Wikipedia cache to a file

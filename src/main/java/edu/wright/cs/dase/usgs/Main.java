@@ -39,7 +39,7 @@ public class Main {
 	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private static String baseOntology = "USGS.owl"; // must have coordinate data
 	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS/query";
-	private static HashMap<String, ArrayList<Entity>> relations;
+	private static HashMap<String, ArrayList<Similarity>> relations;
 	private static String ont1Relations = "";
 	private static String ont2Relations = "";
 	private static double synWeight = 0.0;
@@ -332,7 +332,7 @@ public class Main {
 	}
 	
 	
-	public static ArrayList<Entity> getRelatedClasses(String entityURI, String ont1, String ont2, 
+	public static ArrayList<Similarity> getRelatedClasses(String entityURI, String ont1, String ont2, 
 			double syn, double sem, double struct) {
 		if (relations == null || !ont1Relations.equals(ont1) || !ont2Relations.equals(ont2) || 
 				synWeight != syn || semWeight != sem || structWeight != struct) {
