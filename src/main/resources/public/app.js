@@ -7,6 +7,7 @@ require([
 	'dijit/form/Select',
 	'dijit/registry',
 	'dojo/request',
+	'dojo/debounce',
 	'worldview/AxiomEditor',
 	'dojo/domReady!'
 ], function (
@@ -18,6 +19,7 @@ require([
 	Select,
 	registry,
 	request,
+	debounce,
 	AxiomEditor
 ) {
 	var ONTOLOGY2_ID = 'USGS.owl';
@@ -164,7 +166,17 @@ require([
 					center: [-68.13734351262877, 45.137451890638886],
 					zoom: 5
 				}, 'map');
-				resolve();
+				map.startup();
+
+				map.on('bounds-change', debounce(function () {
+					axioms.clearSelection();
+				}, 500));
+
+				map.on('center-change', debounce(function () {
+					axioms.clearSelection();
+				}, 500));
+
+				resolve(map);
 			}
 			catch (error) {
 				reject(error);

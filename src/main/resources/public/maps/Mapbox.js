@@ -37,8 +37,16 @@ define([ './_Map' ], function (_Map) {
 						});
 						resolve(map);
 					});
-				});
-			});
+
+					map.on('zoomend', function () {
+						this.emit('bounds-change', {});
+					}.bind(this));
+
+					map.on('moveend', function () {
+						this.emit('center-change', {});
+					}.bind(this));
+				}.bind(this));
+			}.bind(this));
 		},
 
 		getCenter: function () {

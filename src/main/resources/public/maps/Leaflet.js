@@ -28,20 +28,29 @@ define([ './_Map' ], function (_Map) {
 						zoom: options.zoom
 					});
 
+					map.addEventListener('moveend', function () {
+						this.emit('center-change');
+					}.bind(this));
+
+					map.addEventListener('zoomend', function () {
+						this.emit('bounds-change');
+					}.bind(this));
+
 					if (options.tiles === 'thunderforest' || !options.token) {
 						leaflet.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png', {
 							detectRetina: true,
 						}).addTo(map);
 					}
 					else {
-						leaflet.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=' + options.token, {
-							detectRetina: true,
-						}).addTo(map);
+						leaflet.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/' +
+							'tiles/256/{z}/{x}/{y}?access_token=' + options.token, {
+								detectRetina: true
+							}).addTo(map);
 					}
 
 					resolve(map);
-				});
-			});
+				}.bind(this));
+			}.bind(this));
 		},
 
 		getCenter: function () {

@@ -18,9 +18,18 @@ define([ './_Map' ], function (_Map) {
 						mapTypeId: 'terrain',
 						streetViewControl: false
 					});
+
+					map.addListener('bounds_changed', function () {
+						this.emit('bounds-change');
+					}.bind(this));
+
+					map.addListener('center_changed', function () {
+						this.emit('center-change');
+					}.bind(this));
+
 					resolve(map);
-				});
-			});
+				}.bind(this));
+			}.bind(this));
 		},
 
 		getCenter: function () {

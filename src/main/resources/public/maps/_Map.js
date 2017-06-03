@@ -1,13 +1,13 @@
 define([
-	'dojo/_base/declare'
-], function (declare) {
-	return declare([], {
-		_shapes: null,
-
+	'dijit/_WidgetBase'
+], function (_WidgetBase) {
+	return _WidgetBase.createSubclass([], {
 		fillColor: '#ff0000',
 		fillOpacity: 0,
 		strokeColor: '#aa4400',
 		strokeOpacity: 0.8,
+
+		_shapes: null,
 
 		constructor: function () {
 			this._shapes = [];
