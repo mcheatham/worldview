@@ -1,5 +1,6 @@
 package edu.wright.cs.dase.usgs;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -7,7 +8,12 @@ import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLObjectRenderer;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLWriter;
 
 public class Axiom {
 	
@@ -17,10 +23,10 @@ public class Axiom {
 	private OWLAxiom axiom;
 
 	
-	public Axiom(OWLAxiom ax, String ont1Filename, String ont2Filename, 
+	public Axiom(OWLAxiom ax, OWLOntology ont, String ont1Filename, String ont2Filename, 
 			OWLOntology ont2) {
 		this.axiom = ax;
-		this.owl = ax.toString();
+		this.owl = getOWL(ax, ont);
 		this.text = ax.toString(); // TODO may use OWLtoEnglish converter later
 		extractEntities(ont1Filename, ont2Filename, ont2);
 	}
@@ -88,5 +94,28 @@ public class Axiom {
 	
 	public OWLAxiom getOWLAxiom() {
 		return axiom;
+	}
+	
+	
+	private String getOWL(OWLAxiom ax, OWLOntology ont) {
+		
+		StringWriter stringWriter = new StringWriter();
+		OWLXMLWriter writer = new OWLXMLWriter(stringWriter, ont);
+		OWLXMLObjectRenderer renderer = new OWLXMLObjectRenderer(writer);
+		
+		if (ax instanceof OWLEquivalentClassesAxiom) {
+			renderer.visit((OWLEquivalentClassesAxiom) ax);
+
+		} else if (ax instanceof OWLSubClassOfAxiom) {
+			renderer.visit((OWLSubClassOfAxiom) ax);
+
+		} else if (ax instanceof OWLDisjointClassesAxiom) {
+			renderer.visit((OWLDisjointClassesAxiom) ax);
+
+		} else {
+			return ax.toString();
+		}
+
+		return stringWriter.toString();
 	}
 }

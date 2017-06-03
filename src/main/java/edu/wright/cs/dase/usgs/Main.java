@@ -3,9 +3,11 @@ package edu.wright.cs.dase.usgs;
 import java.io.File;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -20,10 +22,13 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.RemoveAxiom;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLObjectRenderer;
+import org.semanticweb.owlapi.owlxml.renderer.OWLXMLWriter;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -63,22 +68,26 @@ public class Main {
 //				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
 //				"Hydro3.owl", "USGS.owl");
 //		for (Axiom a: axioms) {
-//			System.out.println(a);
+//			System.out.println(a.getOWL());
 //		}
 //		
 //		String s = "<EquivalentClasses>"
 //				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\"/>"
 //				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/Coastline\"/>"
 //				+ "</EquivalentClasses>";
+//		s = "EquivalentClasses ("
+//				+ "\"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands\" "
+//				+ "\"http://cegis.usgs.gov/SWO/Coastline\" "
+//				+ ")";
 //		addAxiom(s, "Hydro3.owl", "USGS.owl");
 //		
 //		axioms = getAxioms(
 //				"http://spatial.maine.edu/semgaz/HydroOntology#Wetlands", 
 //				"Hydro3.owl", "USGS.owl");
 //		for (Axiom a: axioms) {
-//			System.out.println(a);
+//			System.out.println(a.getOWL());
 //		}
-//		
+		
 //		removeAxiom(s, "Hydro3.owl", "USGS.owl");
 //		
 //		axioms = getAxioms(
@@ -231,8 +240,9 @@ public class Main {
 		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
-			if (ax.toString().contains(entityURI) && Axiom.isInteresting(ax))
-				axioms.add(new Axiom(ax, ont1Filename, ont2Filename, ont2));
+			if (ax.toString().contains(entityURI) && Axiom.isInteresting(ax)) {
+				axioms.add(new Axiom(ax, alignmentOnt, ont1Filename, ont2Filename, ont2));
+			}
 		}
 		
 		return axioms;
@@ -250,7 +260,7 @@ public class Main {
 		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
 			if (ax.toString().equals(axiomOWL)) {
-				return new Axiom(ax, ont1Filename, ont2Filename, ont2);
+				return new Axiom(ax, alignmentOnt, ont1Filename, ont2Filename, ont2);
 			}
 		}
 		
