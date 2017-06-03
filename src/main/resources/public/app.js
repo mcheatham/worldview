@@ -242,18 +242,25 @@ require([
 			}).then(function (data) {
 				data = JSON.parse(data);
 				data.forEach(function (item) {
-					classStore.putSync(item);
+					var storeItem = classStore.getSync(classStore.getIdentity(item.ent));
+					storeItem.sim = item.sim;
+					classStore.putSync(storeItem);
 				});
-			});
+
+				classes2.set('collection', classStore.filter({ ontology: ont2 }).sort('sim', true));
+			}.bind(this));
 		}
 	}
 
 	function handleOntologyChange(ontology, list, newValue) {
+		// Add or remove an 'ontologyX-selected' class from the main wrapper div
 		wrapper.classList[newValue ? 'add' : 'remove'](ontology + '-selected');
 
+		// If the store already has entries for the given ontology, just update the list
 		if (classStore.filter({ ontology: newValue }).fetchSync().length > 0) {
 			updateUI();
 		}
+		// If not, request them, then update the list
 		else {
 			showOverlay(request.get('/classes', {
 				query: { ontology: newValue }
@@ -267,8 +274,13 @@ require([
 		}
 
 		function updateUI() {
-			list.set('collection', classStore.filter({ ontology: newValue }));
+			list.set('collection', classStore.filter({ ontology: newValue }).sort('label'));
 			axiomStore.setItems([]);
+
+			axiomEditor.set('selectedOntologies', [
+				ontology1.get('value'),
+				ontology2.get('value')
+			]);
 		}
 	}
 

@@ -15,6 +15,7 @@ define([ './_Map' ], function (_Map) {
 					var map = new google.maps.Map(node, {
 						center: { lng: options.center[0], lat: options.center[1] },
 						zoom: options.zoom,
+						mapTypeId: 'terrain',
 						streetViewControl: false
 					});
 					resolve(map);
