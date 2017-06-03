@@ -160,7 +160,7 @@ define([
 			terms: [ { name: 'ClassExpression' } ]
 		},
 		ObjectSomeValuesFrom: {
-			terms: [ 
+			terms: [
 				{ name: 'ObjectPropertyExpression' },
 				{ name: 'ClassExpression' }
 			]
@@ -238,15 +238,20 @@ define([
 	var RelationshipField = _WidgetBase.createSubclass([ _FormValueMixin ], {
 		baseClass: 'relationship-editor',
 		term: null,
-		field: null,
+		editor: null,
 		operands: null,
 		sourceRestriction: null,
 		ontologyStore: null,
 		classStore: null,
+		ontology: null,
+		selectedOntologies: null,
+
+		_restrictions: null,
 
 		constructor: function () {
 			this.operands = [];
 			this.term = { name: 'Relationship' };
+			this._restrictions = {};
 		},
 
 		buildRendering: function () {
@@ -279,13 +284,14 @@ define([
 			}.bind(this));
 
 			on(this.operandsNode, 'expression-change', function (event) {
+				event.stopPropagation();
+
 				// We don't care about expression changes here unless expression selector sources have a relationship
 				if (this.sourceRestriction == null) {
 					return;
 				}
 
-				// this.set('firstSource', event.detail.item.entity.ontology);
-				this._updateExpressionOptions(event.detail.widget, event.detail.item.entity.ontology);
+				this._updateExpressionOptions(event.detail.widget, event.detail.item);
 			}.bind(this));
 
 			this.on('keydown', function (event) {
@@ -336,7 +342,8 @@ define([
 						var editor = new RelationshipField({
 							term: term,
 							ontologyStore: this.ontologyStore,
-							classStore: this.classStore
+							classStore: this.classStore,
+							ontology: this.ontology
 						});
 						editor.placeAt(this.operandsNode);
 						return editor;
@@ -387,10 +394,10 @@ define([
 				else {
 					items = list.reduce(function (items, item) {
 						if (item === 'Class') {
-							var storeItems; 
+							var storeItems;
 
-							if (this.term.store) {
-								storeItems = this.term.store.fetchSync();
+							if (this.ontology) {
+								storeItems = this.classStore.filter({ ontology: this.ontology }).fetchSync();
 							}
 							else {
 								storeItems = this.classStore.fetchSync();
@@ -410,7 +417,7 @@ define([
 					}.bind(this), []);
 				}
 			}
-				
+
 			return items.sort(function (a, b) {
 				if (a.value && !b.value) {
 					return 1;
@@ -428,44 +435,31 @@ define([
 			});
 		},
 
-		_setOntologyStoreAttr: function (store) {
-			this.ontologyStore = store;
+		_propagateProperty: function (name, value) {
+			this[name] = value;
 			this.operands.forEach(function (operand) {
-				operand.set('ontologyStore', store);
+				operand.set(name, value);
 			});
+		},
+
+		_setOntologyStoreAttr: function (store) {
+			this._propagateProperty('ontologyStore', store);
+		},
+
+		_setOntologyAttr: function (ontology) {
+			this._propagateProperty('ontology', ontology);
+
+			if (this.editor && this.term.name !== 'nonNegativeInteger') {
+				this.editor.set('store', new Memory({ data: this._getItems() }));
+			}
 		},
 
 		_setClassStoreAttr: function (store) {
-			this.classStore = store;
-			this.operands.forEach(function (operand) {
-				operand.set('classStore', store);
-			});
+			this._propagateProperty('classStore', store);
 		},
 
-		/**
-		 * Update the option lists for the expressions in this relationship based the just-set value for a given widget
-		 */
-		_updateExpressionOptions: function (widget, source) {
-			if (this.sourceRestriction === 'same') {
-				this.operands.filter(function (operand) {
-					return operand !== widget;
-				}).forEach(function (operand) {
-					var term = operand.get('term');
-					term.store = this.classStore.filter({ ontology: source });
-					term.value = operand.get('value');
-					operand.set('term', term);
-				}.bind(this));
-			}
-			else if (this.sourceRestriction === 'different') {
-				this.operands.filter(function (operand) {
-					return operand !== widget;
-				}).forEach(function (operand) {
-					var term = operand.get('term');
-					term.store = this.classStore.filter(new this.classStore.Filter().ne('ontology', source));
-					term.value = operand.get('value');
-					operand.set('term', term);
-				}.bind(this));
-			}
+		_setSelectedOntologiesAttr: function (onts) {
+			this._propagateProperty('selectedOntologies', onts);
 		},
 
 		_setTermAttr: function (term) {
@@ -499,15 +493,68 @@ define([
 			this.editor.on('change', function (newValue) {
 				this._handleOnChange(newValue);
 			}.bind(this));
+		},
+
+		/**
+		 * Update the option lists for the expressions in this relationship based the just-set value for a given widget
+		 */
+		_updateExpressionOptions: function (widget, item) {
+			var widgetId = widget.get('id');
+			var ontology;
+			var otherOntology;
+
+			if (item && item.entity) {
+				ontology = item.entity.ontology;
+
+				// With a 'same' restriction, all widgets must choose entities from the same ontology, only one one key
+				// should be set in _restrictions. The first widget to select a class sets this key.
+				if (this.sourceRestriction === 'same' && Object.keys(this._restrictions).length === 0) {
+					this._restrictions[widgetId] = ontology;
+
+					// Set the ontology value for every widget that isn't this widget
+					this.operands.filter(function (operand) {
+						return operand !== widget;
+					}).forEach(function (operand) {
+						operand.set('ontology', ontology);
+					}.bind(this));
+				}
+				// With a 'different' restriction, both widgets (it only applies to relations with 2 entities) must
+				// choose entities from different ontologies, so up to 2 keys may be set in _restrictions.
+				else if (this.sourceRestriction === 'different' && Object.keys(this._restrictions).length < 2) {
+					otherOntology = this.selectedOntologies[0] === ontology ? this.selectedOntologies[1] :
+						this.selectedOntologies[0];
+
+					this._restrictions[widgetId] = otherOntology;
+
+					this.operands.filter(function (operand) {
+						return operand !== widget;
+					}).forEach(function (operand) {
+						operand.set('ontology', otherOntology);
+					}.bind(this));
+				}
+			}
+			// If the new value is empty and there was a restriction added for this widget
+			else if (!item && this._restrictions[widgetId]) {
+				ontology = this._restrictions[widgetId];
+				delete this._restrictions[widgetId];
+
+				this.operands.filter(function (operand) {
+					return operand !== widget && operand.get('ontology') === ontology;
+				}).forEach(function (operand) {
+					operand.set('ontology', null);
+				}.bind(this));
+			}
 		}
 	});
-                                
+
 	return _WidgetBase.createSubclass([ _FormValueMixin ], {
 		baseClass: 'axiom-editor',
 
 		ontologyStore: null,
 		classStore: null,
 		axiomStore: null,
+
+		selectedOntologies: null,
 
 		buildRendering: function () {
 			this.inherited(arguments);
@@ -532,6 +579,11 @@ define([
 
 		_setAxiomStoreAttr: function (store) {
 			this.axiomStore = store;
+		},
+
+		_setSelectedOntologiesAttr: function (onts) {
+			this.selectedOntologies = onts;
+			this.relationship.set('selectedOntologies', onts);
 		}
 	});
 });

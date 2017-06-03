@@ -249,11 +249,14 @@ require([
 	}
 
 	function handleOntologyChange(ontology, list, newValue) {
+		// Add or remove an 'ontologyX-selected' class from the main wrapper div
 		wrapper.classList[newValue ? 'add' : 'remove'](ontology + '-selected');
 
+		// If the store already has entries for the given ontology, just update the list
 		if (classStore.filter({ ontology: newValue }).fetchSync().length > 0) {
 			updateUI();
 		}
+		// If not, request them, then update the list
 		else {
 			showOverlay(request.get('/classes', {
 				query: { ontology: newValue }
@@ -269,6 +272,11 @@ require([
 		function updateUI() {
 			list.set('collection', classStore.filter({ ontology: newValue }));
 			axiomStore.setItems([]);
+
+			axiomEditor.set('selectedOntologies', [
+				ontology1.get('value'),
+				ontology2.get('value')
+			]);
 		}
 	}
 
