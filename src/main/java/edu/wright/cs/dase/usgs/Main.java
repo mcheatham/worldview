@@ -152,6 +152,22 @@ public class Main {
 				return getAxioms(cls, ont1, ont2);
 			}, gson::toJson);
 
+			post("/axioms", (request, response) -> {
+				String axiom = request.body();
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				addAxiom(axiom, ont1, ont2);
+				return "OK";
+			});
+
+			delete("/axioms", (request, response) -> {
+				String axiom = request.body();
+				String ont1 = request.queryParams("ontology1");
+				String ont2 = request.queryParams("ontology2");
+				removeAxiom(axiom, ont1, ont2);
+				return "OK";
+			});
+
 			get("/coordinates", (request, response) -> {
 				String axiom = request.queryParams("axiom");
 				String ont1 = request.queryParams("ontology1");
@@ -305,6 +321,7 @@ public class Main {
 	
 	// remove the new axiom from the alignment ontology and update the corresponding alignment file
 	public static void removeAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
+		System.out.println("Removing axiom " + axiomOWL + ", " + ont1Filename + ", " + ont2Filename);
 
 		// get the alignment ontology
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 

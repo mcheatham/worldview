@@ -143,7 +143,7 @@ define([
 			terms: [
 				{ name: 'ClassExpression' },
 				{ name: 'ClassExpression' },
-				{ name: '{ ClassExpression }' }
+				{ name: 'ClassExpression', optional: '*' }
 			],
 			sourceRestriction: 'same'
 		},
@@ -151,7 +151,7 @@ define([
 			terms: [
 				{ name: 'ClassExpression' },
 				{ name: 'ClassExpression' },
-				{ name: '{ ClassExpression }' }
+				{ name: 'ClassExpression', optional: '*' }
 			],
 			sourceRestriction: 'same'
 		},
@@ -175,31 +175,31 @@ define([
 		// Class and property from the same ontology
 		ObjectMinCardinality: {
 			terms: [
-				{ name: 'nonNegativeInteger' },
+				{ name: 'nonNegativeInteger', attr: 'cardinality' },
 				{ name: 'ObjectPropertyExpression' },
-				{ name: '[ ClassExpression ]' }
+				{ name: 'ClassExpression', optional: '?' }
 			],
 			sourceRestriction: 'same'
 		},
 		ObjectMaxCardinality: {
 			terms: [
-				{ name: 'nonNegativeInteger' },
+				{ name: 'nonNegativeInteger', attr: 'cardinality' },
 				{ name: 'ObjectPropertyExpression' },
-				{ name: '[ ClassExpression ]' }
+				{ name: 'ClassExpression', optional: '?' }
 			],
 			sourceRestriction: 'same'
 		},
 		ObjectExactCardinality: {
 			terms: [
-				{ name: 'nonNegativeInteger' },
+				{ name: 'nonNegativeInteger', attr: 'cardinality' },
 				{ name: 'ObjectPropertyExpression' },
-				{ name: '[ ClassExpression ]' }
+				{ name: 'ClassExpression', optional: '?' }
 			],
 			sourceRestriction: 'same'
 		},
 
 		ObjectInverseOf: {
-			terms: [ { name: 'ObjectProperty' } ]
+			terms: [ { name: 'ObjectPropertyExpression' } ]
 		}
 	};
 
@@ -243,6 +243,7 @@ define([
 		sourceRestriction: null,
 		ontologyStore: null,
 		classStore: null,
+		propertyStore: null,
 		ontology: null,
 		selectedOntologies: null,
 
@@ -286,12 +287,21 @@ define([
 			on(this.operandsNode, 'expression-change', function (event) {
 				event.stopPropagation();
 
+				var operand = event.detail.widget;
+				if (operand.get('optional') === '*') {
+					var lastOperand = this.operands[this.operands.length - 1];
+					if (operand === lastOperand) {
+						this.operands.push(this._addOperand(lastOperand.get('term')));
+					}
+				}
+
 				// We don't care about expression changes here unless expression selector sources have a relationship
 				if (this.sourceRestriction == null) {
 					return;
 				}
 
 				this._updateExpressionOptions(event.detail.widget, event.detail.item);
+				this.emit('axiom-change', {});
 			}.bind(this));
 
 			this.on('keydown', function (event) {
@@ -328,6 +338,26 @@ define([
 			}.bind(this));
 		},
 
+		isAttribute: function () {
+			return this.term.attr != null;
+		},
+
+		isOptional: function () {
+			return Boolean(this.term.optional);
+		},
+
+		_addOperand: function (term) {
+			var editor = new RelationshipField({
+				term: term,
+				ontologyStore: this.ontologyStore,
+				classStore: this.classStore,
+				propertyStore: this.propertyStore,
+				ontology: this.ontology
+			});
+			editor.placeAt(this.operandsNode);
+			return editor;
+		},
+
 		_createTemplate: function (value) {
 			while (this.operands.length > 0) {
 				this.operands.pop().destroy();
@@ -339,14 +369,7 @@ define([
 					this.sourceRestriction = info.sourceRestriction;
 
 					this.operands = info.terms.map(function (term) {
-						var editor = new RelationshipField({
-							term: term,
-							ontologyStore: this.ontologyStore,
-							classStore: this.classStore,
-							ontology: this.ontology
-						});
-						editor.placeAt(this.operandsNode);
-						return editor;
+						return this._addOperand(term);
 					}.bind(this));
 
 					setTimeout(function () {
@@ -355,7 +378,6 @@ define([
 				}
 			}
 			else {
-				// this.display.textContent = this._getPlaceholderText();
 				setTimeout(function () {
 					this.domNode.focus();
 				}.bind(this));
@@ -393,14 +415,30 @@ define([
 				}
 				else {
 					items = list.reduce(function (items, item) {
-						if (item === 'Class') {
-							var storeItems;
+						var storeItems;
 
+						if (item === 'Class') {
 							if (this.ontology) {
 								storeItems = this.classStore.filter({ ontology: this.ontology }).fetchSync();
 							}
 							else {
 								storeItems = this.classStore.fetchSync();
+							}
+
+							return items.concat(storeItems.map(function (item) {
+								return {
+									id: item.URI,
+									name: item.label,
+									entity: item
+								};
+							}));
+						}
+						else if (item === 'ObjectProperty') {
+							if (this.ontology) {
+								storeItems = this.propertyStore.filter({ ontology: this.ontology }).fetchSync();
+							}
+							else {
+								storeItems = this.propertyStore.fetchSync();
 							}
 
 							return items.concat(storeItems.map(function (item) {
@@ -435,6 +473,79 @@ define([
 			});
 		},
 
+		/**
+		 * Return the label for an attribute
+		 */
+		_getLabelAttr: function () {
+			return this.term.attr;
+		},
+
+		_getOptionalAttr: function () {
+			return this.term.optional;
+		},
+
+		_getValueAttr: function () {
+			var value = this.editor.get('value');
+			if (!value) {
+				return null;
+			}
+
+			if (this.operands.length > 0) {
+				var requiredValues = this.operands.filter(function (operand) {
+					return !operand.isOptional();
+				}).map(function (operand) {
+					return operand.get('value');
+				});
+
+				if (!requiredValues.every(function (value) { return Boolean(value); })) {
+					return null;
+				}
+
+				var lines = [];
+
+				var attributes = this.operands.filter(function (operand) {
+					return operand.isAttribute();
+				});
+
+				if (attributes.length > 0) {
+					lines.push('<' + value + ' ' + attributes.map(function (operand) {
+						return operand.get('label') + '="' + operand.get('value') + '"';
+					}).join(' ') + '>');
+				}
+				else {
+					lines.push('<' + value + '>');
+				}
+
+				this.operands.filter(function (operand) {
+					return !operand.isAttribute() && Boolean(operand.get('value'));
+				}).map(function (operand) {
+					return operand.get('value');
+				}).forEach(function (value) {
+					value.split('\n').forEach(function (line) {
+						lines.push('  ' + line);
+					});
+				});
+				lines.push('</' + value + '>');
+
+				return lines.join('\n');
+			}
+			else {
+				var name;
+				if (this.term.name === 'ClassExpression') {
+					name = 'Class';
+				}
+				else if (this.term.name === 'ObjectPropertyExpression') {
+					name = 'ObjectProperty';
+				}
+				else if (this.term.name === 'nonNegativeInteger') {
+					return value;
+				}
+
+				value = value.replace(/^</, '').replace(/>$/, '');
+				return '<' + name + ' IRI="' + value + '" />';
+			}
+		},
+
 		_propagateProperty: function (name, value) {
 			this[name] = value;
 			this.operands.forEach(function (operand) {
@@ -456,6 +567,10 @@ define([
 
 		_setClassStoreAttr: function (store) {
 			this._propagateProperty('classStore', store);
+		},
+
+		_setPropertyStoreAttr: function (store) {
+			this._propagateProperty('propertyStore', store);
 		},
 
 		_setSelectedOntologiesAttr: function (onts) {
@@ -487,7 +602,17 @@ define([
 				this.editor.set('value', term.value);
 			}
 
-			this.editor.set('placeHolder', term.name);
+			var placeholder = term.name;
+			if (this.isOptional()) {
+				if (this.get('optional') === '*') {
+					placeholder = '{ ' + placeholder + ' }';
+				}
+				else {
+					placeholder = '[ ' + placeholder + ' ]';
+				}
+			}
+
+			this.editor.set('placeHolder', placeholder);
 			this.editor.placeAt(this.selectBox);
 			this.editor.domNode.classList.add('relationship-input');
 			this.editor.on('change', function (newValue) {
@@ -552,6 +677,7 @@ define([
 
 		ontologyStore: null,
 		classStore: null,
+		properyStore: null,
 		axiomStore: null,
 
 		selectedOntologies: null,
@@ -567,6 +693,18 @@ define([
 			this.contentNode.appendChild(this.relationship.domNode);
 		},
 
+		postCreate: function () {
+			this.inherited(arguments);
+
+			this.relationship.on('change', function () {
+				this.emit('axiom-change', {});
+			}.bind(this));
+		},
+
+		_getValueAttr: function () {
+			return this.relationship.get('value');
+		},
+
 		_setOntologyStoreAttr: function (store) {
 			this.ontologyStore = store;
 			this.relationship.set('ontologyStore', store);
@@ -575,6 +713,11 @@ define([
 		_setClassStoreAttr: function (store) {
 			this.classStore = store;
 			this.relationship.set('classStore', store);
+		},
+
+		_setPropertyStoreAttr: function (store) {
+			this.propertyStore = store;
+			this.relationship.set('propertyStore', store);
 		},
 
 		_setAxiomStoreAttr: function (store) {

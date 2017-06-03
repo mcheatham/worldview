@@ -8,7 +8,10 @@ require([
 	'dijit/registry',
 	'dojo/request',
 	'dojo/debounce',
+	'dojo/on',
+	'dojo/dom-construct',
 	'worldview/AxiomEditor',
+	'dojo/query',
 	'dojo/domReady!'
 ], function (
 	List,
@@ -20,6 +23,8 @@ require([
 	registry,
 	request,
 	debounce,
+	on,
+	domConstruct,
 	AxiomEditor
 ) {
 	var ONTOLOGY2_ID = 'USGS.owl';
@@ -38,9 +43,10 @@ require([
 
 	var ontologyStore = new TrackableMemory({ idProperty: 'identifier' });
 	var classStore = new TrackableMemory({ idProperty: 'URI' });
+	var propertyStore = new TrackableMemory({ idProperty: 'URI' });
 	var axiomStore = new TrackableMemory({ idProperty: 'owl' });
 
-	var ListClass = List.createSubclass([ Selection ], {
+	var EntityListClass = List.createSubclass([ Selection ], {
 		selectionMode: 'single',
 		renderRow: function (item) {
 			var div = document.createElement('div');
@@ -48,6 +54,15 @@ require([
 			if (item.marked) {
 				div.classList.add('marked');
 			}
+			return div;
+		},
+	});
+
+	var AxiomListClass = EntityListClass.createSubclass([ Selection ], {
+		selectionMode: 'none',
+		renderRow: function () {
+			var div = this.inherited(arguments);
+			domConstruct.create('button', { className: 'remove-axiom', innerHTML: 'Remove' }, div);
 			return div;
 		},
 	});
@@ -60,7 +75,7 @@ require([
 		labelAttr: 'label'
 	}, 'ontology1');
 
-	var classes1 = new ListClass({
+	var classes1 = new EntityListClass({
 		collection: classStore.filter({ ontology: '' })
 	}, 'classes1');
 
@@ -69,14 +84,37 @@ require([
 		labelAttr: 'label'
 	}, 'ontology2');
 
-	var classes2 = new ListClass({
+	var classes2 = new EntityListClass({
 		collection: classStore.filter({ ontology: '' })
 	}, 'classes2');
 
-	var axioms = new ListClass({
+	var axioms = new AxiomListClass({
 		collection: axiomStore,
 		label: 'text'
 	}, 'axioms');
+
+	axioms.on('.remove-axiom:click', function (event) {
+		var row = axioms.row(event);
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+		var axiom = row.id;
+
+		if (confirm('Are you sure you want to delete this axiom?')) {
+			showOverlay(request.del('/axioms', {
+				query: { ontology1: ont1, ontology2: ont2 },
+				data: axiom
+			}).then(function () {
+				axiomStore.removeSync(axiom);
+			}));
+		}
+	});
+
+	axioms.on('.dgrid-row:click', function (event) {
+		if (event.target.classList.contains('remove-axiom')) {
+			return;
+		}
+		axioms.select(axioms.row(event));
+	});
 
 	ontology1.on('change', function (newValue) {
 		handleOntologyChange('ontology1', classes1, newValue);
@@ -188,16 +226,42 @@ require([
 		wrapper.classList.remove('loading');
 	});
 
+	var axiomEntryNode = document.getElementById('axiom-entry');
+
 	var axiomEditor = new AxiomEditor({
 		ontologyStore: ontologyStore,
 		classStore: classStore,
-		axiomStore: axiomStore
+		axiomStore: axiomStore,
+		propertyStore: propertyStore
 	});
-	var axiomEntryNode = document.getElementById('axiom-entry');
 	axiomEditor.placeAt(axiomEntryNode);
 
-	axiomEditor.on('submit', function () {
-		console.log('created axiom: ' + axiomEditor.get('value'));
+	var saveAxiom = domConstruct.create('button', {
+		id: 'save-axiom',
+		disabled: true,
+		innerHTML: 'Save'
+	}, axiomEntryNode);
+
+	axiomEditor.on('axiom-change', function () {
+		if (axiomEditor.get('value')) {
+			saveAxiom.removeAttribute('disabled');
+		}
+		else {
+			saveAxiom.setAttribute('disabled', 'disabled');
+		}
+	});
+
+	on(saveAxiom, 'click', function () {
+		var axiom = axiomEditor.get('value');
+		var ont1 = ontology1.get('value');
+		var ont2 = ontology2.get('value');
+
+		console.log(axiom);
+
+		showOverlay(request.post('/axioms', {
+			query: { ontology1: ont1, ontology2: ont2 },
+			data: axiom
+		}));
 	});
 
 	// Start all the widgets
@@ -274,15 +338,25 @@ require([
 		}
 		// If not, request them, then update the list
 		else {
-			showOverlay(request.get('/classes', {
-				query: { ontology: newValue }
-			}).then(function (data) {
-				data = JSON.parse(data);
-				data.forEach(function (item) {
-					classStore.putSync(item);
-				});
-				updateUI();
-			}));
+			showOverlay(Promise.all([
+				request.get('/classes', {
+					query: { ontology: newValue }
+				}).then(function (data) {
+					data = JSON.parse(data);
+					data.forEach(function (item) {
+						classStore.putSync(item);
+					});
+					updateUI();
+				}),
+				request.get('/properties', {
+					query: { ontology: newValue }
+				}).then(function (data) {
+					data = JSON.parse(data);
+					data.forEach(function (item) {
+						propertyStore.putSync(item);
+					});
+				})
+			]).then(updateUI));
 		}
 
 		function updateUI() {

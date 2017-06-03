@@ -195,6 +195,7 @@ body {
 
 .dgrid-row {
 	cursor: pointer;
+	position: relative;
 }
 
 .dgrid-row.marked {
@@ -318,16 +319,11 @@ body {
 	align-items: center;
 	padding: 1em;
 	position: relative;
+	overflow: hidden;
 }
 
 .axiom-editor {
-	opacity: 0;
 	margin: 0 auto;
-	transition: opacity 1s;
-}
-
-.ontology1-selected.ontology2-selected .axiom-editor {
-	opacity: 1;
 }
 
 .editor-content {
@@ -404,4 +400,65 @@ body {
 
 .dijitMenuItem.relationship {
 	font-style: italic;
+}
+
+#axioms .dgrid-row {
+	border-bottom: solid 1px #ddd;
+	padding: 5px;
+	overflow: hidden;
+}
+
+.dgrid-row:hover {
+	box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 0, 0.04);
+}
+
+.dgrid-row.dgrid-selected {
+	box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 255, 0.06);
+	background: none;
+}
+
+button {
+	background: #fafafa;
+	box-shadow: inset 0px 0px 4px 2px rgba(255, 255, 255, 0.03), 0px 0px 2px 2px rgba(0, 0, 0, 0.01);
+	border-width: 1px;
+	border-color: #ddd;
+}
+
+button:hover {
+	background: #f0f0f0;
+}
+
+#save-axiom,
+#axioms .remove-axiom {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	border-bottom: 0;
+	border-right: 0;
+	border-radius: 0;
+	border-top-left-radius: 3px;
+}
+
+#axiom-entry > * {
+	transition: opacity 0.5s;
+	opacity: 0;
+}
+.ontology1-selected.ontology2-selected #axiom-entry > * {
+	opacity: 1;
+}
+
+.ontology1-selected.ontology2-selected #axiom-entry > *[disabled] {
+	opacity: 0.5;
+}
+
+.remove-axiom {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+#axioms .dgrid-row:hover .remove-axiom {
+	opacity: 1;
 }
