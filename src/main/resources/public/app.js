@@ -270,7 +270,7 @@ require([
 		}
 
 		function updateUI() {
-			list.set('collection', classStore.filter({ ontology: newValue }));
+			list.set('collection', classStore.filter({ ontology: newValue }).sort('label'));
 			axiomStore.setItems([]);
 
 			axiomEditor.set('selectedOntologies', [
