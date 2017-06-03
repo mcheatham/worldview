@@ -58,13 +58,13 @@ define([ './_Map' ], function (_Map) {
 					},
 					type: 'fill',
 					paint: {
-						'fill-color': '#ff0000',
-						'fill-opacity': 0.8,
-						'fill-outline-color': '#aa4400'
+						'fill-color': this.fillColor,
+						'fill-opacity': this.fillOpacity,
+						'fill-outline-color': this.strokeColor
 					}
 				});
 				return id;
-			});
+			}.bind(this));
 		},
 
 		_removeShape: function (id) {
