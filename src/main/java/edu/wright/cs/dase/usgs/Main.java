@@ -43,7 +43,7 @@ public class Main {
 	private static HashMap<String, OWLOntology> ontologies = new HashMap<>();
 	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private static String baseOntology = "USGS.owl"; // must have coordinate data
-	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS/query";
+	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS_spatial/query";
 	private static HashMap<String, ArrayList<Similarity>> relations;
 	private static String ont1Relations = "";
 	private static String ont2Relations = "";
@@ -105,9 +105,16 @@ public class Main {
 //			System.out.println(a);
 //		}
 		
-//		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(
-//				"SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
-//				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))", 
+//		String s = "SubClassOf(<http://spatial.maine.edu/semgaz/HydroOntology#Watershed> "
+//				+ "ObjectUnionOf(<http://cegis.usgs.gov/SWO/LakeOrPond> <http://cegis.usgs.gov/SWO/SwampOrMarsh>))";
+//		s = "<SubClassOf>"
+//				+ "<Class IRI=\"http://spatial.maine.edu/semgaz/HydroOntology#Watershed\"/>"
+//				+ "<ObjectUnionOf>"
+//				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/LakeOrPond\"/>"
+//				+ "<Class IRI=\"http://cegis.usgs.gov/SWO/SwampOrMarsh\"/>"
+//				+ "</ObjectUnionOf>"
+//				+ "</SubClassOf>";
+//		HashMap<Entity, ArrayList<Coordinates>> coords = getCoordinates(s, 
 //				"Hydro3.owl", "USGS.owl", 38.99237332729, -82.3558901826);
 //		for (Entity e: coords.keySet()) {
 //			System.out.println(e);
@@ -258,8 +265,10 @@ public class Main {
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
+		axiomOWL = axiomOWL.trim().replaceAll(" ", "").replaceAll("\n", "");
+		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
-			if (ax.toString().equals(axiomOWL)) {
+			if (Axiom.getOWL(ax, alignmentOnt).equals(axiomOWL)) {
 				return new Axiom(ax, alignmentOnt, ont1Filename, ont2Filename, ont2);
 			}
 		}

@@ -97,7 +97,7 @@ public class Axiom {
 	}
 	
 	
-	private String getOWL(OWLAxiom ax, OWLOntology ont) {
+	public static String getOWL(OWLAxiom ax, OWLOntology ont) {
 		
 		StringWriter stringWriter = new StringWriter();
 		OWLXMLWriter writer = new OWLXMLWriter(stringWriter, ont);
@@ -116,6 +116,6 @@ public class Axiom {
 			return ax.toString();
 		}
 
-		return stringWriter.toString();
+		return stringWriter.toString().trim().replaceAll(" ", "").replaceAll("\n", "");
 	}
 }
