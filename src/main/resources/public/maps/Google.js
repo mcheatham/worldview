@@ -4,8 +4,7 @@ define([ './_Map' ], function (_Map) {
 
 		constructor: function (options, node) {
 			this.map = new Promise(function (resolve) {
-				/* global mapConfig */
-				var key = mapConfig.googleMapsKey;
+				var key = options.key;
 
 				require([ 'https://maps.googleapis.com/maps/api/js?key=' + key ], function () {
 					/* global google */

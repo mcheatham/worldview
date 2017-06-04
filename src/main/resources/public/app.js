@@ -196,33 +196,59 @@ require([
 
 	var map;
 
-	/* global mapConfig */
-	var mapLoad = new Promise(function (resolve, reject) {
-		require([ 'worldview/maps/' + mapConfig.provider ], function (MapClass) {
-			try {
-				map = new MapClass({
-					center: [-68.13734351262877, 45.137451890638886],
-					zoom: 5
-				}, 'map');
-				map.startup();
+	var configLoad = request.get('/config').then(function (data) {
+		data = JSON.parse(data);
+		console.log('Configuring with:', data);
 
-				map.on('bounds-change', debounce(function () {
-					axioms.clearSelection();
-				}, 500));
+		return new Promise(function (resolve, reject) {
+			var provider = 'Leaflet';
+			var key;
 
-				map.on('center-change', debounce(function () {
-					axioms.clearSelection();
-				}, 500));
-
-				resolve(map);
+			if (data.googleMapsKey) {
+				key = data.googleMapsKey;
+				provider = 'Google';
 			}
-			catch (error) {
-				reject(error);
+			else if (data.mapboxToken) {
+				key = data.mapboxToken;
+				provider = 'Mapbox';
 			}
+
+			var initialLng = Number(data.initialLng);
+			if (isNaN(initialLng)) {
+				initialLng = -68.13734351262877;
+			}
+			var initialLat = Number(data.initialLat);
+			if (isNaN(initialLat)) {
+				initialLat = -68.13734351262877;
+			}
+
+			require([ 'worldview/maps/' + provider ], function (MapClass) {
+				try {
+					map = new MapClass({
+						center: [initialLng, initialLat],
+						zoom: 5,
+						key: key
+					}, 'map');
+					map.startup();
+
+					map.on('bounds-change', debounce(function () {
+						axioms.clearSelection();
+					}, 500));
+
+					map.on('center-change', debounce(function () {
+						axioms.clearSelection();
+					}, 500));
+
+					resolve();
+				}
+				catch (error) {
+					reject(error);
+				}
+			});
 		});
 	});
 
-	Promise.all([ ontologyLoad, mapLoad ]).catch(showError).then(function () {
+	Promise.all([ ontologyLoad, configLoad ]).catch(showError).then(function () {
 		wrapper.classList.remove('loading');
 	});
 

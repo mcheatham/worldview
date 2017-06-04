@@ -22,26 +22,6 @@
 				{ name: 'dstore', location: '//cdn.rawgit.com/SitePen/dstore/v1.1.1' }
 			]
 		};
-
-		var mapConfig = {
-			// To use Mapbox or Google, the associated token/key property must be provided
-			provider: 'Google',
-
-			// If using Mapbox, provide the token value with a Maven property, either on the command line or in a
-			// 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
-			mapboxToken: '${mapboxToken}',
-
-			// If using Google Maps, provide the token value with a Maven property, either on the command line or in
-			// a 'local.properties' file in the project root. The token value shouldn't be checked into the repo.
-			googleMapsKey: '${googleMapsKey}',
-		};
-
-		if (
-			mapConfig.provider === 'Google' && !mapConfig.googleMapsKey ||
-			mapConfig.provider === 'Mapbox' && !mapConfig.mapboxToken
-		) {
-			mapConfig.provider === 'Leaflet'
-		}
 		</script>
 		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
 	</head>

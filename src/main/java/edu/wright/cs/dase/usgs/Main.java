@@ -2,10 +2,17 @@ package edu.wright.cs.dase.usgs;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -24,6 +31,7 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.RemoveAxiom;
+import org.semanticweb.owlapi.io.StringDocumentSource;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -35,18 +43,56 @@ public class Main {
 	
 	private static HashMap<String, OWLOntology> ontologies = new HashMap<>();
 	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-	private static String baseOntology = "USGS.owl"; // must have coordinate data
-	private static String sparqlEndpoint = "http://10.0.1.35:3030/CEGIS_spatial/query";
+
+	// Must have coordinate data
+	private static String baseOntology;
+
+	// A dataset URL on a SPARQL server
+	private static String sparqlEndpoint;
+
 	private static HashMap<String, ArrayList<Similarity>> relations;
 	private static String ont1Relations = "";
 	private static String ont2Relations = "";
 	private static double synWeight = 0.0;
 	private static double semWeight = 0.0;
 	private static double structWeight = 0.0;
-
 	
 	public static void main(String[] args) {
-		
+		Properties config = new Properties();
+		try (InputStream inputStream = new FileInputStream("config.properties")) {
+			if (inputStream != null) {
+				config.load(inputStream);
+			} else {
+				throw new FileNotFoundException("property file 'config.properties' not found");
+			}
+		} catch (IOException e) {
+			System.out.println("Error reading config file");
+			System.exit(1);
+		}
+
+		baseOntology = config.getProperty("baseOntology");
+		sparqlEndpoint = config.getProperty("sparqlDataset");
+
+		if (sparqlEndpoint.charAt(sparqlEndpoint.length() - 1) != '/') {
+			sparqlEndpoint += '/';
+		}
+		sparqlEndpoint += "query";
+
+		Properties local = new Properties();
+		try (InputStream inputStream = new FileInputStream("local.properties")) {
+			if (inputStream != null) {
+				local.load(inputStream);
+				for (Enumeration<?> e = local.propertyNames(); e.hasMoreElements();) {
+					String key = (String)e.nextElement();
+					config.setProperty(key, local.getProperty(key));
+				}
+			} else {
+				// not present, never mind
+			}
+		} catch (IOException e) {
+			// ignore
+		}
+
 //		ArrayList<Ontology> ontologies = getOntologies();
 //		for (Ontology ont: ontologies) {
 //			System.out.println(ont);
@@ -131,7 +177,10 @@ public class Main {
 
 			port(8080);
 			staticFiles.location("/public");
-			init();
+
+			get("/config", (reqest, response) -> {
+				return config;
+			}, gson::toJson);
 		
 			get("/ontologies", (reqest, response) -> {
 				return getOntologies();
@@ -298,7 +347,7 @@ public class Main {
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		
 		// create an ontology that is just this axiom
-		InputStream in = new StringBufferInputStream("<Ontology>" + axiomOWL + "</Ontology>");
+		StringDocumentSource in = new StringDocumentSource("<Ontology>" + axiomOWL + "</Ontology>");
 		try {
 			OWLOntology axiomOnt = manager.loadOntologyFromOntologyDocument(in);
 
@@ -332,7 +381,7 @@ public class Main {
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		
 		// create an ontology that is just this axiom
-		InputStream in = new StringBufferInputStream("<Ontology>" + axiomOWL + "</Ontology>");
+		StringDocumentSource in = new StringDocumentSource("<Ontology>" + axiomOWL + "</Ontology>");
 		try {
 			OWLOntology axiomOnt = manager.loadOntologyFromOntologyDocument(in);
 

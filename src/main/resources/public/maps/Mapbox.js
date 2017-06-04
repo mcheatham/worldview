@@ -20,8 +20,7 @@ define([ './_Map' ], function (_Map) {
 				}
 
 				initialized.then(function (mapbox) {
-					/* global mapConfig */
-					mapbox.accessToken = mapConfig.mapboxToken;
+					mapbox.accessToken = options.key;
 
 					var map = new mapbox.Map({
 						container: node,
