@@ -287,6 +287,8 @@ require([
 		showOverlay(request.post('/axioms', {
 			query: { ontology1: ont1, ontology2: ont2 },
 			data: axiom
+		}).then(function (axiom) {
+			return getAxioms(axiom);
 		}));
 	});
 
@@ -305,18 +307,28 @@ require([
 		});
 	}
 
-	function getAxioms() {
+	function getAxioms(axiomOwl) {
 		var ont1 = ontology1.get('value');
 		var ont2 = ontology2.get('value');
-		var cls1 = Object.keys(classes1.selection).filter(function (id) {
-			return classes1.selection[id];
-		})[0];
+		var query = {
+			ontology1: ont1,
+			ontology2: ont2
+		};
+
+		if (axiomOwl) {
+			query.axiom = axiomOwl;
+		}
+		else {
+			query.class = Object.keys(classes1.selection).filter(function (id) {
+				return classes1.selection[id];
+			})[0];
+		}
 
 		clearClassMarkers();
 
-		if (cls1 && ont1 && ont2) {
+		if ((query.cls1 || query.axiom) && ont1 && ont2) {
 			return request.get('/axioms', {
-				query: { ontology1: ont1, ontology2: ont2, class: cls1 }
+				query: query
 			}).then(function (data) {
 				data = JSON.parse(data);
 				axiomStore.setItems(data);
