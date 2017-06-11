@@ -197,15 +197,21 @@ public class Main {
 				String cls = request.queryParams("class");
 				String ont1 = request.queryParams("ontology1");
 				String ont2 = request.queryParams("ontology2");
-				return getAxioms(cls, ont1, ont2);
+				if (cls != null) {
+					return getAxioms(cls, ont1, ont2);
+				} else {
+					String axiom = request.queryParams("axiom");
+					ArrayList<Axiom> list = new ArrayList<>();
+					list.add(getAxiom(axiom, ont1, ont2));
+					return list;
+				}
 			}, gson::toJson);
 
 			post("/axioms", (request, response) -> {
 				String axiom = request.body();
 				String ont1 = request.queryParams("ontology1");
 				String ont2 = request.queryParams("ontology2");
-				addAxiom(axiom, ont1, ont2);
-				return "OK";
+				return addAxiom(axiom, ont1, ont2).getOWL();
 			});
 
 			delete("/axioms", (request, response) -> {
@@ -333,7 +339,7 @@ public class Main {
 	
 	
 	// add the new axiom to the alignment file, refresh the alignment
-	public static void addAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
+	public static Axiom addAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
 		
 		// get the alignment ontology
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
@@ -351,7 +357,9 @@ public class Main {
 
 			// add the axiom into the alignmentOnt
 			Set<OWLAxiom> temp = axiomOnt.getAxioms();
-			if (temp == null || temp.size() == 0) return;
+			if (temp == null || temp.size() == 0) {
+				return null;
+			}
 			
 			OWLAxiom axArg = temp.iterator().next();
 			manager.applyChange(new AddAxiom(alignmentOnt, axArg));
@@ -359,10 +367,13 @@ public class Main {
 			// write out the alignment ontology to its file
 			manager.saveOntology(alignmentOnt, new OWLXMLDocumentFormat(), IRI.create(orig));
 			
+			OWLOntology ont2 = getOntology(ont2Filename, false);
+			return new Axiom(axArg, alignmentOnt, ont1Filename, ont2Filename, ont2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		return null;
 	}
 	
 	
