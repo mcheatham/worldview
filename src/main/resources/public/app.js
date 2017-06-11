@@ -326,7 +326,7 @@ require([
 
 		clearClassMarkers();
 
-		if ((query.cls1 || query.axiom) && ont1 && ont2) {
+		if ((query.class || query.axiom) && ont1 && ont2) {
 			return request.get('/axioms', {
 				query: query
 			}).then(function (data) {
