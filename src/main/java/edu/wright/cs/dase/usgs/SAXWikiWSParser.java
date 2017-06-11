@@ -38,7 +38,7 @@ public class SAXWikiWSParser extends DefaultHandler {
 	
 	private void writeToFile(){
 		try {
-		    BufferedWriter out = new BufferedWriter(new FileWriter("wikipedia-category.xml"));
+		    BufferedWriter out = new BufferedWriter(new FileWriter("data/wikipedia-category.xml"));
 		    out.write(this.content);
 		    out.close();
 		} catch (IOException e) {
@@ -66,7 +66,7 @@ public class SAXWikiWSParser extends DefaultHandler {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		
 		try {
-			File file = new File("wikipedia-category.xml");
+			File file = new File("data/wikipedia-category.xml");
 			InputStream inputStream = new FileInputStream(file);
 			Reader reader = new InputStreamReader(inputStream, "UTF-8");
 			

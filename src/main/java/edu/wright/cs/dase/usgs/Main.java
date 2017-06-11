@@ -248,7 +248,7 @@ public class Main {
 
 		ArrayList<Ontology> ontologies = new ArrayList<>();
 		
-		File ontDir = new File("./src/main/resources/public/ontologies/");
+		File ontDir = new File("data/ontologies/");
 		
 		for (File f: ontDir.listFiles()) {
 			
@@ -345,7 +345,7 @@ public class Main {
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
 				ont2Filename.replaceAll(".owl", "") + ".owl";
 		
-		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
+		File orig = new File("data/alignments/" + alignmentFilename);
 		
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -384,7 +384,7 @@ public class Main {
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
 				ont2Filename.replaceAll(".owl", "") + ".owl";
 		
-		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
+		File orig = new File("data/alignments/" + alignmentFilename);
 		
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -555,9 +555,9 @@ public class Main {
 		
 		OWLOntology ont = null;
 		
-		String path = "./src/main/resources/public/ontologies/";
+		String path = "data/ontologies/";
 		if (isAlignment) {
-			path = "./src/main/resources/public/alignments/";
+			path = "data/alignments/";
 		}
 		
 		ontFilename = ontFilename.trim();

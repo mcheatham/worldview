@@ -1,5 +1,5 @@
 /target/
 local.properties
 *-similarities.dat
-wikipedia-category.xml
-wikipedia.dat
+data/wikipedia-category.xml
+data/wikipedia.dat

@@ -38,7 +38,7 @@ public class AutomatedAlignment {
 		HashMap<String, ArrayList<Similarity>> simMap = new HashMap<>();
 		
 		// read in the Wikipedia cache to speed up the semantic similarity computation
-		File file = new File("wikipedia.dat");
+		File file = new File("data/wikipedia.dat");
 		if (file.exists()) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -67,7 +67,7 @@ public class AutomatedAlignment {
 		
 		// write the Wikipedia cache to a file
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("wikipedia.dat")));
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("data/wikipedia.dat")));
 			oos.writeObject(wikipediaResults);
 			oos.close();
 		} catch (Exception e) {
