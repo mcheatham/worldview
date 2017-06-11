@@ -42,7 +42,6 @@ import com.hp.hpl.jena.query.ResultSet;
 public class Main {
 	
 	private static HashMap<String, OWLOntology> ontologies = new HashMap<>();
-	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
 	// Must have coordinate data
 	private static String baseOntology;
@@ -323,8 +322,6 @@ public class Main {
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
 		OWLOntology ont2 = getOntology(ont2Filename, false);
 		
-		axiomOWL = axiomOWL.trim().replaceAll(" ", "").replaceAll("\n", "");
-		
 		for (OWLAxiom ax: alignmentOnt.getAxioms()) {
 			if (Axiom.getOWL(ax, alignmentOnt).equals(axiomOWL)) {
 				return new Axiom(ax, alignmentOnt, ont1Filename, ont2Filename, ont2);
@@ -345,6 +342,7 @@ public class Main {
 		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
 		
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		
 		// create an ontology that is just this axiom
 		StringDocumentSource in = new StringDocumentSource("<Ontology>" + axiomOWL + "</Ontology>");
@@ -370,8 +368,7 @@ public class Main {
 	
 	// remove the new axiom from the alignment ontology and update the corresponding alignment file
 	public static void removeAxiom(String axiomOWL, String ont1Filename, String ont2Filename) {
-		System.out.println("Removing axiom " + axiomOWL + ", " + ont1Filename + ", " + ont2Filename);
-
+		
 		// get the alignment ontology
 		String alignmentFilename = ont1Filename.replaceAll(".owl", "") + "-" + 
 				ont2Filename.replaceAll(".owl", "") + ".owl";
@@ -379,10 +376,12 @@ public class Main {
 		File orig = new File("./src/main/resources/public/alignments/" + alignmentFilename);
 		
 		OWLOntology alignmentOnt = getOntology(alignmentFilename, true);
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		
 		// create an ontology that is just this axiom
 		StringDocumentSource in = new StringDocumentSource("<Ontology>" + axiomOWL + "</Ontology>");
 		try {
+
 			OWLOntology axiomOnt = manager.loadOntologyFromOntologyDocument(in);
 
 			// remove the axiom from the alignmentOnt
@@ -475,7 +474,7 @@ public class Main {
 				int range = 1;
 				int count = 0;
 				int attempts = 0;
-				int step = 2;
+				int step = 4;
 				
 				while (count == 0 && ++attempts < 5) {
 					String filledQuery = countQuery.replaceAll("<RANGE>", "" + range);
@@ -550,17 +549,15 @@ public class Main {
 			path = "./src/main/resources/public/alignments/";
 		}
 		
+		ontFilename = ontFilename.trim();
+		
 		if (ontologies.containsKey(ontFilename)) {
 			ont = ontologies.get(ontFilename);
 			
 		} else {
 			
 			try {
-
-				if (ontologies.size() > 5) {
-					ontologies.clear(); // don't let the cache get too big
-				}
-				
+				OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 				IRI iri = IRI.create(new File(path + ontFilename));
 				ont = manager.loadOntologyFromOntologyDocument(iri);
 				ontologies.put(ontFilename, ont);

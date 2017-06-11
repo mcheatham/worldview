@@ -340,6 +340,9 @@
         <Class IRI="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="http://cegis.usgs.gov/SWO/isContainedBy"/>
+    </Declaration>
+    <Declaration>
         <ObjectProperty IRI="http://cegis.usgs.gov/SWO/constuctionMaterial"/>
     </Declaration>
     <Declaration>

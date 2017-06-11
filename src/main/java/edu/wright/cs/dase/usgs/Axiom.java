@@ -116,6 +116,6 @@ public class Axiom {
 			return ax.toString();
 		}
 
-		return stringWriter.toString().trim().replaceAll(" ", "").replaceAll("\n", "");
+		return stringWriter.toString().trim().replaceAll("\n", "");
 	}
 }
