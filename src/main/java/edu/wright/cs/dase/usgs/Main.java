@@ -14,6 +14,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -56,7 +57,7 @@ public class Main {
 	private static double semWeight = 0.0;
 	private static double structWeight = 0.0;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Properties config = new Properties();
 		try (InputStream inputStream = new FileInputStream("config.properties")) {
 			if (inputStream != null) {
@@ -171,76 +172,117 @@ public class Main {
 //			}
 //		}
 
-		if (args.length > 0 && args[0].equals("serve")) {
-			Gson gson = new Gson();
+		String fusekiJar = config.getProperty("fusekiJar");
+		if (fusekiJar != null) {
+			File fusekiJarFile = new File(fusekiJar);
+			String fusekiPort = config.getProperty("fusekiPort", "3030");
+			String fusekiConfig = config.getProperty("fusekiConfig", new File(fusekiJarFile.getParent(), "config.ttl").getAbsolutePath());
 
-			port(8080);
-			staticFiles.location("/public");
+			ProcessBuilder fusekiPb = new ProcessBuilder("java", "-jar", fusekiJarFile.getName(), "--port", fusekiPort, "--localhost", "--config", fusekiConfig);
 
-			get("/config", (reqest, response) -> {
-				return config;
-			}, gson::toJson);
-		
-			get("/ontologies", (reqest, response) -> {
-				return getOntologies();
-			}, gson::toJson);
+			Map<String, String> env = fusekiPb.environment();
+			if (!env.containsKey("FUSEKI_HOME")) {
+				env.put("FUSEKI_HOME", fusekiJarFile.getParentFile().getAbsolutePath());
+			}
+			if (!env.containsKey("FUSEKI_BASE")) {
+				env.put("FUSEKI_BASE", new File(fusekiJarFile.getParent(), "run").getAbsolutePath());
+			}
+			String maxHeap = config.getProperty("fusekiMaxHeap", "2400M");
+			env.put("JVM_ARGS", env.getOrDefault("JVM_ARGS", "") + ":--Xmx" + maxHeap);
 
-			get("/classes", (request, response) -> {
-				return getClasses(request.queryParams("ontology"));
-			}, gson::toJson);
-			
-			get("/properties", (request, response) -> {
-				return getProperties(request.queryParams("ontology"));
-			}, gson::toJson);
+			// Start fuseki from the fuseki directory
+			fusekiPb.directory(fusekiJarFile.getParentFile());
 
-			get("/axioms", (request, response) -> {
-				String cls = request.queryParams("class");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				if (cls != null) {
-					return getAxioms(cls, ont1, ont2);
-				} else {
-					String axiom = request.queryParams("axiom");
-					ArrayList<Axiom> list = new ArrayList<>();
-					list.add(getAxiom(axiom, ont1, ont2));
-					return list;
+			fusekiPb.redirectError(ProcessBuilder.Redirect.INHERIT);
+			fusekiPb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+			try {
+				System.out.println("Starting fuseki server at " + fusekiJar + " on port " + fusekiPort);
+				final Process fuseki = fusekiPb.start();
+				if (!fuseki.isAlive()) {
+					throw new Error("Error starting fuseki");
 				}
-			}, gson::toJson);
-
-			post("/axioms", (request, response) -> {
-				String axiom = request.body();
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				return addAxiom(axiom, ont1, ont2).getOWL();
-			});
-
-			delete("/axioms", (request, response) -> {
-				String axiom = request.body();
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				removeAxiom(axiom, ont1, ont2);
-				return "OK";
-			});
-
-			get("/coordinates", (request, response) -> {
-				String axiom = request.queryParams("axiom");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				Double lat = new Double(request.queryParams("lat"));
-				Double lng = new Double(request.queryParams("lng"));
-				return getCoordinates(axiom, ont1, ont2, lat, lng);
-			}, gson::toJson);
-
-			get("/relatedClasses", (request, response) -> {
-				String cls = request.queryParams("class");
-				String ont1 = request.queryParams("ontology1");
-				String ont2 = request.queryParams("ontology2");
-				Double syn = new Double(request.queryParams("syn"));
-				Double sem = new Double(request.queryParams("sem"));
-				Double struct = new Double(request.queryParams("struct"));
-				return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
-			}, gson::toJson);
+				Runtime.getRuntime().addShutdownHook(new Thread() {
+					public void run() {
+						fuseki.destroy();
+					}
+				});
+			}
+			catch (Exception e) {
+				throw new Error("Error starting fuseki server: " + e);
+			}
 		}
+
+		Gson gson = new Gson();
+
+		String portString = config.getProperty("port", "8080");
+		int port = Integer.valueOf(portString);
+
+		port(port);
+		staticFiles.location("/public");
+
+		get("/config", (reqest, response) -> {
+			return config;
+		}, gson::toJson);
+	
+		get("/ontologies", (reqest, response) -> {
+			return getOntologies();
+		}, gson::toJson);
+
+		get("/classes", (request, response) -> {
+			return getClasses(request.queryParams("ontology"));
+		}, gson::toJson);
+		
+		get("/properties", (request, response) -> {
+			return getProperties(request.queryParams("ontology"));
+		}, gson::toJson);
+
+		get("/axioms", (request, response) -> {
+			String cls = request.queryParams("class");
+			String ont1 = request.queryParams("ontology1");
+			String ont2 = request.queryParams("ontology2");
+			if (cls != null) {
+				return getAxioms(cls, ont1, ont2);
+			} else {
+				String axiom = request.queryParams("axiom");
+				ArrayList<Axiom> list = new ArrayList<>();
+				list.add(getAxiom(axiom, ont1, ont2));
+				return list;
+			}
+		}, gson::toJson);
+
+		post("/axioms", (request, response) -> {
+			String axiom = request.body();
+			String ont1 = request.queryParams("ontology1");
+			String ont2 = request.queryParams("ontology2");
+			return addAxiom(axiom, ont1, ont2).getOWL();
+		});
+
+		delete("/axioms", (request, response) -> {
+			String axiom = request.body();
+			String ont1 = request.queryParams("ontology1");
+			String ont2 = request.queryParams("ontology2");
+			removeAxiom(axiom, ont1, ont2);
+			return "OK";
+		});
+
+		get("/coordinates", (request, response) -> {
+			String axiom = request.queryParams("axiom");
+			String ont1 = request.queryParams("ontology1");
+			String ont2 = request.queryParams("ontology2");
+			Double lat = new Double(request.queryParams("lat"));
+			Double lng = new Double(request.queryParams("lng"));
+			return getCoordinates(axiom, ont1, ont2, lat, lng);
+		}, gson::toJson);
+
+		get("/relatedClasses", (request, response) -> {
+			String cls = request.queryParams("class");
+			String ont1 = request.queryParams("ontology1");
+			String ont2 = request.queryParams("ontology2");
+			Double syn = new Double(request.queryParams("syn"));
+			Double sem = new Double(request.queryParams("sem"));
+			Double struct = new Double(request.queryParams("struct"));
+			return getRelatedClasses(cls, ont1, ont2, syn, sem, struct);
+		}, gson::toJson);
 	}
 	
 	// list the ontologies
